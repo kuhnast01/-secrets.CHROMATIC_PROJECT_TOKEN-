@@ -1,0 +1,7 @@
+{
+  "correlationId": "agent-handoff-20260218T194243Z",
+  "owner": "SRE",
+  "deploymentGate": "approved",
+  "rollbackPlanId": "rb-20260218T194243Z",
+  "approvedAt": "2026-02-18T19:42:43.106Z"
+}

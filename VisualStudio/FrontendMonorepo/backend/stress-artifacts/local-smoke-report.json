@@ -1,0 +1,36 @@
+{
+  "profile": "smoke",
+  "baseUrl": "http://127.0.0.1:4000",
+  "generatedAt": "2026-02-19T23:56:33.308Z",
+  "config": {
+    "duration": 30,
+    "connections": 20,
+    "pipelining": 1,
+    "thresholds": {
+      "maxErrorRate": 0.01,
+      "maxP95Ms": 300,
+      "minRequests": 500
+    }
+  },
+  "results": [
+    {
+      "path": "/healthz",
+      "total": 277581,
+      "errors": 0,
+      "non2xx": 0,
+      "p95": 4,
+      "errorRate": 0,
+      "passed": true
+    },
+    {
+      "path": "/system-health",
+      "total": 252278,
+      "errors": 0,
+      "non2xx": 0,
+      "p95": 4,
+      "errorRate": 0,
+      "passed": true
+    }
+  ],
+  "passed": true
+}

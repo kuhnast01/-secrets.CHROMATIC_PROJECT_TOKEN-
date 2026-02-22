@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "description": "Policy gates for NC-02 reward/economy simulation validation before publish.",
+  "riskThresholds": {
+    "maxEconomyDeltaPercent": 15,
+    "maxWhaleAdvantageIndex": 2.5,
+    "maxInflationRiskScore": 0.65,
+    "maxPayoutPerUser": 3000
+  },
+  "blockPublishOnViolation": true,
+  "requiredSignals": [
+    "economy_delta_percent",
+    "whale_advantage_index",
+    "inflation_risk_score",
+    "payout_per_user"
+  ]
+}

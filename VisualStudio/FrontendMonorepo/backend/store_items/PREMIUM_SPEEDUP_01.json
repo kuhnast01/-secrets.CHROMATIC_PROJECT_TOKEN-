@@ -1,0 +1,14 @@
+{
+  "id": "PREMIUM_SPEEDUP_01",
+  "type": "speedup",
+  "pricePremium": 50,
+  "contents": {
+    "premiumCurrency": 0,
+    "speedupMinutes": 60
+  },
+  "visibility": {
+    "minSector": 1,
+    "maxSector": 99,
+    "oneTimePurchase": false
+  }
+}

@@ -1,0 +1,22 @@
+﻿{
+    "schemaVersion":  1,
+    "kind":  "login-storm-drill",
+    "startedAt":  "2026-02-18T03:30:54.0876465Z",
+    "finishedAt":  "2026-02-18T03:30:59.1962020Z",
+    "durationMs":  5109,
+    "requestConfig":  {
+                          "totalRequests":  320,
+                          "concurrency":  1,
+                          "target":  "http://127.0.0.1:4000/auth/login",
+                          "username":  "admin",
+                          "passwordVariant":  "invalid"
+                      },
+    "statusCounts":  {
+                         "401":  100,
+                         "429":  220
+                     },
+    "transportErrors":  0,
+    "unauthorizedObserved":  true,
+    "rateLimitObserved":  true,
+    "note":  "Global limiter max=100 requests/15m; expect 401 before threshold, 429 after threshold."
+}

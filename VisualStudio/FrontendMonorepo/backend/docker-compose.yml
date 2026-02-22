@@ -1,0 +1,23 @@
+version: '3.8'
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: ${POSEIDON_DB_NAME:-liveops}
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+  backend:
+    build: .
+    environment:
+      DATABASE_URL: postgres://user:password@db:5432/${POSEIDON_DB_NAME:-liveops}
+      JWT_SECRET: your_jwt_secret
+    ports:
+      - "4000:4000"
+    depends_on:
+      - db
+volumes:
+  pgdata:

@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "pipeline": "NC-01",
+  "stagedAt": "2026-02-18T19:54:33.715Z",
+  "source": "no-code-form-usability-test",
+  "event": {
+    "name": "NC-01 Weekend Boost 2026-02-18",
+    "config": {
+      "trigger": {
+        "type": "schedule",
+        "startAt": "2026-02-18T20:54:33.714Z",
+        "endAt": "2026-02-19T21:54:33.714Z",
+        "timezone": "UTC"
+      },
+      "segments": [
+        "returning_players"
+      ],
+      "rewards": [
+        {
+          "sku": "coins",
+          "amount": 500
+        }
+      ],
+      "rollout": {
+        "mode": "staged",
+        "percentage": 20
+      },
+      "metadata": {
+        "source": "NC-01-no-code-composer-drill",
+        "composedAt": "2026-02-18T19:54:33.714Z"
+      }
+    },
+    "created_by": 1
+  }
+}

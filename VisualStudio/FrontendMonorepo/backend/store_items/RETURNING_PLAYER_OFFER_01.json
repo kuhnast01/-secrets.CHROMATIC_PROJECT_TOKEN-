@@ -1,0 +1,15 @@
+{
+  "id": "RETURNING_PLAYER_OFFER_01",
+  "type": "dynamic_offer",
+  "pricePremium": 99,
+  "contents": {
+    "premiumCurrency": 100,
+    "resources": { "energy": 5000, "alloy": 2000 }
+  },
+  "visibility": {
+    "minSector": 1,
+    "maxSector": 99,
+    "oneTimePurchase": true,
+    "trigger": "returning_player"
+  }
+}

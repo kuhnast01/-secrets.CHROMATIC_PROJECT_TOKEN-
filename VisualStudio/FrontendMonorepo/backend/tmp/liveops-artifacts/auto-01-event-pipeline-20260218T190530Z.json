@@ -1,0 +1,54 @@
+{
+  "schemaVersion": 1,
+  "pipeline": "AUTO-01",
+  "status": "success",
+  "generatedAt": "2026-02-18T19:05:30.409Z",
+  "stageId": "20260218T190530Z-auto-01-event-2026-02-18",
+  "stagePath": "C:\\Users\\kuhna\\OneDrive\\Desktop\\SIMgameFiles\\VisualStudio\\FrontendMonorepo\\backend\\tmp\\liveops-staging\\events\\20260218T190530Z-auto-01-event-2026-02-18.json",
+  "reportPath": "C:\\Users\\kuhna\\OneDrive\\Desktop\\SIMgameFiles\\VisualStudio\\FrontendMonorepo\\backend\\tmp\\liveops-artifacts\\auto-01-event-pipeline-20260218T190530Z.json",
+  "steps": [
+    {
+      "name": "author",
+      "status": "success",
+      "details": "Draft payload generated"
+    },
+    {
+      "name": "validate",
+      "status": "success",
+      "details": "Schema validation passed"
+    },
+    {
+      "name": "stage",
+      "status": "success",
+      "details": "Staged to C:\\Users\\kuhna\\OneDrive\\Desktop\\SIMgameFiles\\VisualStudio\\FrontendMonorepo\\backend\\tmp\\liveops-staging\\events\\20260218T190530Z-auto-01-event-2026-02-18.json"
+    }
+  ],
+  "eventDraft": {
+    "name": "AUTO-01 Event 2026-02-18",
+    "config": {
+      "trigger": {
+        "type": "schedule",
+        "startAt": "2026-02-18T20:05:30.407Z",
+        "endAt": "2026-02-19T20:05:30.407Z",
+        "timezone": "UTC"
+      },
+      "segments": [
+        "all_players"
+      ],
+      "rewards": [
+        {
+          "sku": "coins",
+          "amount": 250
+        }
+      ],
+      "rollout": {
+        "mode": "staged",
+        "percentage": 10
+      },
+      "metadata": {
+        "source": "AUTO-01-one-click-pipeline",
+        "generatedAt": "2026-02-18T19:05:30.407Z"
+      }
+    }
+  }
+}

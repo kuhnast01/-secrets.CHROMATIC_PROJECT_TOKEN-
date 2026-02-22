@@ -1,0 +1,14 @@
+openapi: 3.0.3
+info:
+  title: Galaxy: Ascendant — Full API
+  version: 1.0.0
+  description: |
+    Comprehensive backend API for Galaxy: Ascendant. All endpoints for web/mobile integration, LiveOps, PvP, social, monetization, and more.
+servers:
+  - url: http://localhost:4000/api
+  - url: http://localhost:4000/
+paths:
+  # ...
+  # All endpoints will be enumerated and described here (auto-generated below)
+  # ...
+  # See README or Swagger UI for usage instructions.

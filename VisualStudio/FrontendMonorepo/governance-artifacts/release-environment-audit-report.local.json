@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "mode": "release-environment-audit-monthly",
+  "repository": "kuhna/FrontendMonorepo",
+  "branch": "main",
+  "runId": "local",
+  "runNumber": "local",
+  "runUrl": "https://github.com/kuhna/FrontendMonorepo/actions/runs/local",
+  "targetEnvironment": "production-release",
+  "auditStatus": "PASS",
+  "issueNumber": null,
+  "operation": null,
+  "secretCheckNote": "local_validation",
+  "findings": []
+}

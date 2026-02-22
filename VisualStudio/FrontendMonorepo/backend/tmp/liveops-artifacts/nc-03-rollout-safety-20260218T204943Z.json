@@ -1,0 +1,121 @@
+{
+  "schemaVersion": 1,
+  "pipeline": "NC-03",
+  "status": "pass",
+  "generatedAt": "2026-02-18T20:49:43.559Z",
+  "runId": "no-code-rollout-safety-20260218T204943Z",
+  "policyPath": "C:\\Users\\kuhna\\OneDrive\\Desktop\\SIMgameFiles\\VisualStudio\\FrontendMonorepo\\governance\\policies\\no-code-rollout-safety-policy.json",
+  "reportPath": "C:\\Users\\kuhna\\OneDrive\\Desktop\\SIMgameFiles\\VisualStudio\\FrontendMonorepo\\backend\\tmp\\liveops-artifacts\\nc-03-rollout-safety-20260218T204943Z.json",
+  "rolloutPlanPath": "C:\\Users\\kuhna\\OneDrive\\Desktop\\SIMgameFiles\\VisualStudio\\FrontendMonorepo\\backend\\tmp\\liveops-rollout-safety\\no-code-rollout-safety-20260218T204943Z\\rollout-plans.json",
+  "policy": {
+    "schemaVersion": 1,
+    "description": "Policy gates for NC-03 A/B rollout safety before publish.",
+    "targeting": {
+      "requireAllowlistedSegmentsOnly": true,
+      "allowedSegments": [
+        "new_players",
+        "returning_players",
+        "payers_low_risk"
+      ],
+      "forbiddenSegments": [
+        "whales_high_value",
+        "vip_unbounded"
+      ]
+    },
+    "guardrails": {
+      "maxInitialRolloutPercent": 25,
+      "maxDailyRolloutIncreasePercent": 20,
+      "requireErrorBudgetGuardrail": true,
+      "maxErrorRatePercent": 1.5,
+      "maxCrashRatePercent": 0.3,
+      "maxP95LatencyMs": 350
+    },
+    "rollback": {
+      "required": true,
+      "maxRollbackTimeSeconds": 180,
+      "requireRollbackOwner": true
+    },
+    "blockPublishOnViolation": true
+  },
+  "checks": [
+    {
+      "name": "valid-plan-allowed",
+      "status": "pass",
+      "details": "decision=allow"
+    },
+    {
+      "name": "invalid-plan-blocked",
+      "status": "pass",
+      "details": "disallowed_segments:whales_high_value, forbidden_segments:whales_high_value, initial_rollout_percent:40>25, daily_rollout_increase_percent:35>20, missing_error_budget_guardrail, error_rate_percent:2.4>1.5, crash_rate_percent:0.9>0.3, p95_latency_ms:510>350, missing_rollback_owner, rollback_time_seconds:420>180"
+    },
+    {
+      "name": "invalid-plan-has-targeting-guardrail-rollback-violations",
+      "status": "pass",
+      "details": "disallowed_segments:whales_high_value, forbidden_segments:whales_high_value, initial_rollout_percent:40>25, daily_rollout_increase_percent:35>20, missing_error_budget_guardrail, error_rate_percent:2.4>1.5, crash_rate_percent:0.9>0.3, p95_latency_ms:510>350, missing_rollback_owner, rollback_time_seconds:420>180"
+    }
+  ],
+  "validScenario": {
+    "plan": {
+      "id": "ROLL-VALID-001",
+      "targetingSegments": [
+        "new_players",
+        "returning_players"
+      ],
+      "initialRolloutPercent": 15,
+      "dailyRolloutIncreasePercent": 10,
+      "guardrails": {
+        "errorRatePercent": 0.7,
+        "crashRatePercent": 0.15,
+        "p95LatencyMs": 260,
+        "errorBudgetGuardrailEnabled": true
+      },
+      "rollbackPlan": {
+        "enabled": true,
+        "rollbackOwner": "sre-owner",
+        "expectedRollbackSeconds": 120
+      }
+    },
+    "evaluation": {
+      "scenario": "valid",
+      "publishDecision": "allow",
+      "violations": []
+    }
+  },
+  "invalidScenario": {
+    "plan": {
+      "id": "ROLL-INVALID-001",
+      "targetingSegments": [
+        "returning_players",
+        "whales_high_value"
+      ],
+      "initialRolloutPercent": 40,
+      "dailyRolloutIncreasePercent": 35,
+      "guardrails": {
+        "errorRatePercent": 2.4,
+        "crashRatePercent": 0.9,
+        "p95LatencyMs": 510,
+        "errorBudgetGuardrailEnabled": false
+      },
+      "rollbackPlan": {
+        "enabled": true,
+        "expectedRollbackSeconds": 420
+      }
+    },
+    "evaluation": {
+      "scenario": "invalid",
+      "publishDecision": "block",
+      "violations": [
+        "disallowed_segments:whales_high_value",
+        "forbidden_segments:whales_high_value",
+        "initial_rollout_percent:40>25",
+        "daily_rollout_increase_percent:35>20",
+        "missing_error_budget_guardrail",
+        "error_rate_percent:2.4>1.5",
+        "crash_rate_percent:0.9>0.3",
+        "p95_latency_ms:510>350",
+        "missing_rollback_owner",
+        "rollback_time_seconds:420>180"
+      ]
+    }
+  }
+}

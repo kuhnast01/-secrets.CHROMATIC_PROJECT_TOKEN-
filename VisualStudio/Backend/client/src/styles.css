@@ -1,0 +1,15 @@
+:root{--bg:#0b1020;--panel:#0f1724;--accent:#6ee7b7;--muted:#9aa4b2;color-scheme:dark}
+body{font-family:Inter,Segoe UI,Arial,sans-serif;background:var(--bg);color:#e6eef8;margin:0}
+.app{max-width:980px;margin:32px auto;padding:24px;background:linear-gradient(180deg,rgba(255,255,255,.02),transparent);border-radius:12px}
+header{display:flex;align-items:center;justify-content:space-between;gap:16px}
+nav a{color:var(--accent);margin-right:12px;text-decoration:none}
+main{margin-top:20px;padding:12px;background:var(--panel);border-radius:8px}
+button{background:var(--accent);border:none;padding:8px 12px;border-radius:6px;color:#04201a;cursor:pointer}
+pre{background:#071023;padding:12px;border-radius:8px;overflow:auto}
+footer{margin-top:12px;color:var(--muted)}
+
+/* combat log */
+.combat-log-entry{padding:8px;border-radius:6px;margin-bottom:6px;background:linear-gradient(90deg,rgba(255,255,255,.02),transparent);border:1px solid rgba(255,255,255,.03)}
+.combat-log-entry.turn{font-weight:600;color:#6ee7b7}
+.combat-result-win{color:#6ee7b7;font-size:18px}
+.combat-result-lose{color:#ff7b7b;font-size:18px}

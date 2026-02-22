@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "releaseId": "mono-20260218.1",
+  "bundle": {
+    "name": "poseidon-monorepo-core",
+    "version": "1.0.0",
+    "channels": ["dev", "stage", "prod"],
+    "components": ["backend", "admin-panel", "web", "mobile"],
+    "integrity": "sha256:__BUNDLE_SHA256__"
+  }
+}

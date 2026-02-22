@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "description": "Policy-as-code source of truth for elite and launch readiness thresholds.",
+  "elite": {
+    "baselinePattern": "-01",
+    "minimumCompletionPercent": 70
+  },
+  "launch": {
+    "requiredPillars": [2, 3, 5, 7],
+    "requirePillarFullCompletion": true
+  }
+}

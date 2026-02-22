@@ -1,0 +1,11 @@
+packages:
+  - apps/*
+  - backend
+  - packages/*
+
+onlyBuiltDependencies:
+  - '@firebase/util'
+  - '@prisma/client'
+  - '@prisma/engines'
+  - '@scarf/scarf'
+  - '@types/node'

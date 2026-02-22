@@ -1,0 +1,23 @@
+{
+  "id": "ENM_CUSTOM",
+  "faction": "Celestial Syndicate",
+  "fleet": [
+    { "type": "Fighter", "count": 10, "level": 5 },
+    { "type": "Cruiser", "count": 2, "level": 5 }
+  ],
+  "modifiers": { "attack": 0.25, "defense": 0.15 },
+  "customTraits": {
+    "phaseShift": true,
+    "regeneration": 0.1
+  },
+  "specialAbilities": {
+    "stellarNova": {
+      "description": "Deal massive AoE damage and stun for 1 round",
+      "cooldown": 3
+    }
+  },
+  "bossAbility": {
+    "name": "Celestial Overdrive",
+    "effect": "+50% attack and speed for 2 rounds"
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "ok": false,
+  "errorType": "auth",
+  "exitCode": 3,
+  "message": "Missing token. Set GITHUB_TOKEN (or GH_TOKEN)."
+}

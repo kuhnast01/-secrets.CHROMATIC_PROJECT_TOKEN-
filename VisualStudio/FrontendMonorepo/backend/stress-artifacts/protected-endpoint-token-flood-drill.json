@@ -1,0 +1,34 @@
+﻿{
+    "schemaVersion":  1,
+    "kind":  "protected-endpoint-token-flood-drill",
+    "startedAt":  "2026-02-18T03:34:59.6779748Z",
+    "finishedAt":  "2026-02-18T03:34:59.6779748Z",
+    "durationMs":  0,
+    "requestConfig":  {
+                          "totalRequests":  200,
+                          "concurrency":  1,
+                          "target":  "http://127.0.0.1:4000/users",
+                          "mix":  "alternating missing token and invalid token",
+                          "protectedEndpoint":  true
+                      },
+    "overallStatusCounts":  {
+                                "401":  50,
+                                "403":  50,
+                                "429":  100
+                            },
+    "scenarioStatusCounts":  {
+                                 "missingToken":  {
+                                                      "401":  50,
+                                                      "429":  50
+                                                  },
+                                 "invalidToken":  {
+                                                      "403":  50,
+                                                      "429":  50
+                                                  }
+                             },
+    "transportErrors":  0,
+    "missingTokenRejectedObserved":  true,
+    "invalidTokenRejectedObserved":  true,
+    "rateLimitObserved":  true,
+    "note":  "Limiter max=100 requests/15m; expected auth rejects (401/403) before limiter threshold, then 429."
+}

@@ -1,0 +1,55 @@
+{
+  "schemaVersion": 1,
+  "pipeline": "AUTO-03",
+  "status": "pass",
+  "generatedAt": "2026-02-18T19:32:43.083Z",
+  "reportPath": "C:\\Users\\kuhna\\OneDrive\\Desktop\\SIMgameFiles\\VisualStudio\\FrontendMonorepo\\backend\\tmp\\liveops-artifacts\\auto-03-deploy-rollback-drill-20260218T193240Z.json",
+  "releaseStatePath": "C:\\Users\\kuhna\\OneDrive\\Desktop\\SIMgameFiles\\VisualStudio\\FrontendMonorepo\\backend\\tmp\\liveops-release\\active-release.json",
+  "previousRelease": {
+    "releaseId": "baseline-20260218T193240Z",
+    "promotedAt": "2026-02-18T19:32:40.021Z",
+    "source": "seeded-by-auto-03-drill"
+  },
+  "deployedRelease": {
+    "releaseId": "deploy-20260218T193243Z",
+    "promotedAt": "2026-02-18T19:32:43.082Z",
+    "source": "AUTO-03 from baseline-20260218T193240Z"
+  },
+  "finalRelease": {
+    "releaseId": "baseline-20260218T193240Z",
+    "promotedAt": "2026-02-18T19:32:40.021Z",
+    "source": "seeded-by-auto-03-drill"
+  },
+  "steps": [
+    {
+      "name": "preflight:required-files",
+      "status": "pass",
+      "durationMs": 0,
+      "details": "Required deployment files are present"
+    },
+    {
+      "name": "preflight:pnpm run type-check",
+      "status": "pass",
+      "durationMs": 1487,
+      "details": "Command succeeded"
+    },
+    {
+      "name": "preflight:pnpm run build",
+      "status": "pass",
+      "durationMs": 1571,
+      "details": "Command succeeded"
+    },
+    {
+      "name": "deploy:promote-release",
+      "status": "pass",
+      "durationMs": 0,
+      "details": "Promoted release deploy-20260218T193243Z"
+    },
+    {
+      "name": "rollback:restore-previous-release",
+      "status": "pass",
+      "durationMs": 1,
+      "details": "Restored baseline-20260218T193240Z"
+    }
+  ]
+}

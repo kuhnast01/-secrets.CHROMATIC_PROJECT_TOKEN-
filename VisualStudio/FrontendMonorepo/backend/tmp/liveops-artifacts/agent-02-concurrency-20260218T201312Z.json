@@ -1,0 +1,73 @@
+{
+  "schemaVersion": 1,
+  "pipeline": "AGENT-02",
+  "status": "pass",
+  "generatedAt": "2026-02-18T20:13:12.489Z",
+  "reportPath": "C:\\Users\\kuhna\\OneDrive\\Desktop\\SIMgameFiles\\VisualStudio\\FrontendMonorepo\\backend\\tmp\\liveops-artifacts\\agent-02-concurrency-20260218T201312Z.json",
+  "runId": "agent-conflict-20260218T201312Z",
+  "conflictDirectory": "C:\\Users\\kuhna\\OneDrive\\Desktop\\SIMgameFiles\\VisualStudio\\FrontendMonorepo\\backend\\tmp\\agent-conflicts\\agent-conflict-20260218T201312Z",
+  "policy": "priority",
+  "steps": [
+    {
+      "name": "agent-conflict-policy-resolution",
+      "status": "pass",
+      "details": "Resolved 2 resources with policy priority; shared winner=sre-agent"
+    }
+  ],
+  "resolutions": [
+    {
+      "resource": "rollout/feature-flags.json",
+      "policy": "priority",
+      "winnerAgentIndex": 2,
+      "winnerUser": "sre-agent",
+      "contenderAgentIndexes": [
+        2,
+        1,
+        0
+      ],
+      "skippedAgentIndexes": [
+        1,
+        0
+      ],
+      "contenderCount": 3
+    },
+    {
+      "resource": "reporting/health-summary.json",
+      "policy": "priority",
+      "winnerAgentIndex": 0,
+      "winnerUser": "engineering-agent",
+      "contenderAgentIndexes": [
+        0
+      ],
+      "skippedAgentIndexes": [],
+      "contenderCount": 1
+    }
+  ],
+  "events": [
+    {
+      "timestamp": "2026-02-18T20:13:12.489Z",
+      "resource": "rollout/feature-flags.json",
+      "policy": "priority",
+      "winner": "sre-agent",
+      "contenders": [
+        "sre-agent",
+        "qa-agent",
+        "engineering-agent"
+      ],
+      "skipped": [
+        "qa-agent",
+        "engineering-agent"
+      ]
+    },
+    {
+      "timestamp": "2026-02-18T20:13:12.489Z",
+      "resource": "reporting/health-summary.json",
+      "policy": "priority",
+      "winner": "engineering-agent",
+      "contenders": [
+        "engineering-agent"
+      ],
+      "skipped": []
+    }
+  ]
+}

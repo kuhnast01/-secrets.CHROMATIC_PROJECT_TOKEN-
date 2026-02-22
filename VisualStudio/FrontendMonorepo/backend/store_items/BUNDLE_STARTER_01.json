@@ -1,0 +1,15 @@
+{
+  "id": "BUNDLE_STARTER_01",
+  "type": "bundle",
+  "pricePremium": 499,
+  "contents": {
+    "premiumCurrency": 500,
+    "resources": { "energy": 10000, "alloy": 5000 },
+    "commanderShards": { "CMD_001": 20 }
+  },
+  "visibility": {
+    "minSector": 1,
+    "maxSector": 3,
+    "oneTimePurchase": true
+  }
+}

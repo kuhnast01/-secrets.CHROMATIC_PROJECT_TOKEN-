@@ -1,0 +1,83 @@
+/* Poseidon Desktop Global Styles - Responsive, Accessible, Themed */
+
+:root {
+  --color-primary: #3b82f6;
+  --color-success: #16a34a;
+  --color-error: #dc2626;
+  --color-bg: #f7f9fa;
+  --color-surface: #fff;
+  --color-border: #cbd5e1;
+  --color-text: #1a2233;
+  --color-muted: #888;
+  --radius: 8px;
+  --shadow: 0 2px 12px #0001;
+  --font-main: 'Inter', 'Segoe UI', Arial, sans-serif;
+}
+
+.dark-mode {
+  --color-primary: #60a5fa;
+  --color-success: #22d3ee;
+  --color-error: #f87171;
+  --color-bg: #181f2a;
+  --color-surface: #232b3a;
+  --color-border: #334155;
+  --color-text: #f1f5f9;
+  --color-muted: #64748b;
+  --shadow: 0 2px 12px #0008;
+}
+
+body {
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-main);
+  margin: 0;
+  min-height: 100vh;
+}
+
+h1, h2, h3, h4 {
+  color: var(--color-text);
+  font-family: var(--font-main);
+}
+
+button, input, select, textarea {
+  font-family: inherit;
+  font-size: 1rem;
+}
+
+/* Responsive container */
+.poseidon-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 16px;
+}
+
+/* Focus ring for accessibility */
+:focus {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* Card surface */
+.poseidon-card {
+  background: var(--color-surface);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 24px;
+  margin-bottom: 24px;
+}
+
+/* Utility classes */
+.text-muted { color: var(--color-muted); }
+.text-error { color: var(--color-error); }
+.text-success { color: var(--color-success); }
+.text-primary { color: var(--color-primary); }
+
+@media (max-width: 900px) {
+  .poseidon-container { padding: 8px; }
+  .poseidon-card { padding: 12px; }
+}
+@media (max-width: 600px) {
+  .poseidon-container { padding: 2px; }
+  .poseidon-card { padding: 6px; }
+  h1, h2 { font-size: 1.2rem; }
+}

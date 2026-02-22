@@ -1,0 +1,43 @@
+{
+  "schemaVersion": 1,
+  "pipeline": "NC-01",
+  "status": "pass",
+  "generatedAt": "2026-02-18T19:54:33.715Z",
+  "reportPath": "C:\\Users\\kuhna\\OneDrive\\Desktop\\SIMgameFiles\\VisualStudio\\FrontendMonorepo\\backend\\tmp\\liveops-artifacts\\nc-01-no-code-composer-20260218T195433Z.json",
+  "stagePath": "C:\\Users\\kuhna\\OneDrive\\Desktop\\SIMgameFiles\\VisualStudio\\FrontendMonorepo\\backend\\tmp\\liveops-staging\\no-code\\nc-01-event-20260218T195433Z.json",
+  "inputs": {
+    "eventName": "NC-01 Weekend Boost 2026-02-18",
+    "startAt": "2026-02-18T20:54:33.714Z",
+    "endAt": "2026-02-19T21:54:33.714Z",
+    "segment": "returning_players",
+    "rewardSku": "coins",
+    "rewardAmount": 500,
+    "rolloutPercent": 20
+  },
+  "steps": [
+    {
+      "name": "no-code-input:collect-form-fields",
+      "status": "pass",
+      "durationMs": 0,
+      "details": "Collected event fields without requiring code or JSON authoring"
+    },
+    {
+      "name": "no-code-composer:compose-event-payload",
+      "status": "pass",
+      "durationMs": 0,
+      "details": "Composed internal event payload from no-code inputs"
+    },
+    {
+      "name": "no-code-composer:validate-event",
+      "status": "pass",
+      "durationMs": 1,
+      "details": "Composed event passed backend schema validation"
+    },
+    {
+      "name": "no-code-composer:stage-event",
+      "status": "pass",
+      "durationMs": 0,
+      "details": "Event staged successfully at C:\\Users\\kuhna\\OneDrive\\Desktop\\SIMgameFiles\\VisualStudio\\FrontendMonorepo\\backend\\tmp\\liveops-staging\\no-code\\nc-01-event-20260218T195433Z.json"
+    }
+  ]
+}

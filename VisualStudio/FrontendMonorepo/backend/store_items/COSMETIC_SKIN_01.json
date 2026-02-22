@@ -1,0 +1,13 @@
+{
+  "id": "COSMETIC_SKIN_01",
+  "type": "cosmetic",
+  "pricePremium": 199,
+  "contents": {
+    "skinId": "SKIN_001"
+  },
+  "visibility": {
+    "minSector": 1,
+    "maxSector": 99,
+    "oneTimePurchase": true
+  }
+}

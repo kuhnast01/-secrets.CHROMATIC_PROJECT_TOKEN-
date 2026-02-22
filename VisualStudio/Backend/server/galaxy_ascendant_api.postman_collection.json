@@ -1,0 +1,50 @@
+{
+  "info": {
+    "name": "Galaxy Ascendant API",
+    "description": "Postman collection for all backend endpoints. Import this to test and explore the API.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Claim Login Calendar",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"playerId\": \"testplayer\",\n  \"type\": \"daily\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:4000/calendar/claim",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "4000",
+          "path": ["calendar", "claim"]
+        }
+      }
+    },
+    {
+      "name": "Advance Season",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"playerId\": \"testplayer\",\n  \"seasonId\": \"season1\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:4000/season/progress",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "4000",
+          "path": ["season", "progress"]
+        }
+      }
+    }
+    // ... more endpoints can be added here ...
+  ]
+}

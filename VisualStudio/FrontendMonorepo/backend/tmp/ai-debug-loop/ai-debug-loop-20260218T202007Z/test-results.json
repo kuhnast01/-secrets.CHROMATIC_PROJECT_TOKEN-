@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-02-18T20:20:07.731Z",
+  "total": 42,
+  "passed": 40,
+  "failed": 2,
+  "failingTests": [
+    {
+      "suite": "apps/web/liveops-regression",
+      "test": "rollout banner renders on targeted stage users",
+      "error": "TimeoutError: expected banner after 8000ms"
+    },
+    {
+      "suite": "apps/mobile/event-guardrails",
+      "test": "rollback prompt appears after risky reward delta",
+      "error": "AssertionError: rollback prompt was not visible"
+    }
+  ]
+}
