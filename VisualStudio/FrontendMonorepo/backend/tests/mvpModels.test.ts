@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect } from '@jest/globals';
 import Building from '../src/models/Building';
 import Commander from '../src/models/Commander';
 import Resource from '../src/models/Resource';
