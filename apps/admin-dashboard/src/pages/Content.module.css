@@ -1,0 +1,20 @@
+.livePreview {
+  padding: 16px;
+  border: 1px solid #eee;
+  border-radius: 8px;
+  background: #fafbfc;
+}
+
+.contentImagePreview {
+  max-width: 120px;
+  max-height: 80px;
+  margin-top: 8px;
+}
+
+.dropzone {
+  border: 2px dashed #888;
+  padding: 16px;
+  text-align: center;
+  cursor: pointer;
+  background: #fafafa;
+}
