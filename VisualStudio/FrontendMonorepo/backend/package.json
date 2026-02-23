@@ -10,6 +10,8 @@
     "format": "prettier --write src/**/*.{ts,json,md}",
     "type-check": "tsc --noEmit",
     "test": "jest --config ./jest.config.mjs",
+    "test:virtual": "jest --config ./jest.config.mjs --testMatch '**/tests/virtual/**/*.test.ts'",
+    "test:local": "jest --config ./jest.config.mjs --testMatch '**/tests/local/**/*.test.ts'",
     "validate:store-items": "ts-node scripts/validate-store-items-schema.ts",
     "test:shop": "jest tests/shop.test.ts",
     "test:coverage": "jest --coverage",
