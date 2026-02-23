@@ -1,3 +1,117 @@
+// --- CORE GAMEPLAY MODELS ---
+model Player {
+  id           Int        @id @default(autoincrement())
+  username     String     @unique
+  email        String?    @unique
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  resources    Resource[]
+  buildings    Building[]
+  commanders   Commander[]
+  ships        Ship[]
+  techs        Tech[]
+  sectors      Sector[]
+  missions     Mission[]
+  // Social & meta
+  guildId      Int?
+  guild        Guild?     @relation(fields: [guildId], references: [id])
+  friends      Player[]   @relation("PlayerFriends")
+  invitedById  Int?
+  invitedBy    Player?    @relation("PlayerInvites", fields: [invitedById], references: [id])
+  invites      Player[]   @relation("PlayerInvites")
+  // Analytics & meta
+  lastLogin    DateTime?
+  isVIP        Boolean    @default(false)
+  meta         Json?
+}
+
+model Resource {
+  id        Int      @id @default(autoincrement())
+  player    Player   @relation(fields: [playerId], references: [id])
+  playerId  Int
+  type      String   // e.g. "energy", "alloy", "credits", "premium"
+  amount    Int      @default(0)
+  updatedAt DateTime @updatedAt
+}
+
+model Building {
+  id         Int      @id @default(autoincrement())
+  player     Player   @relation(fields: [playerId], references: [id])
+  playerId   Int
+  type       String   // e.g. "barracks", "factory"
+  level      Int      @default(1)
+  startedAt  DateTime?
+  completedAt DateTime?
+  meta       Json?
+}
+
+model Commander {
+  id         Int      @id @default(autoincrement())
+  player     Player   @relation(fields: [playerId], references: [id])
+  playerId   Int
+  name       String
+  rarity     String   // e.g. "common", "rare", "epic", "legendary"
+  level      Int      @default(1)
+  shards     Int      @default(0)
+  stats      Json?
+  abilities  Json?
+  meta       Json?
+}
+
+model Ship {
+  id         Int      @id @default(autoincrement())
+  player     Player   @relation(fields: [playerId], references: [id])
+  playerId   Int
+  name       String
+  class      String   // e.g. "frigate", "destroyer"
+  level      Int      @default(1)
+  stats      Json?
+  unlockCost Json?
+  meta       Json?
+}
+
+model Tech {
+  id         Int      @id @default(autoincrement())
+  player     Player   @relation(fields: [playerId], references: [id])
+  playerId   Int
+  branch     String   // e.g. "offense", "defense"
+  tier       Int
+  effect     Json?
+  unlocked   Boolean  @default(false)
+  meta       Json?
+}
+
+model Sector {
+  id         Int      @id @default(autoincrement())
+  player     Player   @relation(fields: [playerId], references: [id])
+  playerId   Int
+  name       String
+  level      Int      @default(1)
+  missions   Mission[]
+  meta       Json?
+}
+
+model Mission {
+  id         Int      @id @default(autoincrement())
+  player     Player   @relation(fields: [playerId], references: [id])
+  playerId   Int
+  sector     Sector?  @relation(fields: [sectorId], references: [id])
+  sectorId   Int?
+  name       String
+  status     String   // e.g. "locked", "unlocked", "completed"
+  reward     Json?
+  startedAt  DateTime?
+  completedAt DateTime?
+  meta       Json?
+}
+
+model Guild {
+  id         Int      @id @default(autoincrement())
+  name       String   @unique
+  createdAt  DateTime @default(now())
+  members    Player[]
+  meta       Json?
+}
 model EnemyTemplate {
   id           String   @id
   faction      String
