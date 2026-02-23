@@ -2,11 +2,7 @@
   "name": "galaxy-ascendant-client",
   "version": "0.1.0",
   "private": true,
-  "scripts": {
-    "dev": "vite",
-    "build": "tsc && vite build",
-    "preview": "vite preview",
-    "test": "vitest"
+  // ...existing code...
   },
   "dependencies": {
     "react": "^18.2.0",
