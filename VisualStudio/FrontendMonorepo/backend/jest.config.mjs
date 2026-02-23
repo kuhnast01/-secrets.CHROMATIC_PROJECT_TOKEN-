@@ -18,6 +18,7 @@ export default {
     '<rootDir>/../',
     '<rootDir>/../../.vscode/',
     '<rootDir>/../../extensions/',
+    '/dist/',
   ],
   transform: {
     '^.+\\.ts$': [
