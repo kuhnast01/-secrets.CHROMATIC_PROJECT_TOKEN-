@@ -1,0 +1,80 @@
+{
+  "schemaVersion": 1,
+  "pipeline": "LIC-02",
+  "status": "pass",
+  "generatedAt": "2026-02-18T22:06:15.411Z",
+  "runId": "license-strict-staging-20260218T220615Z",
+  "policyPath": "C:\\Users\\kuhna\\OneDrive\\Desktop\\SIMgameFiles\\VisualStudio\\FrontendMonorepo\\governance\\policies\\license-strict-staging-rollout-policy.json",
+  "reportPath": "C:\\Users\\kuhna\\OneDrive\\Desktop\\SIMgameFiles\\VisualStudio\\FrontendMonorepo\\backend\\tmp\\liveops-artifacts\\lic-02-license-strict-staging-20260218T220615Z.json",
+  "workPath": "C:\\Users\\kuhna\\OneDrive\\Desktop\\SIMgameFiles\\VisualStudio\\FrontendMonorepo\\backend\\tmp\\licensing-strict-staging\\license-strict-staging-20260218T220615Z",
+  "enforcementMode": "strict",
+  "policy": {
+    "schemaVersion": 1,
+    "policyId": "LIC-02",
+    "description": "Strict-mode staging rollout gate for license enforcement smoke/endurance validation.",
+    "enforcement": {
+      "requiredMode": "strict"
+    },
+    "smoke": {
+      "requiredChecks": [
+        "missing-license-blocked",
+        "invalid-format-blocked",
+        "revoked-license-blocked",
+        "valid-license-allowed"
+      ]
+    },
+    "endurance": {
+      "requestCount": 250,
+      "minSuccessRate": 0.995,
+      "maxFailureCount": 1
+    },
+    "evidence": {
+      "artifactPrefix": "lic-02-license-strict-staging",
+      "requireMachineReadableReport": true
+    }
+  },
+  "checks": [
+    {
+      "name": "strict-mode-enabled",
+      "status": "pass",
+      "details": "mode=strict"
+    },
+    {
+      "name": "missing-license-blocked",
+      "status": "pass",
+      "details": "status=503; code=missing_license_key"
+    },
+    {
+      "name": "invalid-format-blocked",
+      "status": "pass",
+      "details": "status=503; code=invalid_license_format"
+    },
+    {
+      "name": "revoked-license-blocked",
+      "status": "pass",
+      "details": "status=503; code=license_revoked"
+    },
+    {
+      "name": "valid-license-allowed",
+      "status": "pass",
+      "details": "status=200"
+    },
+    {
+      "name": "strict-endurance-valid-traffic",
+      "status": "pass",
+      "details": "requests=undefined; success=80; failures=0; successRate=1"
+    }
+  ],
+  "smoke": {
+    "missingLicenseCode": "missing_license_key",
+    "invalidFormatCode": "invalid_license_format",
+    "revokedLicenseCode": "license_revoked",
+    "validLicenseStatus": 200
+  },
+  "endurance": {
+    "requestCount": 80,
+    "successCount": 80,
+    "failureCount": 0,
+    "successRate": 1
+  }
+}

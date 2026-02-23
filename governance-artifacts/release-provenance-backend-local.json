@@ -1,0 +1,104 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-02-18T21:27:50.624Z",
+  "generatedAtCompact": "20260218T212750Z",
+  "component": "backend",
+  "sourceDir": "backend/tmp/liveops-artifacts",
+  "repository": null,
+  "ref": null,
+  "sha": null,
+  "runId": null,
+  "runNumber": null,
+  "files": [
+    {
+      "path": "backend/tmp/liveops-artifacts/agent-01-handoff-20260218T194243Z.json",
+      "sizeBytes": 2365,
+      "sha256": "d7f3f1ab509aa85d418aa75c748d2898726e91394cdc4554134ca9c174f9ded6"
+    },
+    {
+      "path": "backend/tmp/liveops-artifacts/agent-02-concurrency-20260218T201259Z.json",
+      "sizeBytes": 912,
+      "sha256": "d16ad114dfb4de78d438c4ef02cda0328334f6881fa4585b9d9a31ea70f9950b"
+    },
+    {
+      "path": "backend/tmp/liveops-artifacts/agent-02-concurrency-20260218T201312Z.json",
+      "sizeBytes": 1946,
+      "sha256": "d42bd2a5f6c1f504215e5f90273b3de749186ff37064ca0c3ce7f4ad2227f382"
+    },
+    {
+      "path": "backend/tmp/liveops-artifacts/agent-03-slo-20260218T201557Z.json",
+      "sizeBytes": 4274,
+      "sha256": "13f6cb7639bac2680cb39067ddbdf82a98b853759b00bb3c76d2a7a3485d351b"
+    },
+    {
+      "path": "backend/tmp/liveops-artifacts/agent-03-slo-20260218T201616Z.json",
+      "sizeBytes": 4265,
+      "sha256": "ab3c9c1f73fd5c2491eb7be2b92b230486940f5d54169a818d220c780f8bc24f"
+    },
+    {
+      "path": "backend/tmp/liveops-artifacts/ai-01-agent-contract-20260218T194418Z.json",
+      "sizeBytes": 2300,
+      "sha256": "cf6decfd9bf4d4aeb6c5ea39c3320e3d9e564108c4d8094f30daa16252e92292"
+    },
+    {
+      "path": "backend/tmp/liveops-artifacts/ai-02-debug-loop-20260218T202007Z.json",
+      "sizeBytes": 5498,
+      "sha256": "0b803e291f6f3a6eb7bc0e99afc6d522d13d4f7edadc55c76acdad77a0287d85"
+    },
+    {
+      "path": "backend/tmp/liveops-artifacts/ai-03-approval-gate-20260218T202551Z.json",
+      "sizeBytes": 2655,
+      "sha256": "46c56e2396fe117d3e03fba0711161cad39beeb55be95b406b532b320e2e6a0c"
+    },
+    {
+      "path": "backend/tmp/liveops-artifacts/auto-01-event-pipeline-20260218T190530Z.json",
+      "sizeBytes": 1650,
+      "sha256": "384cdbafff9568a3f877e79d961aebc6f028c2bc493de2c84b04238256e9972e"
+    },
+    {
+      "path": "backend/tmp/liveops-artifacts/auto-02-channel-regression-20260218T190801Z.json",
+      "sizeBytes": 1754,
+      "sha256": "5d246f7624c294f6f8b0d9d8150c4b0e581fbde62f25f3244daa7ab902009401"
+    },
+    {
+      "path": "backend/tmp/liveops-artifacts/auto-02-channel-regression-20260218T190832Z.json",
+      "sizeBytes": 1634,
+      "sha256": "c5a5413fa5bf23bfa42ac060332f60472c29307a8a26078699781ec28fdcc06f"
+    },
+    {
+      "path": "backend/tmp/liveops-artifacts/auto-02-channel-regression-20260218T190851Z.json",
+      "sizeBytes": 1752,
+      "sha256": "80bf7cdabc59b78743cbb0b82cea756e3c6c678f3ca475a725ea4b1fdcc1b85c"
+    },
+    {
+      "path": "backend/tmp/liveops-artifacts/auto-03-deploy-rollback-drill-20260218T193240Z.json",
+      "sizeBytes": 1740,
+      "sha256": "e63f443e2eca5a391d41f50ee5c31a19b215f3e7a8eff29ef496c86feaf16c15"
+    },
+    {
+      "path": "backend/tmp/liveops-artifacts/lic-01-license-revocation-rotation-20260218T211813Z.json",
+      "sizeBytes": 2351,
+      "sha256": "1b6e00659aadc0eab796a64aafee198ad1cab75b2c8deb4f6fe519269c963201"
+    },
+    {
+      "path": "backend/tmp/liveops-artifacts/local-03-secrets-rotation-20260218T193958Z.json",
+      "sizeBytes": 1820,
+      "sha256": "ddb2e88b7dc8ef05ded246d2b7a4cb523feae306853db803a4bab6b6f9ac7090"
+    },
+    {
+      "path": "backend/tmp/liveops-artifacts/nc-01-no-code-composer-20260218T195433Z.json",
+      "sizeBytes": 1618,
+      "sha256": "98aca7be4f2cfe83f47878f228cd3f16f79ce4cdf44933c96e879cd723899783"
+    },
+    {
+      "path": "backend/tmp/liveops-artifacts/nc-02-economy-simulation-20260218T204723Z.json",
+      "sizeBytes": 3194,
+      "sha256": "0eee997593d34c28b25b05b2f59c1aef4e330511e76b167b841c89135d506b59"
+    },
+    {
+      "path": "backend/tmp/liveops-artifacts/nc-03-rollout-safety-20260218T204943Z.json",
+      "sizeBytes": 4193,
+      "sha256": "f5dc867cd82e28af6eb353f68761a310f36915c1241271276ceb6ace22436a08"
+    }
+  ]
+}

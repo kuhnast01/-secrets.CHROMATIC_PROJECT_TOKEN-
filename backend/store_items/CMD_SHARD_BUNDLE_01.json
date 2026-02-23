@@ -1,0 +1,13 @@
+{
+  "id": "CMD_SHARD_BUNDLE_01",
+  "type": "bundle",
+  "pricePremium": 299,
+  "contents": {
+    "commanderShards": { "CMD_002": 10, "CMD_003": 15 }
+  },
+  "visibility": {
+    "minSector": 2,
+    "maxSector": 5,
+    "oneTimePurchase": true
+  }
+}

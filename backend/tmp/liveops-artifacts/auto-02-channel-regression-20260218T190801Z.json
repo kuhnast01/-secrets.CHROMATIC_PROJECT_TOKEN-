@@ -1,0 +1,74 @@
+{
+  "schemaVersion": 1,
+  "pipeline": "AUTO-02",
+  "status": "fail",
+  "generatedAt": "2026-02-18T19:08:05.700Z",
+  "selectedChannels": [
+    "dev",
+    "stage",
+    "prod"
+  ],
+  "reportPath": "C:\\Users\\kuhna\\OneDrive\\Desktop\\SIMgameFiles\\VisualStudio\\FrontendMonorepo\\backend\\tmp\\liveops-artifacts\\auto-02-channel-regression-20260218T190801Z.json",
+  "totals": {
+    "channels": 3,
+    "channelsPassed": 1,
+    "channelsFailed": 2,
+    "steps": 4,
+    "stepsPassed": 2,
+    "stepsFailed": 2,
+    "durationMs": 3766
+  },
+  "channels": [
+    {
+      "channel": "dev",
+      "status": "fail",
+      "startedAt": "2026-02-18T19:08:01.935Z",
+      "finishedAt": "2026-02-18T19:08:03.923Z",
+      "durationMs": 1988,
+      "steps": [
+        {
+          "command": "pnpm run type-check",
+          "exitCode": 0,
+          "durationMs": 1478,
+          "status": "pass"
+        },
+        {
+          "command": "pnpm run lint",
+          "exitCode": 2,
+          "durationMs": 510,
+          "status": "fail"
+        }
+      ]
+    },
+    {
+      "channel": "stage",
+      "status": "pass",
+      "startedAt": "2026-02-18T19:08:03.923Z",
+      "finishedAt": "2026-02-18T19:08:05.436Z",
+      "durationMs": 1513,
+      "steps": [
+        {
+          "command": "pnpm run build",
+          "exitCode": 0,
+          "durationMs": 1513,
+          "status": "pass"
+        }
+      ]
+    },
+    {
+      "channel": "prod",
+      "status": "fail",
+      "startedAt": "2026-02-18T19:08:05.436Z",
+      "finishedAt": "2026-02-18T19:08:05.699Z",
+      "durationMs": 263,
+      "steps": [
+        {
+          "command": "pnpm run docs:check-links",
+          "exitCode": 1,
+          "durationMs": 263,
+          "status": "fail"
+        }
+      ]
+    }
+  ]
+}

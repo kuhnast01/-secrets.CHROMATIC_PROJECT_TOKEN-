@@ -1,0 +1,86 @@
+{
+  "schemaVersion": 1,
+  "pipeline": "AI-03",
+  "status": "pass",
+  "generatedAt": "2026-02-18T20:25:51.175Z",
+  "runId": "ai-approval-gate-20260218T202551Z",
+  "policyPath": "C:\\Users\\kuhna\\OneDrive\\Desktop\\SIMgameFiles\\VisualStudio\\FrontendMonorepo\\governance\\policies\\ai-approval-gate-policy.json",
+  "reportPath": "C:\\Users\\kuhna\\OneDrive\\Desktop\\SIMgameFiles\\VisualStudio\\FrontendMonorepo\\backend\\tmp\\liveops-artifacts\\ai-03-approval-gate-20260218T202551Z.json",
+  "approvalRecordPath": "C:\\Users\\kuhna\\OneDrive\\Desktop\\SIMgameFiles\\VisualStudio\\FrontendMonorepo\\backend\\tmp\\ai-approval-gate\\ai-approval-gate-20260218T202551Z\\approvals.json",
+  "policy": {
+    "schemaVersion": 1,
+    "description": "Policy-as-code source of truth for AI-03 human approval gate enforcement.",
+    "approvalRequiredFor": [
+      "balancing",
+      "deployment"
+    ],
+    "requiredApproverRoles": [
+      "LiveOpsLead",
+      "SRELead"
+    ],
+    "requireSignedApprovalRecord": true,
+    "maxApprovalAgeMinutes": 60
+  },
+  "suggestions": [
+    {
+      "id": "SUG-BAL-001",
+      "type": "balancing",
+      "summary": "Increase event reward multiplier by +8% for stage cohort.",
+      "risk": "medium"
+    },
+    {
+      "id": "SUG-DEP-001",
+      "type": "deployment",
+      "summary": "Promote rollout config from stage to prod channel.",
+      "risk": "high"
+    }
+  ],
+  "checks": [
+    {
+      "name": "gate-blocks-without-approval",
+      "status": "pass",
+      "details": "SUG-BAL-001:missing_approval_record, SUG-DEP-001:missing_approval_record"
+    },
+    {
+      "name": "gate-allows-with-explicit-approval",
+      "status": "pass",
+      "details": "SUG-BAL-001:approved_by:liveops-owner, SUG-DEP-001:approved_by:sre-owner"
+    }
+  ],
+  "deniedWithoutApproval": [
+    {
+      "suggestionId": "SUG-BAL-001",
+      "type": "balancing",
+      "requiresApproval": true,
+      "approved": false,
+      "decision": "blocked",
+      "reason": "missing_approval_record"
+    },
+    {
+      "suggestionId": "SUG-DEP-001",
+      "type": "deployment",
+      "requiresApproval": true,
+      "approved": false,
+      "decision": "blocked",
+      "reason": "missing_approval_record"
+    }
+  ],
+  "executedWithApproval": [
+    {
+      "suggestionId": "SUG-BAL-001",
+      "type": "balancing",
+      "requiresApproval": true,
+      "approved": true,
+      "decision": "executed",
+      "reason": "approved_by:liveops-owner"
+    },
+    {
+      "suggestionId": "SUG-DEP-001",
+      "type": "deployment",
+      "requiresApproval": true,
+      "approved": true,
+      "decision": "executed",
+      "reason": "approved_by:sre-owner"
+    }
+  ]
+}

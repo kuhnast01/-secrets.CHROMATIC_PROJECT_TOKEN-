@@ -1,0 +1,3253 @@
+{
+  "schemaVersion": 1,
+  "format": "poseidon-sbom-v1",
+  "generatedAt": "2026-02-18T20:53:27.728Z",
+  "check": "MONO-03",
+  "lockfile": {
+    "path": "pnpm-lock.yaml",
+    "sha256": "915a86ff344c33a1cfc62b622f6623eaeef53db6f6d130ffeaf072c0efeea0b3"
+  },
+  "componentCount": 13,
+  "dependencyNameCount": 127,
+  "components": [
+    {
+      "name": "admin-dashboard",
+      "version": "1.0.0",
+      "manifestPath": "apps/admin-dashboard/package.json",
+      "dependencyCount": 30,
+      "dependencies": [
+        {
+          "name": "@expo/vector-icons",
+          "spec": "^15.0.3",
+          "scope": "dependencies",
+          "purl": "pkg:npm/%40expo%2Fvector-icons@%5E15.0.3"
+        },
+        {
+          "name": "@react-navigation/native",
+          "spec": "^7.1.28",
+          "scope": "dependencies",
+          "purl": "pkg:npm/%40react-navigation%2Fnative@%5E7.1.28"
+        },
+        {
+          "name": "date-fns",
+          "spec": "^4.1.0",
+          "scope": "dependencies",
+          "purl": "pkg:npm/date-fns@%5E4.1.0"
+        },
+        {
+          "name": "expo",
+          "spec": "^54.0.33",
+          "scope": "dependencies",
+          "purl": "pkg:npm/expo@%5E54.0.33"
+        },
+        {
+          "name": "prop-types",
+          "spec": "^15.8.1",
+          "scope": "dependencies",
+          "purl": "pkg:npm/prop-types@%5E15.8.1"
+        },
+        {
+          "name": "react-i18next",
+          "spec": "^13.2.2",
+          "scope": "dependencies",
+          "purl": "pkg:npm/react-i18next@%5E13.2.2"
+        },
+        {
+          "name": "react-query",
+          "spec": "^3.39.3",
+          "scope": "dependencies",
+          "purl": "pkg:npm/react-query@%5E3.39.3"
+        },
+        {
+          "name": "react-quill",
+          "spec": "^2.0.0",
+          "scope": "dependencies",
+          "purl": "pkg:npm/react-quill@%5E2.0.0"
+        },
+        {
+          "name": "@api",
+          "spec": "workspace:../../packages/api",
+          "scope": "devDependencies",
+          "purl": "pkg:npm/%40api@workspace%3A..%2F..%2Fpackages%2Fapi"
+        },
+        {
+          "name": "@babel/preset-env",
+          "spec": "^7.29.0",
+          "scope": "devDependencies",
+          "purl": "pkg:npm/%40babel%2Fpreset-env@%5E7.29.0"
+        },
+        {
+          "name": "@babel/preset-react",
+          "spec": "^7.28.5",
+          "scope": "devDependencies",
+          "purl": "pkg:npm/%40babel%2Fpreset-react@%5E7.28.5"
+        },
+        {
+          "name": "@babel/preset-typescript",
+          "spec": "^7.28.5",
+          "scope": "devDependencies",
+          "purl": "pkg:npm/%40babel%2Fpreset-typescript@%5E7.28.5"
+        },
+        {
+          "name": "@react-native/babel-preset",
+          "spec": "^0.84.0",
+          "scope": "devDependencies",
+          "purl": "pkg:npm/%40react-native%2Fbabel-preset@%5E0.84.0"
+        },
+        {
+          "name": "@testing-library/jest-native",
+          "spec": "^5.4.3",
+          "scope": "devDependencies",
+          "purl": "pkg:npm/%40testing-library%2Fjest-native@%5E5.4.3"
+        },
+        {
+          "name": "@testing-library/react-native",
+          "spec": "^12.1.5",
+          "scope": "devDependencies",
+          "purl": "pkg:npm/%40testing-library%2Freact-native@%5E12.1.5"
+        },
+        {
+          "name": "@types/jest",
+          "spec": "^29.5.11",
+          "scope": "devDependencies",
+          "purl": "pkg:npm/%40types%2Fjest@%5E29.5.11"
+        },
+        {
+          "name": "@types/node",
+          "spec": "^25.2.3",
+          "scope": "devDependencies",
+          "purl": "pkg:npm/%40types%2Fnode@%5E25.2.3"
+        },
+        {
+          "name": "@types/prop-types",
+          "spec": "^15.7.12",
+          "scope": "devDependencies",
+          "purl": "pkg:npm/%40types%2Fprop-types@%5E15.7.12"
+        },
+        {
+          "name": "@types/react",
+          "spec": "^19.2.14",
+          "scope": "devDependencies",
+          "purl": "pkg:npm/%40types%2Freact@%5E19.2.14"
+        },
+        {
+          "name": "@types/react-i18next",
+          "spec": "8.1.0",
+          "scope": "devDependencies",
+          "purl": "pkg:npm/%40types%2Freact-i18next@8.1.0"
+        },
+        {
+          "name": "@types/react-native",
+          "spec": "^0.72.4",
+          "scope": "devDependencies",
+          "purl": "pkg:npm/%40types%2Freact-native@%5E0.72.4"
+        },
+        {
+          "name": "@types/react-navigation",
+          "spec": "^3.4.0",
+          "scope": "devDependencies",
+          "purl": "pkg:npm/%40types%2Freact-navigation@%5E3.4.0"
+        },
+        {
+          "name": "babel-jest",
+          "spec": "^30.2.0",
+          "scope": "devDependencies",
+          "purl": "pkg:npm/babel-jest@%5E30.2.0"
+        },
+        {
+          "name": "jest",
+          "spec": "^30.2.0",
+          "scope": "devDependencies",
+          "purl": "pkg:npm/jest@%5E30.2.0"
+        },
+        {
+          "name": "jest-environment-jsdom",
+          "spec": "^30.2.0",
+          "scope": "devDependencies",
+          "purl": "pkg:npm/jest-environment-jsdom@%5E30.2.0"
+        },
+        {
+          "name": "jest-react-native",
+          "spec": "^18.0.0",
+          "scope": "devDependencies",
+          "purl": "pkg:npm/jest-react-native@%5E18.0.0"
+        },
+        {
+          "name": "metro-react-native-babel-preset",
+          "spec": "^0.77.0",
+          "scope": "devDependencies",
+          "purl": "pkg:npm/metro-react-native-babel-preset@%5E0.77.0"
+        },
+        {
+          "name": "react-native",
+          "spec": "^0.84.0",
+          "scope": "devDependencies",
+          "purl": "pkg:npm/react-native@%5E0.84.0"
+        },
+        {
+          "name": "ts-jest",
+          "spec": "^29.4.6",
+          "scope": "devDependencies",
+          "purl": "pkg:npm/ts-jest@%5E29.4.6"
+        },
+        {
+          "name": "typescript",
+          "spec": "^5.9.3",
+          "scope": "devDependencies",
+          "purl": "pkg:npm/typescript@%5E5.9.3"
+        }
+      ]
+    },
+    {
+      "name": "admin-panel",
+      "version": "0.1.0",
+      "manifestPath": "apps/admin-panel/package.json",
+      "dependencyCount": 13,
+      "dependencies": [
+        {
+          "name": "@dnd-kit/core",
+          "spec": "^6.3.1",
+          "scope": "dependencies",
+          "purl": "pkg:npm/%40dnd-kit%2Fcore@%5E6.3.1"
+        },
+        {
+          "name": "@dnd-kit/sortable",
+          "spec": "^10.0.0",
+          "scope": "dependencies",
+          "purl": "pkg:npm/%40dnd-kit%2Fsortable@%5E10.0.0"
+        },
+        {
+          "name": "next",
+          "spec": "16.1.6",
+          "scope": "dependencies",
+          "purl": "pkg:npm/next@16.1.6"
+        },
+        {
+          "name": "react",
+          "spec": "19.2.4",
+          "scope": "dependencies",
+          "purl": "pkg:npm/react@19.2.4"
+        },
+        {
+          "name": "react-dom",
+          "spec": "19.2.4",
+          "scope": "dependencies",
+          "purl": "pkg:npm/react-dom@19.2.4"
+        },
+        {
+          "name": "@tailwindcss/postcss",
+          "spec": "^4",
+          "scope": "devDependencies",
+          "purl": "pkg:npm/%40tailwindcss%2Fpostcss@%5E4"
+        },
+        {
+          "name": "@types/node",
+          "spec": "^20",
+          "scope": "devDependencies",
+          "purl": "pkg:npm/%40types%2Fnode@%5E20"
+        },
+        {
+          "name": "@types/react",
+          "spec": "19.2.14",
+          "scope": "devDependencies",
+          "purl": "pkg:npm/%40types%2Freact@19.2.14"
+        },
+        {
+          "name": "@types/react-dom",
+          "spec": "19.2.3",
+          "scope": "devDependencies",
+          "purl": "pkg:npm/%40types%2Freact-dom@19.2.3"
+        },
+        {
+          "name": "eslint",
+          "spec": "^9",
+          "scope": "devDependencies",
+          "purl": "pkg:npm/eslint@%5E9"
+        },
+        {
+          "name": "eslint-config-next",
+          "spec": "16.1.6",
+          "scope": "devDependencies",
+          "purl": "pkg:npm/eslint-config-next@16.1.6"
+        },
+        {
+          "name": "tailwindcss",
+          "spec": "^4",
+          "scope": "devDependencies",
+          "purl": "pkg:npm/tailwindcss@%5E4"
+        },
+        {
+          "name": "typescript",
+          "spec": "^5",
+          "scope": "devDependencies",
+          "purl": "pkg:npm/typescript@%5E5"
+        }
+      ]
+    },
+    {
+      "name": "mobile",
+      "version": "1.0.0",
+      "manifestPath": "apps/mobile/package.json",
+      "dependencyCount": 31,
+      "dependencies": [
+        {
+          "name": "@expo/vector-icons",
+          "spec": "^15.0.3",
+          "scope": "dependencies",
+          "purl": "pkg:npm/%40expo%2Fvector-icons@%5E15.0.3"
+        },
+        {
+          "name": "@react-navigation/native",
+          "spec": "^7.1.28",
+          "scope": "dependencies",
+          "purl": "pkg:npm/%40react-navigation%2Fnative@%5E7.1.28"
+        },
+        {
+          "name": "date-fns",
+          "spec": "^4.1.0",
+          "scope": "dependencies",
+          "purl": "pkg:npm/date-fns@%5E4.1.0"
+        },
+        {
+          "name": "expo",
+          "spec": "^54.0.33",
+          "scope": "dependencies",
+          "purl": "pkg:npm/expo@%5E54.0.33"
+        },
+        {
+          "name": "prop-types",
+          "spec": "^15.8.1",
+          "scope": "dependencies",
+          "purl": "pkg:npm/prop-types@%5E15.8.1"
+        },
+        {
+          "name": "react",
+          "spec": "19.1.0",
+          "scope": "dependencies",
+          "purl": "pkg:npm/react@19.1.0"
+        },
+        {
+          "name": "react-i18next",
+          "spec": "^13.2.2",
+          "scope": "dependencies",
+          "purl": "pkg:npm/react-i18next@%5E13.2.2"
+        },
+        {
+          "name": "react-native",
+          "spec": "0.81.5",
+          "scope": "dependencies",
+          "purl": "pkg:npm/react-native@0.81.5"
+        },
+        {
+          "name": "react-query",
+          "spec": "^3.39.3",
+          "scope": "dependencies",
+          "purl": "pkg:npm/react-query@%5E3.39.3"
+        },
+        {
+          "name": "@babel/preset-env",
+          "spec": "^7.29.0",
+          "scope": "devDependencies",
+          "purl": "pkg:npm/%40babel%2Fpreset-env@%5E7.29.0"
+        },
+        {
+          "name": "@babel/preset-react",
+          "spec": "^7.28.5",
+          "scope": "devDependencies",
+          "purl": "pkg:npm/%40babel%2Fpreset-react@%5E7.28.5"
+        },
+        {
+          "name": "@babel/preset-typescript",
+          "spec": "^7.28.5",
+          "scope": "devDependencies",
+          "purl": "pkg:npm/%40babel%2Fpreset-typescript@%5E7.28.5"
+        },
+        {
+          "name": "@frontend-monorepo/api",
+          "spec": "workspace:../../packages/api",
+          "scope": "devDependencies",
+          "purl": "pkg:npm/%40frontend-monorepo%2Fapi@workspace%3A..%2F..%2Fpackages%2Fapi"
+        },
+        {
+          "name": "@react-native/babel-preset",
+          "spec": "^0.84.0",
+          "scope": "devDependencies",
+          "purl": "pkg:npm/%40react-native%2Fbabel-preset@%5E0.84.0"
+        },
+        {
+          "name": "@testing-library/jest-native",
+          "spec": "^5.4.3",
+          "scope": "devDependencies",
+          "purl": "pkg:npm/%40testing-library%2Fjest-native@%5E5.4.3"
+        },
+        {
+          "name": "@testing-library/react-native",
+          "spec": "^12.1.5",
+          "scope": "devDependencies",
+          "purl": "pkg:npm/%40testing-library%2Freact-native@%5E12.1.5"
+        },
+        {
+          "name": "@types/jest",
+          "spec": "29.5.14",
+          "scope": "devDependencies",
+          "purl": "pkg:npm/%40types%2Fjest@29.5.14"
+        },
+        {
+          "name": "@types/node",
+          "spec": "^25.2.3",
+          "scope": "devDependencies",
+          "purl": "pkg:npm/%40types%2Fnode@%5E25.2.3"
+        },
+        {
+          "name": "@types/prop-types",
+          "spec": "^15.7.12",
+          "scope": "devDependencies",
+          "purl": "pkg:npm/%40types%2Fprop-types@%5E15.7.12"
+        },
+        {
+          "name": "@types/react",
+          "spec": "^19.1.17",
+          "scope": "devDependencies",
+          "purl": "pkg:npm/%40types%2Freact@%5E19.1.17"
+        },
+        {
+          "name": "@types/react-i18next",
+          "spec": "8.1.0",
+          "scope": "devDependencies",
+          "purl": "pkg:npm/%40types%2Freact-i18next@8.1.0"
+        },
+        {
+          "name": "@types/react-native",
+          "spec": "^0.72.4",
+          "scope": "devDependencies",
+          "purl": "pkg:npm/%40types%2Freact-native@%5E0.72.4"
+        },
+        {
+          "name": "@types/react-navigation",
+          "spec": "^3.4.0",
+          "scope": "devDependencies",
+          "purl": "pkg:npm/%40types%2Freact-navigation@%5E3.4.0"
+        },
+        {
+          "name": "babel-jest",
+          "spec": "^30.2.0",
+          "scope": "devDependencies",
+          "purl": "pkg:npm/babel-jest@%5E30.2.0"
+        },
+        {
+          "name": "jest",
+          "spec": "^29.7.0",
+          "scope": "devDependencies",
+          "purl": "pkg:npm/jest@%5E29.7.0"
+        },
+        {
+          "name": "jest-environment-jsdom",
+          "spec": "^30.2.0",
+          "scope": "devDependencies",
+          "purl": "pkg:npm/jest-environment-jsdom@%5E30.2.0"
+        },
+        {
+          "name": "jest-react-native",
+          "spec": "^18.0.0",
+          "scope": "devDependencies",
+          "purl": "pkg:npm/jest-react-native@%5E18.0.0"
+        },
+        {
+          "name": "metro-react-native-babel-preset",
+          "spec": "^0.77.0",
+          "scope": "devDependencies",
+          "purl": "pkg:npm/metro-react-native-babel-preset@%5E0.77.0"
+        },
+        {
+          "name": "react-native",
+          "spec": "0.81.5",
+          "scope": "devDependencies",
+          "purl": "pkg:npm/react-native@0.81.5"
+        },
+        {
+          "name": "ts-jest",
+          "spec": "^29.4.6",
+          "scope": "devDependencies",
+          "purl": "pkg:npm/ts-jest@%5E29.4.6"
+        },
+        {
+          "name": "typescript",
+          "spec": "^5.9.3",
+          "scope": "devDependencies",
+          "purl": "pkg:npm/typescript@%5E5.9.3"
+        }
+      ]
+    },
+    {
+      "name": "poseidon-studio",
+      "version": "0.1.0",
+      "manifestPath": "apps/poseidon-studio/package.json",
+      "dependencyCount": 20,
+      "dependencies": [
+        {
+          "name": "@chakra-ui/icons",
+          "spec": "^2.2.4",
+          "scope": "dependencies",
+          "purl": "pkg:npm/%40chakra-ui%2Ficons@%5E2.2.4"
+        },
+        {
+          "name": "@chakra-ui/react",
+          "spec": "^2.8.0",
+          "scope": "dependencies",
+          "purl": "pkg:npm/%40chakra-ui%2Freact@%5E2.8.0"
+        },
+        {
+          "name": "@emotion/react",
+          "spec": "^11.11.1",
+          "scope": "dependencies",
+          "purl": "pkg:npm/%40emotion%2Freact@%5E11.11.1"
+        },
+        {
+          "name": "@emotion/styled",
+          "spec": "^11.11.0",
+          "scope": "dependencies",
+          "purl": "pkg:npm/%40emotion%2Fstyled@%5E11.11.0"
+        },
+        {
+          "name": "@tanstack/react-query",
+          "spec": "^4.29.0",
+          "scope": "dependencies",
+          "purl": "pkg:npm/%40tanstack%2Freact-query@%5E4.29.0"
+        },
+        {
+          "name": "@tanstack/react-query-devtools",
+          "spec": "^4.29.0",
+          "scope": "dependencies",
+          "purl": "pkg:npm/%40tanstack%2Freact-query-devtools@%5E4.29.0"
+        },
+        {
+          "name": "framer-motion",
+          "spec": "^10.16.4",
+          "scope": "dependencies",
+          "purl": "pkg:npm/framer-motion@%5E10.16.4"
+        },
+        {
+          "name": "react",
+          "spec": "^18.2.0",
+          "scope": "dependencies",
+          "purl": "pkg:npm/react@%5E18.2.0"
+        },
+        {
+          "name": "react-dom",
+          "spec": "^18.2.0",
+          "scope": "dependencies",
+          "purl": "pkg:npm/react-dom@%5E18.2.0"
+        },
+        {
+          "name": "react-icons",
+          "spec": "^4.10.1",
+          "scope": "dependencies",
+          "purl": "pkg:npm/react-icons@%5E4.10.1"
+        },
+        {
+          "name": "react-router-dom",
+          "spec": "^6.22.3",
+          "scope": "dependencies",
+          "purl": "pkg:npm/react-router-dom@%5E6.22.3"
+        },
+        {
+          "name": "@types/react",
+          "spec": "^18.2.37",
+          "scope": "devDependencies",
+          "purl": "pkg:npm/%40types%2Freact@%5E18.2.37"
+        },
+        {
+          "name": "@types/react-dom",
+          "spec": "^18.2.15",
+          "scope": "devDependencies",
+          "purl": "pkg:npm/%40types%2Freact-dom@%5E18.2.15"
+        },
+        {
+          "name": "@vitejs/plugin-react",
+          "spec": "^4.2.1",
+          "scope": "devDependencies",
+          "purl": "pkg:npm/%40vitejs%2Fplugin-react@%5E4.2.1"
+        },
+        {
+          "name": "eslint",
+          "spec": "^8.56.0",
+          "scope": "devDependencies",
+          "purl": "pkg:npm/eslint@%5E8.56.0"
+        },
+        {
+          "name": "eslint-config-prettier",
+          "spec": "^9.1.0",
+          "scope": "devDependencies",
+          "purl": "pkg:npm/eslint-config-prettier@%5E9.1.0"
+        },
+        {
+          "name": "eslint-plugin-react",
+          "spec": "^7.33.2",
+          "scope": "devDependencies",
+          "purl": "pkg:npm/eslint-plugin-react@%5E7.33.2"
+        },
+        {
+          "name": "prettier",
+          "spec": "^3.2.5",
+          "scope": "devDependencies",
+          "purl": "pkg:npm/prettier@%5E3.2.5"
+        },
+        {
+          "name": "typescript",
+          "spec": "^5.3.3",
+          "scope": "devDependencies",
+          "purl": "pkg:npm/typescript@%5E5.3.3"
+        },
+        {
+          "name": "vite",
+          "spec": "^5.2.0",
+          "scope": "devDependencies",
+          "purl": "pkg:npm/vite@%5E5.2.0"
+        }
+      ]
+    },
+    {
+      "name": "poseidon-ui",
+      "version": "0.1.0",
+      "manifestPath": "apps/poseidon-ui/package.json",
+      "dependencyCount": 2,
+      "dependencies": [
+        {
+          "name": "electron",
+          "spec": "^35.7.5",
+          "scope": "devDependencies",
+          "purl": "pkg:npm/electron@%5E35.7.5"
+        },
+        {
+          "name": "electron-builder",
+          "spec": "^26.7.0",
+          "scope": "devDependencies",
+          "purl": "pkg:npm/electron-builder@%5E26.7.0"
+        }
+      ]
+    },
+    {
+      "name": "web",
+      "version": "0.0.0",
+      "manifestPath": "apps/web/package.json",
+      "dependencyCount": 14,
+      "dependencies": [
+        {
+          "name": "react",
+          "spec": "^19.2.0",
+          "scope": "dependencies",
+          "purl": "pkg:npm/react@%5E19.2.0"
+        },
+        {
+          "name": "react-dom",
+          "spec": "^19.2.0",
+          "scope": "dependencies",
+          "purl": "pkg:npm/react-dom@%5E19.2.0"
+        },
+        {
+          "name": "@eslint/js",
+          "spec": "^9.39.1",
+          "scope": "devDependencies",
+          "purl": "pkg:npm/%40eslint%2Fjs@%5E9.39.1"
+        },
+        {
+          "name": "@types/node",
+          "spec": "^24.10.1",
+          "scope": "devDependencies",
+          "purl": "pkg:npm/%40types%2Fnode@%5E24.10.1"
+        },
+        {
+          "name": "@types/react",
+          "spec": "^19.2.7",
+          "scope": "devDependencies",
+          "purl": "pkg:npm/%40types%2Freact@%5E19.2.7"
+        },
+        {
+          "name": "@types/react-dom",
+          "spec": "^19.2.3",
+          "scope": "devDependencies",
+          "purl": "pkg:npm/%40types%2Freact-dom@%5E19.2.3"
+        },
+        {
+          "name": "@vitejs/plugin-react",
+          "spec": "^5.1.1",
+          "scope": "devDependencies",
+          "purl": "pkg:npm/%40vitejs%2Fplugin-react@%5E5.1.1"
+        },
+        {
+          "name": "eslint",
+          "spec": "^9.39.1",
+          "scope": "devDependencies",
+          "purl": "pkg:npm/eslint@%5E9.39.1"
+        },
+        {
+          "name": "eslint-plugin-react-hooks",
+          "spec": "^7.0.1",
+          "scope": "devDependencies",
+          "purl": "pkg:npm/eslint-plugin-react-hooks@%5E7.0.1"
+        },
+        {
+          "name": "eslint-plugin-react-refresh",
+          "spec": "^0.4.24",
+          "scope": "devDependencies",
+          "purl": "pkg:npm/eslint-plugin-react-refresh@%5E0.4.24"
+        },
+        {
+          "name": "globals",
+          "spec": "^16.5.0",
+          "scope": "devDependencies",
+          "purl": "pkg:npm/globals@%5E16.5.0"
+        },
+        {
+          "name": "typescript",
+          "spec": "~5.9.3",
+          "scope": "devDependencies",
+          "purl": "pkg:npm/typescript@~5.9.3"
+        },
+        {
+          "name": "typescript-eslint",
+          "spec": "^8.48.0",
+          "scope": "devDependencies",
+          "purl": "pkg:npm/typescript-eslint@%5E8.48.0"
+        },
+        {
+          "name": "vite",
+          "spec": "^7.3.1",
+          "scope": "devDependencies",
+          "purl": "pkg:npm/vite@%5E7.3.1"
+        }
+      ]
+    },
+    {
+      "name": "liveops-backend",
+      "version": "1.0.0",
+      "manifestPath": "backend/package.json",
+      "dependencyCount": 48,
+      "dependencies": [
+        {
+          "name": "@dnd-kit/core",
+          "spec": "^6.3.1",
+          "scope": "dependencies",
+          "purl": "pkg:npm/%40dnd-kit%2Fcore@%5E6.3.1"
+        },
+        {
+          "name": "@dnd-kit/sortable",
+          "spec": "^10.0.0",
+          "scope": "dependencies",
+          "purl": "pkg:npm/%40dnd-kit%2Fsortable@%5E10.0.0"
+        },
+        {
+          "name": "@dnd-kit/utilities",
+          "spec": "^3.2.2",
+          "scope": "dependencies",
+          "purl": "pkg:npm/%40dnd-kit%2Futilities@%5E3.2.2"
+        },
+        {
+          "name": "bcrypt",
+          "spec": "^5.1.1",
+          "scope": "dependencies",
+          "purl": "pkg:npm/bcrypt@%5E5.1.1"
+        },
+        {
+          "name": "bcryptjs",
+          "spec": "^3.0.3",
+          "scope": "dependencies",
+          "purl": "pkg:npm/bcryptjs@%5E3.0.3"
+        },
+        {
+          "name": "cors",
+          "spec": "^2.8.6",
+          "scope": "dependencies",
+          "purl": "pkg:npm/cors@%5E2.8.6"
+        },
+        {
+          "name": "dotenv",
+          "spec": "^16.3.1",
+          "scope": "dependencies",
+          "purl": "pkg:npm/dotenv@%5E16.3.1"
+        },
+        {
+          "name": "express",
+          "spec": "^4.22.1",
+          "scope": "dependencies",
+          "purl": "pkg:npm/express@%5E4.22.1"
+        },
+        {
+          "name": "express-rate-limit",
+          "spec": "^8.2.1",
+          "scope": "dependencies",
+          "purl": "pkg:npm/express-rate-limit@%5E8.2.1"
+        },
+        {
+          "name": "helmet",
+          "spec": "^8.1.0",
+          "scope": "dependencies",
+          "purl": "pkg:npm/helmet@%5E8.1.0"
+        },
+        {
+          "name": "i18next",
+          "spec": "^25.8.10",
+          "scope": "dependencies",
+          "purl": "pkg:npm/i18next@%5E25.8.10"
+        },
+        {
+          "name": "i18next-fs-backend",
+          "spec": "^2.6.1",
+          "scope": "dependencies",
+          "purl": "pkg:npm/i18next-fs-backend@%5E2.6.1"
+        },
+        {
+          "name": "i18next-http-middleware",
+          "spec": "^3.9.2",
+          "scope": "dependencies",
+          "purl": "pkg:npm/i18next-http-middleware@%5E3.9.2"
+        },
+        {
+          "name": "json2csv",
+          "spec": "6.0.0-alpha.2",
+          "scope": "dependencies",
+          "purl": "pkg:npm/json2csv@6.0.0-alpha.2"
+        },
+        {
+          "name": "jsonwebtoken",
+          "spec": "^9.0.3",
+          "scope": "dependencies",
+          "purl": "pkg:npm/jsonwebtoken@%5E9.0.3"
+        },
+        {
+          "name": "pg",
+          "spec": "^8.18.0",
+          "scope": "dependencies",
+          "purl": "pkg:npm/pg@%5E8.18.0"
+        },
+        {
+          "name": "swagger-jsdoc",
+          "spec": "^6.2.8",
+          "scope": "dependencies",
+          "purl": "pkg:npm/swagger-jsdoc@%5E6.2.8"
+        },
+        {
+          "name": "swagger-ui-express",
+          "spec": "^5.0.1",
+          "scope": "dependencies",
+          "purl": "pkg:npm/swagger-ui-express@%5E5.0.1"
+        },
+        {
+          "name": "@prisma/client",
+          "spec": "6.19.2",
+          "scope": "devDependencies",
+          "purl": "pkg:npm/%40prisma%2Fclient@6.19.2"
+        },
+        {
+          "name": "@types/autocannon",
+          "spec": "^7.12.7",
+          "scope": "devDependencies",
+          "purl": "pkg:npm/%40types%2Fautocannon@%5E7.12.7"
+        },
+        {
+          "name": "@types/axios",
+          "spec": "^0.9.36",
+          "scope": "devDependencies",
+          "purl": "pkg:npm/%40types%2Faxios@%5E0.9.36"
+        },
+        {
+          "name": "@types/bcrypt",
+          "spec": "^5.0.2",
+          "scope": "devDependencies",
+          "purl": "pkg:npm/%40types%2Fbcrypt@%5E5.0.2"
+        },
+        {
+          "name": "@types/cors",
+          "spec": "^2.8.19",
+          "scope": "devDependencies",
+          "purl": "pkg:npm/%40types%2Fcors@%5E2.8.19"
+        },
+        {
+          "name": "@types/express",
+          "spec": "^4.17.25",
+          "scope": "devDependencies",
+          "purl": "pkg:npm/%40types%2Fexpress@%5E4.17.25"
+        },
+        {
+          "name": "@types/express-rate-limit",
+          "spec": "^6.0.2",
+          "scope": "devDependencies",
+          "purl": "pkg:npm/%40types%2Fexpress-rate-limit@%5E6.0.2"
+        },
+        {
+          "name": "@types/helmet",
+          "spec": "^4.0.0",
+          "scope": "devDependencies",
+          "purl": "pkg:npm/%40types%2Fhelmet@%5E4.0.0"
+        },
+        {
+          "name": "@types/i18next",
+          "spec": "^13.0.0",
+          "scope": "devDependencies",
+          "purl": "pkg:npm/%40types%2Fi18next@%5E13.0.0"
+        },
+        {
+          "name": "@types/jest",
+          "spec": "^30.0.0",
+          "scope": "devDependencies",
+          "purl": "pkg:npm/%40types%2Fjest@%5E30.0.0"
+        },
+        {
+          "name": "@types/json2csv",
+          "spec": "^5.0.7",
+          "scope": "devDependencies",
+          "purl": "pkg:npm/%40types%2Fjson2csv@%5E5.0.7"
+        },
+        {
+          "name": "@types/jsonwebtoken",
+          "spec": "^9.0.10",
+          "scope": "devDependencies",
+          "purl": "pkg:npm/%40types%2Fjsonwebtoken@%5E9.0.10"
+        },
+        {
+          "name": "@types/node",
+          "spec": "^20.11.17",
+          "scope": "devDependencies",
+          "purl": "pkg:npm/%40types%2Fnode@%5E20.11.17"
+        },
+        {
+          "name": "@types/pg",
+          "spec": "^8.16.0",
+          "scope": "devDependencies",
+          "purl": "pkg:npm/%40types%2Fpg@%5E8.16.0"
+        },
+        {
+          "name": "@types/pino",
+          "spec": "^7.0.5",
+          "scope": "devDependencies",
+          "purl": "pkg:npm/%40types%2Fpino@%5E7.0.5"
+        },
+        {
+          "name": "@types/supertest",
+          "spec": "^6.0.3",
+          "scope": "devDependencies",
+          "purl": "pkg:npm/%40types%2Fsupertest@%5E6.0.3"
+        },
+        {
+          "name": "@types/swagger-jsdoc",
+          "spec": "^6.0.4",
+          "scope": "devDependencies",
+          "purl": "pkg:npm/%40types%2Fswagger-jsdoc@%5E6.0.4"
+        },
+        {
+          "name": "@types/swagger-ui-express",
+          "spec": "^4.1.8",
+          "scope": "devDependencies",
+          "purl": "pkg:npm/%40types%2Fswagger-ui-express@%5E4.1.8"
+        },
+        {
+          "name": "autocannon",
+          "spec": "^8.0.0",
+          "scope": "devDependencies",
+          "purl": "pkg:npm/autocannon@%5E8.0.0"
+        },
+        {
+          "name": "axios",
+          "spec": "^1.13.5",
+          "scope": "devDependencies",
+          "purl": "pkg:npm/axios@%5E1.13.5"
+        },
+        {
+          "name": "husky",
+          "spec": "^9.0.0",
+          "scope": "devDependencies",
+          "purl": "pkg:npm/husky@%5E9.0.0"
+        },
+        {
+          "name": "jest",
+          "spec": "^30.2.0",
+          "scope": "devDependencies",
+          "purl": "pkg:npm/jest@%5E30.2.0"
+        },
+        {
+          "name": "lint-staged",
+          "spec": "^15.0.0",
+          "scope": "devDependencies",
+          "purl": "pkg:npm/lint-staged@%5E15.0.0"
+        },
+        {
+          "name": "pino",
+          "spec": "^10.3.1",
+          "scope": "devDependencies",
+          "purl": "pkg:npm/pino@%5E10.3.1"
+        },
+        {
+          "name": "prisma",
+          "spec": "6.19.2",
+          "scope": "devDependencies",
+          "purl": "pkg:npm/prisma@6.19.2"
+        },
+        {
+          "name": "supertest",
+          "spec": "^7.2.2",
+          "scope": "devDependencies",
+          "purl": "pkg:npm/supertest@%5E7.2.2"
+        },
+        {
+          "name": "ts-jest",
+          "spec": "^29.4.6",
+          "scope": "devDependencies",
+          "purl": "pkg:npm/ts-jest@%5E29.4.6"
+        },
+        {
+          "name": "ts-node-dev",
+          "spec": "^2.0.0",
+          "scope": "devDependencies",
+          "purl": "pkg:npm/ts-node-dev@%5E2.0.0"
+        },
+        {
+          "name": "tsx",
+          "spec": "^4.21.0",
+          "scope": "devDependencies",
+          "purl": "pkg:npm/tsx@%5E4.21.0"
+        },
+        {
+          "name": "typescript",
+          "spec": "^5.3.3",
+          "scope": "devDependencies",
+          "purl": "pkg:npm/typescript@%5E5.3.3"
+        }
+      ]
+    },
+    {
+      "name": "FrontendMonorepo",
+      "version": "1.0.0",
+      "manifestPath": "package.json",
+      "dependencyCount": 46,
+      "dependencies": [
+        {
+          "name": "@chakra-ui/react",
+          "spec": "^3.33.0",
+          "scope": "dependencies",
+          "purl": "pkg:npm/%40chakra-ui%2Freact@%5E3.33.0"
+        },
+        {
+          "name": "@dnd-kit/core",
+          "spec": "^6.3.1",
+          "scope": "dependencies",
+          "purl": "pkg:npm/%40dnd-kit%2Fcore@%5E6.3.1"
+        },
+        {
+          "name": "@dnd-kit/sortable",
+          "spec": "^10.0.0",
+          "scope": "dependencies",
+          "purl": "pkg:npm/%40dnd-kit%2Fsortable@%5E10.0.0"
+        },
+        {
+          "name": "@dnd-kit/utilities",
+          "spec": "^3.2.2",
+          "scope": "dependencies",
+          "purl": "pkg:npm/%40dnd-kit%2Futilities@%5E3.2.2"
+        },
+        {
+          "name": "@expo/vector-icons",
+          "spec": "^15.0.3",
+          "scope": "dependencies",
+          "purl": "pkg:npm/%40expo%2Fvector-icons@%5E15.0.3"
+        },
+        {
+          "name": "@mui/material",
+          "spec": "^7.3.8",
+          "scope": "dependencies",
+          "purl": "pkg:npm/%40mui%2Fmaterial@%5E7.3.8"
+        },
+        {
+          "name": "@react-native-community/netinfo",
+          "spec": "^12.0.1",
+          "scope": "dependencies",
+          "purl": "pkg:npm/%40react-native-community%2Fnetinfo@%5E12.0.1"
+        },
+        {
+          "name": "@react-native-firebase/analytics",
+          "spec": "^23.8.6",
+          "scope": "dependencies",
+          "purl": "pkg:npm/%40react-native-firebase%2Fanalytics@%5E23.8.6"
+        },
+        {
+          "name": "@react-navigation/stack",
+          "spec": "^7.7.1",
+          "scope": "dependencies",
+          "purl": "pkg:npm/%40react-navigation%2Fstack@%5E7.7.1"
+        },
+        {
+          "name": "@sentry/browser",
+          "spec": "^10.39.0",
+          "scope": "dependencies",
+          "purl": "pkg:npm/%40sentry%2Fbrowser@%5E10.39.0"
+        },
+        {
+          "name": "@sentry/react",
+          "spec": "^10.39.0",
+          "scope": "dependencies",
+          "purl": "pkg:npm/%40sentry%2Freact@%5E10.39.0"
+        },
+        {
+          "name": "@sentry/react-native",
+          "spec": "^8.0.0",
+          "scope": "dependencies",
+          "purl": "pkg:npm/%40sentry%2Freact-native@%5E8.0.0"
+        },
+        {
+          "name": "@tanstack/react-query",
+          "spec": "^5.90.21",
+          "scope": "dependencies",
+          "purl": "pkg:npm/%40tanstack%2Freact-query@%5E5.90.21"
+        },
+        {
+          "name": "@tanstack/react-query-devtools",
+          "spec": "^5.91.3",
+          "scope": "dependencies",
+          "purl": "pkg:npm/%40tanstack%2Freact-query-devtools@%5E5.91.3"
+        },
+        {
+          "name": "@types/react-native",
+          "spec": "^0.72.8",
+          "scope": "dependencies",
+          "purl": "pkg:npm/%40types%2Freact-native@%5E0.72.8"
+        },
+        {
+          "name": "expo",
+          "spec": "^54.0.33",
+          "scope": "dependencies",
+          "purl": "pkg:npm/expo@%5E54.0.33"
+        },
+        {
+          "name": "prettier",
+          "spec": "^3.8.1",
+          "scope": "dependencies",
+          "purl": "pkg:npm/prettier@%5E3.8.1"
+        },
+        {
+          "name": "react",
+          "spec": "19.2.4",
+          "scope": "dependencies",
+          "purl": "pkg:npm/react@19.2.4"
+        },
+        {
+          "name": "react-dom",
+          "spec": "19.2.4",
+          "scope": "dependencies",
+          "purl": "pkg:npm/react-dom@19.2.4"
+        },
+        {
+          "name": "react-dropzone",
+          "spec": "^15.0.0",
+          "scope": "dependencies",
+          "purl": "pkg:npm/react-dropzone@%5E15.0.0"
+        },
+        {
+          "name": "react-icons",
+          "spec": "^5.5.0",
+          "scope": "dependencies",
+          "purl": "pkg:npm/react-icons@%5E5.5.0"
+        },
+        {
+          "name": "react-native",
+          "spec": "0.84.0",
+          "scope": "dependencies",
+          "purl": "pkg:npm/react-native@0.84.0"
+        },
+        {
+          "name": "react-query",
+          "spec": "^3.39.3",
+          "scope": "dependencies",
+          "purl": "pkg:npm/react-query@%5E3.39.3"
+        },
+        {
+          "name": "react-router-dom",
+          "spec": "^7.13.0",
+          "scope": "dependencies",
+          "purl": "pkg:npm/react-router-dom@%5E7.13.0"
+        },
+        {
+          "name": "vite",
+          "spec": "^7.3.1",
+          "scope": "dependencies",
+          "purl": "pkg:npm/vite@%5E7.3.1"
+        },
+        {
+          "name": "zod",
+          "spec": "^4.3.6",
+          "scope": "dependencies",
+          "purl": "pkg:npm/zod@%5E4.3.6"
+        },
+        {
+          "name": "@eslint/js",
+          "spec": "^10.0.1",
+          "scope": "devDependencies",
+          "purl": "pkg:npm/%40eslint%2Fjs@%5E10.0.1"
+        },
+        {
+          "name": "@types/jest",
+          "spec": "^30.0.0",
+          "scope": "devDependencies",
+          "purl": "pkg:npm/%40types%2Fjest@%5E30.0.0"
+        },
+        {
+          "name": "@types/node",
+          "spec": "^25.2.3",
+          "scope": "devDependencies",
+          "purl": "pkg:npm/%40types%2Fnode@%5E25.2.3"
+        },
+        {
+          "name": "@types/react",
+          "spec": "19.2.14",
+          "scope": "devDependencies",
+          "purl": "pkg:npm/%40types%2Freact@19.2.14"
+        },
+        {
+          "name": "@types/react-dom",
+          "spec": "^18.3.1",
+          "scope": "devDependencies",
+          "purl": "pkg:npm/%40types%2Freact-dom@%5E18.3.1"
+        },
+        {
+          "name": "@typescript-eslint/eslint-plugin",
+          "spec": "^8.55.0",
+          "scope": "devDependencies",
+          "purl": "pkg:npm/%40typescript-eslint%2Feslint-plugin@%5E8.55.0"
+        },
+        {
+          "name": "@typescript-eslint/parser",
+          "spec": "^8.55.0",
+          "scope": "devDependencies",
+          "purl": "pkg:npm/%40typescript-eslint%2Fparser@%5E8.55.0"
+        },
+        {
+          "name": "cypress",
+          "spec": "^15.10.0",
+          "scope": "devDependencies",
+          "purl": "pkg:npm/cypress@%5E15.10.0"
+        },
+        {
+          "name": "detox",
+          "spec": "^20.47.0",
+          "scope": "devDependencies",
+          "purl": "pkg:npm/detox@%5E20.47.0"
+        },
+        {
+          "name": "eslint",
+          "spec": "^10.0.0",
+          "scope": "devDependencies",
+          "purl": "pkg:npm/eslint@%5E10.0.0"
+        },
+        {
+          "name": "eslint-plugin-i18next",
+          "spec": "^6.1.3",
+          "scope": "devDependencies",
+          "purl": "pkg:npm/eslint-plugin-i18next@%5E6.1.3"
+        },
+        {
+          "name": "eslint-plugin-jsx-a11y",
+          "spec": "^6.10.2",
+          "scope": "devDependencies",
+          "purl": "pkg:npm/eslint-plugin-jsx-a11y@%5E6.10.2"
+        },
+        {
+          "name": "eslint-plugin-react",
+          "spec": "^7.37.5",
+          "scope": "devDependencies",
+          "purl": "pkg:npm/eslint-plugin-react@%5E7.37.5"
+        },
+        {
+          "name": "eslint-plugin-react-hooks",
+          "spec": "^7.0.1",
+          "scope": "devDependencies",
+          "purl": "pkg:npm/eslint-plugin-react-hooks@%5E7.0.1"
+        },
+        {
+          "name": "espree",
+          "spec": "^11.1.0",
+          "scope": "devDependencies",
+          "purl": "pkg:npm/espree@%5E11.1.0"
+        },
+        {
+          "name": "husky",
+          "spec": "^9.0.0",
+          "scope": "devDependencies",
+          "purl": "pkg:npm/husky@%5E9.0.0"
+        },
+        {
+          "name": "jest",
+          "spec": "^30.2.0",
+          "scope": "devDependencies",
+          "purl": "pkg:npm/jest@%5E30.2.0"
+        },
+        {
+          "name": "lint-staged",
+          "spec": "^15.0.0",
+          "scope": "devDependencies",
+          "purl": "pkg:npm/lint-staged@%5E15.0.0"
+        },
+        {
+          "name": "turbo",
+          "spec": "^2.8.9",
+          "scope": "devDependencies",
+          "purl": "pkg:npm/turbo@%5E2.8.9"
+        },
+        {
+          "name": "typescript",
+          "spec": "^5.9.3",
+          "scope": "devDependencies",
+          "purl": "pkg:npm/typescript@%5E5.9.3"
+        }
+      ]
+    },
+    {
+      "name": "api",
+      "version": "1.0.0",
+      "manifestPath": "packages/api/package.json",
+      "dependencyCount": 21,
+      "dependencies": [
+        {
+          "name": "@chakra-ui/react",
+          "spec": "2.10.9",
+          "scope": "dependencies",
+          "purl": "pkg:npm/%40chakra-ui%2Freact@2.10.9"
+        },
+        {
+          "name": "@chakra-ui/system",
+          "spec": "2.6.2",
+          "scope": "dependencies",
+          "purl": "pkg:npm/%40chakra-ui%2Fsystem@2.6.2"
+        },
+        {
+          "name": "@chakra-ui/theme-tools",
+          "spec": "2.0.0",
+          "scope": "dependencies",
+          "purl": "pkg:npm/%40chakra-ui%2Ftheme-tools@2.0.0"
+        },
+        {
+          "name": "@emotion/react",
+          "spec": "11.10.5",
+          "scope": "dependencies",
+          "purl": "pkg:npm/%40emotion%2Freact@11.10.5"
+        },
+        {
+          "name": "@emotion/styled",
+          "spec": "11.10.5",
+          "scope": "dependencies",
+          "purl": "pkg:npm/%40emotion%2Fstyled@11.10.5"
+        },
+        {
+          "name": "@react-navigation/native",
+          "spec": "^7.1.28",
+          "scope": "dependencies",
+          "purl": "pkg:npm/%40react-navigation%2Fnative@%5E7.1.28"
+        },
+        {
+          "name": "@react-navigation/native-stack",
+          "spec": "^7.12.0",
+          "scope": "dependencies",
+          "purl": "pkg:npm/%40react-navigation%2Fnative-stack@%5E7.12.0"
+        },
+        {
+          "name": "@types/axios",
+          "spec": "^0.14.4",
+          "scope": "dependencies",
+          "purl": "pkg:npm/%40types%2Faxios@%5E0.14.4"
+        },
+        {
+          "name": "@types/date-fns",
+          "spec": "^2.6.3",
+          "scope": "dependencies",
+          "purl": "pkg:npm/%40types%2Fdate-fns@%5E2.6.3"
+        },
+        {
+          "name": "@types/react-query",
+          "spec": "^1.2.9",
+          "scope": "dependencies",
+          "purl": "pkg:npm/%40types%2Freact-query@%5E1.2.9"
+        },
+        {
+          "name": "axios",
+          "spec": "^1.13.5",
+          "scope": "dependencies",
+          "purl": "pkg:npm/axios@%5E1.13.5"
+        },
+        {
+          "name": "date-fns",
+          "spec": "^4.1.0",
+          "scope": "dependencies",
+          "purl": "pkg:npm/date-fns@%5E4.1.0"
+        },
+        {
+          "name": "framer-motion",
+          "spec": "7.6.16",
+          "scope": "dependencies",
+          "purl": "pkg:npm/framer-motion@7.6.16"
+        },
+        {
+          "name": "react-native-safe-area-context",
+          "spec": "^5.6.2",
+          "scope": "dependencies",
+          "purl": "pkg:npm/react-native-safe-area-context@%5E5.6.2"
+        },
+        {
+          "name": "react-native-screens",
+          "spec": "^4.23.0",
+          "scope": "dependencies",
+          "purl": "pkg:npm/react-native-screens@%5E4.23.0"
+        },
+        {
+          "name": "react-query",
+          "spec": "^3.39.3",
+          "scope": "dependencies",
+          "purl": "pkg:npm/react-query@%5E3.39.3"
+        },
+        {
+          "name": "@babel/preset-env",
+          "spec": "^7.29.0",
+          "scope": "devDependencies",
+          "purl": "pkg:npm/%40babel%2Fpreset-env@%5E7.29.0"
+        },
+        {
+          "name": "@babel/preset-typescript",
+          "spec": "^7.28.5",
+          "scope": "devDependencies",
+          "purl": "pkg:npm/%40babel%2Fpreset-typescript@%5E7.28.5"
+        },
+        {
+          "name": "babel-jest",
+          "spec": "^30.2.0",
+          "scope": "devDependencies",
+          "purl": "pkg:npm/babel-jest@%5E30.2.0"
+        },
+        {
+          "name": "jest",
+          "spec": "^30.2.0",
+          "scope": "devDependencies",
+          "purl": "pkg:npm/jest@%5E30.2.0"
+        },
+        {
+          "name": "typescript",
+          "spec": "^5.9.3",
+          "scope": "devDependencies",
+          "purl": "pkg:npm/typescript@%5E5.9.3"
+        }
+      ]
+    },
+    {
+      "name": "models",
+      "version": "1.0.0",
+      "manifestPath": "packages/models/package.json",
+      "dependencyCount": 2,
+      "dependencies": [
+        {
+          "name": "zod",
+          "spec": "^4.3.6",
+          "scope": "dependencies",
+          "purl": "pkg:npm/zod@%5E4.3.6"
+        },
+        {
+          "name": "typescript",
+          "spec": "^5.9.3",
+          "scope": "devDependencies",
+          "purl": "pkg:npm/typescript@%5E5.9.3"
+        }
+      ]
+    },
+    {
+      "name": "ui",
+      "version": "1.0.0",
+      "manifestPath": "packages/ui/package.json",
+      "dependencyCount": 3,
+      "dependencies": [
+        {
+          "name": "react",
+          "spec": "18.3.1",
+          "scope": "dependencies",
+          "purl": "pkg:npm/react@18.3.1"
+        },
+        {
+          "name": "react-native",
+          "spec": "^0.84.0",
+          "scope": "dependencies",
+          "purl": "pkg:npm/react-native@%5E0.84.0"
+        },
+        {
+          "name": "typescript",
+          "spec": "^5.9.3",
+          "scope": "devDependencies",
+          "purl": "pkg:npm/typescript@%5E5.9.3"
+        }
+      ]
+    },
+    {
+      "name": "poseidon-desktop",
+      "version": "0.1.0",
+      "manifestPath": "poseidon-desktop/package.json",
+      "dependencyCount": 5,
+      "dependencies": [
+        {
+          "name": "electron",
+          "spec": "^28.0.0",
+          "scope": "dependencies",
+          "purl": "pkg:npm/electron@%5E28.0.0"
+        },
+        {
+          "name": "react",
+          "spec": "^18.0.0",
+          "scope": "dependencies",
+          "purl": "pkg:npm/react@%5E18.0.0"
+        },
+        {
+          "name": "react-dom",
+          "spec": "^18.0.0",
+          "scope": "dependencies",
+          "purl": "pkg:npm/react-dom@%5E18.0.0"
+        },
+        {
+          "name": "electron-builder",
+          "spec": "^24.0.0",
+          "scope": "devDependencies",
+          "purl": "pkg:npm/electron-builder@%5E24.0.0"
+        },
+        {
+          "name": "typescript",
+          "spec": "^5.0.0",
+          "scope": "devDependencies",
+          "purl": "pkg:npm/typescript@%5E5.0.0"
+        }
+      ]
+    },
+    {
+      "name": "poseidon-desktop-renderer",
+      "version": "0.1.0",
+      "manifestPath": "poseidon-desktop/renderer/package.json",
+      "dependencyCount": 5,
+      "dependencies": [
+        {
+          "name": "react",
+          "spec": "^18.0.0",
+          "scope": "dependencies",
+          "purl": "pkg:npm/react@%5E18.0.0"
+        },
+        {
+          "name": "react-dom",
+          "spec": "^18.0.0",
+          "scope": "dependencies",
+          "purl": "pkg:npm/react-dom@%5E18.0.0"
+        },
+        {
+          "name": "@vitejs/plugin-react",
+          "spec": "^4.0.0",
+          "scope": "devDependencies",
+          "purl": "pkg:npm/%40vitejs%2Fplugin-react@%5E4.0.0"
+        },
+        {
+          "name": "typescript",
+          "spec": "^5.0.0",
+          "scope": "devDependencies",
+          "purl": "pkg:npm/typescript@%5E5.0.0"
+        },
+        {
+          "name": "vite",
+          "spec": "^4.0.0",
+          "scope": "devDependencies",
+          "purl": "pkg:npm/vite@%5E4.0.0"
+        }
+      ]
+    }
+  ],
+  "dependencyIndex": [
+    {
+      "name": "@api",
+      "specs": [
+        "workspace:../../packages/api"
+      ],
+      "consumers": [
+        "admin-dashboard"
+      ],
+      "scopes": [
+        "devDependencies"
+      ]
+    },
+    {
+      "name": "@babel/preset-env",
+      "specs": [
+        "^7.29.0"
+      ],
+      "consumers": [
+        "admin-dashboard",
+        "api",
+        "mobile"
+      ],
+      "scopes": [
+        "devDependencies"
+      ]
+    },
+    {
+      "name": "@babel/preset-react",
+      "specs": [
+        "^7.28.5"
+      ],
+      "consumers": [
+        "admin-dashboard",
+        "mobile"
+      ],
+      "scopes": [
+        "devDependencies"
+      ]
+    },
+    {
+      "name": "@babel/preset-typescript",
+      "specs": [
+        "^7.28.5"
+      ],
+      "consumers": [
+        "admin-dashboard",
+        "api",
+        "mobile"
+      ],
+      "scopes": [
+        "devDependencies"
+      ]
+    },
+    {
+      "name": "@chakra-ui/icons",
+      "specs": [
+        "^2.2.4"
+      ],
+      "consumers": [
+        "poseidon-studio"
+      ],
+      "scopes": [
+        "dependencies"
+      ]
+    },
+    {
+      "name": "@chakra-ui/react",
+      "specs": [
+        "^2.8.0",
+        "^3.33.0",
+        "2.10.9"
+      ],
+      "consumers": [
+        "api",
+        "FrontendMonorepo",
+        "poseidon-studio"
+      ],
+      "scopes": [
+        "dependencies"
+      ]
+    },
+    {
+      "name": "@chakra-ui/system",
+      "specs": [
+        "2.6.2"
+      ],
+      "consumers": [
+        "api"
+      ],
+      "scopes": [
+        "dependencies"
+      ]
+    },
+    {
+      "name": "@chakra-ui/theme-tools",
+      "specs": [
+        "2.0.0"
+      ],
+      "consumers": [
+        "api"
+      ],
+      "scopes": [
+        "dependencies"
+      ]
+    },
+    {
+      "name": "@dnd-kit/core",
+      "specs": [
+        "^6.3.1"
+      ],
+      "consumers": [
+        "admin-panel",
+        "FrontendMonorepo",
+        "liveops-backend"
+      ],
+      "scopes": [
+        "dependencies"
+      ]
+    },
+    {
+      "name": "@dnd-kit/sortable",
+      "specs": [
+        "^10.0.0"
+      ],
+      "consumers": [
+        "admin-panel",
+        "FrontendMonorepo",
+        "liveops-backend"
+      ],
+      "scopes": [
+        "dependencies"
+      ]
+    },
+    {
+      "name": "@dnd-kit/utilities",
+      "specs": [
+        "^3.2.2"
+      ],
+      "consumers": [
+        "FrontendMonorepo",
+        "liveops-backend"
+      ],
+      "scopes": [
+        "dependencies"
+      ]
+    },
+    {
+      "name": "@emotion/react",
+      "specs": [
+        "^11.11.1",
+        "11.10.5"
+      ],
+      "consumers": [
+        "api",
+        "poseidon-studio"
+      ],
+      "scopes": [
+        "dependencies"
+      ]
+    },
+    {
+      "name": "@emotion/styled",
+      "specs": [
+        "^11.11.0",
+        "11.10.5"
+      ],
+      "consumers": [
+        "api",
+        "poseidon-studio"
+      ],
+      "scopes": [
+        "dependencies"
+      ]
+    },
+    {
+      "name": "@eslint/js",
+      "specs": [
+        "^10.0.1",
+        "^9.39.1"
+      ],
+      "consumers": [
+        "FrontendMonorepo",
+        "web"
+      ],
+      "scopes": [
+        "devDependencies"
+      ]
+    },
+    {
+      "name": "@expo/vector-icons",
+      "specs": [
+        "^15.0.3"
+      ],
+      "consumers": [
+        "admin-dashboard",
+        "FrontendMonorepo",
+        "mobile"
+      ],
+      "scopes": [
+        "dependencies"
+      ]
+    },
+    {
+      "name": "@frontend-monorepo/api",
+      "specs": [
+        "workspace:../../packages/api"
+      ],
+      "consumers": [
+        "mobile"
+      ],
+      "scopes": [
+        "devDependencies"
+      ]
+    },
+    {
+      "name": "@mui/material",
+      "specs": [
+        "^7.3.8"
+      ],
+      "consumers": [
+        "FrontendMonorepo"
+      ],
+      "scopes": [
+        "dependencies"
+      ]
+    },
+    {
+      "name": "@prisma/client",
+      "specs": [
+        "6.19.2"
+      ],
+      "consumers": [
+        "liveops-backend"
+      ],
+      "scopes": [
+        "devDependencies"
+      ]
+    },
+    {
+      "name": "@react-native-community/netinfo",
+      "specs": [
+        "^12.0.1"
+      ],
+      "consumers": [
+        "FrontendMonorepo"
+      ],
+      "scopes": [
+        "dependencies"
+      ]
+    },
+    {
+      "name": "@react-native-firebase/analytics",
+      "specs": [
+        "^23.8.6"
+      ],
+      "consumers": [
+        "FrontendMonorepo"
+      ],
+      "scopes": [
+        "dependencies"
+      ]
+    },
+    {
+      "name": "@react-native/babel-preset",
+      "specs": [
+        "^0.84.0"
+      ],
+      "consumers": [
+        "admin-dashboard",
+        "mobile"
+      ],
+      "scopes": [
+        "devDependencies"
+      ]
+    },
+    {
+      "name": "@react-navigation/native",
+      "specs": [
+        "^7.1.28"
+      ],
+      "consumers": [
+        "admin-dashboard",
+        "api",
+        "mobile"
+      ],
+      "scopes": [
+        "dependencies"
+      ]
+    },
+    {
+      "name": "@react-navigation/native-stack",
+      "specs": [
+        "^7.12.0"
+      ],
+      "consumers": [
+        "api"
+      ],
+      "scopes": [
+        "dependencies"
+      ]
+    },
+    {
+      "name": "@react-navigation/stack",
+      "specs": [
+        "^7.7.1"
+      ],
+      "consumers": [
+        "FrontendMonorepo"
+      ],
+      "scopes": [
+        "dependencies"
+      ]
+    },
+    {
+      "name": "@sentry/browser",
+      "specs": [
+        "^10.39.0"
+      ],
+      "consumers": [
+        "FrontendMonorepo"
+      ],
+      "scopes": [
+        "dependencies"
+      ]
+    },
+    {
+      "name": "@sentry/react",
+      "specs": [
+        "^10.39.0"
+      ],
+      "consumers": [
+        "FrontendMonorepo"
+      ],
+      "scopes": [
+        "dependencies"
+      ]
+    },
+    {
+      "name": "@sentry/react-native",
+      "specs": [
+        "^8.0.0"
+      ],
+      "consumers": [
+        "FrontendMonorepo"
+      ],
+      "scopes": [
+        "dependencies"
+      ]
+    },
+    {
+      "name": "@tailwindcss/postcss",
+      "specs": [
+        "^4"
+      ],
+      "consumers": [
+        "admin-panel"
+      ],
+      "scopes": [
+        "devDependencies"
+      ]
+    },
+    {
+      "name": "@tanstack/react-query",
+      "specs": [
+        "^4.29.0",
+        "^5.90.21"
+      ],
+      "consumers": [
+        "FrontendMonorepo",
+        "poseidon-studio"
+      ],
+      "scopes": [
+        "dependencies"
+      ]
+    },
+    {
+      "name": "@tanstack/react-query-devtools",
+      "specs": [
+        "^4.29.0",
+        "^5.91.3"
+      ],
+      "consumers": [
+        "FrontendMonorepo",
+        "poseidon-studio"
+      ],
+      "scopes": [
+        "dependencies"
+      ]
+    },
+    {
+      "name": "@testing-library/jest-native",
+      "specs": [
+        "^5.4.3"
+      ],
+      "consumers": [
+        "admin-dashboard",
+        "mobile"
+      ],
+      "scopes": [
+        "devDependencies"
+      ]
+    },
+    {
+      "name": "@testing-library/react-native",
+      "specs": [
+        "^12.1.5"
+      ],
+      "consumers": [
+        "admin-dashboard",
+        "mobile"
+      ],
+      "scopes": [
+        "devDependencies"
+      ]
+    },
+    {
+      "name": "@types/autocannon",
+      "specs": [
+        "^7.12.7"
+      ],
+      "consumers": [
+        "liveops-backend"
+      ],
+      "scopes": [
+        "devDependencies"
+      ]
+    },
+    {
+      "name": "@types/axios",
+      "specs": [
+        "^0.14.4",
+        "^0.9.36"
+      ],
+      "consumers": [
+        "api",
+        "liveops-backend"
+      ],
+      "scopes": [
+        "dependencies",
+        "devDependencies"
+      ]
+    },
+    {
+      "name": "@types/bcrypt",
+      "specs": [
+        "^5.0.2"
+      ],
+      "consumers": [
+        "liveops-backend"
+      ],
+      "scopes": [
+        "devDependencies"
+      ]
+    },
+    {
+      "name": "@types/cors",
+      "specs": [
+        "^2.8.19"
+      ],
+      "consumers": [
+        "liveops-backend"
+      ],
+      "scopes": [
+        "devDependencies"
+      ]
+    },
+    {
+      "name": "@types/date-fns",
+      "specs": [
+        "^2.6.3"
+      ],
+      "consumers": [
+        "api"
+      ],
+      "scopes": [
+        "dependencies"
+      ]
+    },
+    {
+      "name": "@types/express",
+      "specs": [
+        "^4.17.25"
+      ],
+      "consumers": [
+        "liveops-backend"
+      ],
+      "scopes": [
+        "devDependencies"
+      ]
+    },
+    {
+      "name": "@types/express-rate-limit",
+      "specs": [
+        "^6.0.2"
+      ],
+      "consumers": [
+        "liveops-backend"
+      ],
+      "scopes": [
+        "devDependencies"
+      ]
+    },
+    {
+      "name": "@types/helmet",
+      "specs": [
+        "^4.0.0"
+      ],
+      "consumers": [
+        "liveops-backend"
+      ],
+      "scopes": [
+        "devDependencies"
+      ]
+    },
+    {
+      "name": "@types/i18next",
+      "specs": [
+        "^13.0.0"
+      ],
+      "consumers": [
+        "liveops-backend"
+      ],
+      "scopes": [
+        "devDependencies"
+      ]
+    },
+    {
+      "name": "@types/jest",
+      "specs": [
+        "^29.5.11",
+        "^30.0.0",
+        "29.5.14"
+      ],
+      "consumers": [
+        "admin-dashboard",
+        "FrontendMonorepo",
+        "liveops-backend",
+        "mobile"
+      ],
+      "scopes": [
+        "devDependencies"
+      ]
+    },
+    {
+      "name": "@types/json2csv",
+      "specs": [
+        "^5.0.7"
+      ],
+      "consumers": [
+        "liveops-backend"
+      ],
+      "scopes": [
+        "devDependencies"
+      ]
+    },
+    {
+      "name": "@types/jsonwebtoken",
+      "specs": [
+        "^9.0.10"
+      ],
+      "consumers": [
+        "liveops-backend"
+      ],
+      "scopes": [
+        "devDependencies"
+      ]
+    },
+    {
+      "name": "@types/node",
+      "specs": [
+        "^20",
+        "^20.11.17",
+        "^24.10.1",
+        "^25.2.3"
+      ],
+      "consumers": [
+        "admin-dashboard",
+        "admin-panel",
+        "FrontendMonorepo",
+        "liveops-backend",
+        "mobile",
+        "web"
+      ],
+      "scopes": [
+        "devDependencies"
+      ]
+    },
+    {
+      "name": "@types/pg",
+      "specs": [
+        "^8.16.0"
+      ],
+      "consumers": [
+        "liveops-backend"
+      ],
+      "scopes": [
+        "devDependencies"
+      ]
+    },
+    {
+      "name": "@types/pino",
+      "specs": [
+        "^7.0.5"
+      ],
+      "consumers": [
+        "liveops-backend"
+      ],
+      "scopes": [
+        "devDependencies"
+      ]
+    },
+    {
+      "name": "@types/prop-types",
+      "specs": [
+        "^15.7.12"
+      ],
+      "consumers": [
+        "admin-dashboard",
+        "mobile"
+      ],
+      "scopes": [
+        "devDependencies"
+      ]
+    },
+    {
+      "name": "@types/react",
+      "specs": [
+        "^18.2.37",
+        "^19.1.17",
+        "^19.2.14",
+        "^19.2.7",
+        "19.2.14"
+      ],
+      "consumers": [
+        "admin-dashboard",
+        "admin-panel",
+        "FrontendMonorepo",
+        "mobile",
+        "poseidon-studio",
+        "web"
+      ],
+      "scopes": [
+        "devDependencies"
+      ]
+    },
+    {
+      "name": "@types/react-dom",
+      "specs": [
+        "^18.2.15",
+        "^18.3.1",
+        "^19.2.3",
+        "19.2.3"
+      ],
+      "consumers": [
+        "admin-panel",
+        "FrontendMonorepo",
+        "poseidon-studio",
+        "web"
+      ],
+      "scopes": [
+        "devDependencies"
+      ]
+    },
+    {
+      "name": "@types/react-i18next",
+      "specs": [
+        "8.1.0"
+      ],
+      "consumers": [
+        "admin-dashboard",
+        "mobile"
+      ],
+      "scopes": [
+        "devDependencies"
+      ]
+    },
+    {
+      "name": "@types/react-native",
+      "specs": [
+        "^0.72.4",
+        "^0.72.8"
+      ],
+      "consumers": [
+        "admin-dashboard",
+        "FrontendMonorepo",
+        "mobile"
+      ],
+      "scopes": [
+        "dependencies",
+        "devDependencies"
+      ]
+    },
+    {
+      "name": "@types/react-navigation",
+      "specs": [
+        "^3.4.0"
+      ],
+      "consumers": [
+        "admin-dashboard",
+        "mobile"
+      ],
+      "scopes": [
+        "devDependencies"
+      ]
+    },
+    {
+      "name": "@types/react-query",
+      "specs": [
+        "^1.2.9"
+      ],
+      "consumers": [
+        "api"
+      ],
+      "scopes": [
+        "dependencies"
+      ]
+    },
+    {
+      "name": "@types/supertest",
+      "specs": [
+        "^6.0.3"
+      ],
+      "consumers": [
+        "liveops-backend"
+      ],
+      "scopes": [
+        "devDependencies"
+      ]
+    },
+    {
+      "name": "@types/swagger-jsdoc",
+      "specs": [
+        "^6.0.4"
+      ],
+      "consumers": [
+        "liveops-backend"
+      ],
+      "scopes": [
+        "devDependencies"
+      ]
+    },
+    {
+      "name": "@types/swagger-ui-express",
+      "specs": [
+        "^4.1.8"
+      ],
+      "consumers": [
+        "liveops-backend"
+      ],
+      "scopes": [
+        "devDependencies"
+      ]
+    },
+    {
+      "name": "@typescript-eslint/eslint-plugin",
+      "specs": [
+        "^8.55.0"
+      ],
+      "consumers": [
+        "FrontendMonorepo"
+      ],
+      "scopes": [
+        "devDependencies"
+      ]
+    },
+    {
+      "name": "@typescript-eslint/parser",
+      "specs": [
+        "^8.55.0"
+      ],
+      "consumers": [
+        "FrontendMonorepo"
+      ],
+      "scopes": [
+        "devDependencies"
+      ]
+    },
+    {
+      "name": "@vitejs/plugin-react",
+      "specs": [
+        "^4.0.0",
+        "^4.2.1",
+        "^5.1.1"
+      ],
+      "consumers": [
+        "poseidon-desktop-renderer",
+        "poseidon-studio",
+        "web"
+      ],
+      "scopes": [
+        "devDependencies"
+      ]
+    },
+    {
+      "name": "autocannon",
+      "specs": [
+        "^8.0.0"
+      ],
+      "consumers": [
+        "liveops-backend"
+      ],
+      "scopes": [
+        "devDependencies"
+      ]
+    },
+    {
+      "name": "axios",
+      "specs": [
+        "^1.13.5"
+      ],
+      "consumers": [
+        "api",
+        "liveops-backend"
+      ],
+      "scopes": [
+        "dependencies",
+        "devDependencies"
+      ]
+    },
+    {
+      "name": "babel-jest",
+      "specs": [
+        "^30.2.0"
+      ],
+      "consumers": [
+        "admin-dashboard",
+        "api",
+        "mobile"
+      ],
+      "scopes": [
+        "devDependencies"
+      ]
+    },
+    {
+      "name": "bcrypt",
+      "specs": [
+        "^5.1.1"
+      ],
+      "consumers": [
+        "liveops-backend"
+      ],
+      "scopes": [
+        "dependencies"
+      ]
+    },
+    {
+      "name": "bcryptjs",
+      "specs": [
+        "^3.0.3"
+      ],
+      "consumers": [
+        "liveops-backend"
+      ],
+      "scopes": [
+        "dependencies"
+      ]
+    },
+    {
+      "name": "cors",
+      "specs": [
+        "^2.8.6"
+      ],
+      "consumers": [
+        "liveops-backend"
+      ],
+      "scopes": [
+        "dependencies"
+      ]
+    },
+    {
+      "name": "cypress",
+      "specs": [
+        "^15.10.0"
+      ],
+      "consumers": [
+        "FrontendMonorepo"
+      ],
+      "scopes": [
+        "devDependencies"
+      ]
+    },
+    {
+      "name": "date-fns",
+      "specs": [
+        "^4.1.0"
+      ],
+      "consumers": [
+        "admin-dashboard",
+        "api",
+        "mobile"
+      ],
+      "scopes": [
+        "dependencies"
+      ]
+    },
+    {
+      "name": "detox",
+      "specs": [
+        "^20.47.0"
+      ],
+      "consumers": [
+        "FrontendMonorepo"
+      ],
+      "scopes": [
+        "devDependencies"
+      ]
+    },
+    {
+      "name": "dotenv",
+      "specs": [
+        "^16.3.1"
+      ],
+      "consumers": [
+        "liveops-backend"
+      ],
+      "scopes": [
+        "dependencies"
+      ]
+    },
+    {
+      "name": "electron",
+      "specs": [
+        "^28.0.0",
+        "^35.7.5"
+      ],
+      "consumers": [
+        "poseidon-desktop",
+        "poseidon-ui"
+      ],
+      "scopes": [
+        "dependencies",
+        "devDependencies"
+      ]
+    },
+    {
+      "name": "electron-builder",
+      "specs": [
+        "^24.0.0",
+        "^26.7.0"
+      ],
+      "consumers": [
+        "poseidon-desktop",
+        "poseidon-ui"
+      ],
+      "scopes": [
+        "devDependencies"
+      ]
+    },
+    {
+      "name": "eslint",
+      "specs": [
+        "^10.0.0",
+        "^8.56.0",
+        "^9",
+        "^9.39.1"
+      ],
+      "consumers": [
+        "admin-panel",
+        "FrontendMonorepo",
+        "poseidon-studio",
+        "web"
+      ],
+      "scopes": [
+        "devDependencies"
+      ]
+    },
+    {
+      "name": "eslint-config-next",
+      "specs": [
+        "16.1.6"
+      ],
+      "consumers": [
+        "admin-panel"
+      ],
+      "scopes": [
+        "devDependencies"
+      ]
+    },
+    {
+      "name": "eslint-config-prettier",
+      "specs": [
+        "^9.1.0"
+      ],
+      "consumers": [
+        "poseidon-studio"
+      ],
+      "scopes": [
+        "devDependencies"
+      ]
+    },
+    {
+      "name": "eslint-plugin-i18next",
+      "specs": [
+        "^6.1.3"
+      ],
+      "consumers": [
+        "FrontendMonorepo"
+      ],
+      "scopes": [
+        "devDependencies"
+      ]
+    },
+    {
+      "name": "eslint-plugin-jsx-a11y",
+      "specs": [
+        "^6.10.2"
+      ],
+      "consumers": [
+        "FrontendMonorepo"
+      ],
+      "scopes": [
+        "devDependencies"
+      ]
+    },
+    {
+      "name": "eslint-plugin-react",
+      "specs": [
+        "^7.33.2",
+        "^7.37.5"
+      ],
+      "consumers": [
+        "FrontendMonorepo",
+        "poseidon-studio"
+      ],
+      "scopes": [
+        "devDependencies"
+      ]
+    },
+    {
+      "name": "eslint-plugin-react-hooks",
+      "specs": [
+        "^7.0.1"
+      ],
+      "consumers": [
+        "FrontendMonorepo",
+        "web"
+      ],
+      "scopes": [
+        "devDependencies"
+      ]
+    },
+    {
+      "name": "eslint-plugin-react-refresh",
+      "specs": [
+        "^0.4.24"
+      ],
+      "consumers": [
+        "web"
+      ],
+      "scopes": [
+        "devDependencies"
+      ]
+    },
+    {
+      "name": "espree",
+      "specs": [
+        "^11.1.0"
+      ],
+      "consumers": [
+        "FrontendMonorepo"
+      ],
+      "scopes": [
+        "devDependencies"
+      ]
+    },
+    {
+      "name": "expo",
+      "specs": [
+        "^54.0.33"
+      ],
+      "consumers": [
+        "admin-dashboard",
+        "FrontendMonorepo",
+        "mobile"
+      ],
+      "scopes": [
+        "dependencies"
+      ]
+    },
+    {
+      "name": "express",
+      "specs": [
+        "^4.22.1"
+      ],
+      "consumers": [
+        "liveops-backend"
+      ],
+      "scopes": [
+        "dependencies"
+      ]
+    },
+    {
+      "name": "express-rate-limit",
+      "specs": [
+        "^8.2.1"
+      ],
+      "consumers": [
+        "liveops-backend"
+      ],
+      "scopes": [
+        "dependencies"
+      ]
+    },
+    {
+      "name": "framer-motion",
+      "specs": [
+        "^10.16.4",
+        "7.6.16"
+      ],
+      "consumers": [
+        "api",
+        "poseidon-studio"
+      ],
+      "scopes": [
+        "dependencies"
+      ]
+    },
+    {
+      "name": "globals",
+      "specs": [
+        "^16.5.0"
+      ],
+      "consumers": [
+        "web"
+      ],
+      "scopes": [
+        "devDependencies"
+      ]
+    },
+    {
+      "name": "helmet",
+      "specs": [
+        "^8.1.0"
+      ],
+      "consumers": [
+        "liveops-backend"
+      ],
+      "scopes": [
+        "dependencies"
+      ]
+    },
+    {
+      "name": "husky",
+      "specs": [
+        "^9.0.0"
+      ],
+      "consumers": [
+        "FrontendMonorepo",
+        "liveops-backend"
+      ],
+      "scopes": [
+        "devDependencies"
+      ]
+    },
+    {
+      "name": "i18next",
+      "specs": [
+        "^25.8.10"
+      ],
+      "consumers": [
+        "liveops-backend"
+      ],
+      "scopes": [
+        "dependencies"
+      ]
+    },
+    {
+      "name": "i18next-fs-backend",
+      "specs": [
+        "^2.6.1"
+      ],
+      "consumers": [
+        "liveops-backend"
+      ],
+      "scopes": [
+        "dependencies"
+      ]
+    },
+    {
+      "name": "i18next-http-middleware",
+      "specs": [
+        "^3.9.2"
+      ],
+      "consumers": [
+        "liveops-backend"
+      ],
+      "scopes": [
+        "dependencies"
+      ]
+    },
+    {
+      "name": "jest",
+      "specs": [
+        "^29.7.0",
+        "^30.2.0"
+      ],
+      "consumers": [
+        "admin-dashboard",
+        "api",
+        "FrontendMonorepo",
+        "liveops-backend",
+        "mobile"
+      ],
+      "scopes": [
+        "devDependencies"
+      ]
+    },
+    {
+      "name": "jest-environment-jsdom",
+      "specs": [
+        "^30.2.0"
+      ],
+      "consumers": [
+        "admin-dashboard",
+        "mobile"
+      ],
+      "scopes": [
+        "devDependencies"
+      ]
+    },
+    {
+      "name": "jest-react-native",
+      "specs": [
+        "^18.0.0"
+      ],
+      "consumers": [
+        "admin-dashboard",
+        "mobile"
+      ],
+      "scopes": [
+        "devDependencies"
+      ]
+    },
+    {
+      "name": "json2csv",
+      "specs": [
+        "6.0.0-alpha.2"
+      ],
+      "consumers": [
+        "liveops-backend"
+      ],
+      "scopes": [
+        "dependencies"
+      ]
+    },
+    {
+      "name": "jsonwebtoken",
+      "specs": [
+        "^9.0.3"
+      ],
+      "consumers": [
+        "liveops-backend"
+      ],
+      "scopes": [
+        "dependencies"
+      ]
+    },
+    {
+      "name": "lint-staged",
+      "specs": [
+        "^15.0.0"
+      ],
+      "consumers": [
+        "FrontendMonorepo",
+        "liveops-backend"
+      ],
+      "scopes": [
+        "devDependencies"
+      ]
+    },
+    {
+      "name": "metro-react-native-babel-preset",
+      "specs": [
+        "^0.77.0"
+      ],
+      "consumers": [
+        "admin-dashboard",
+        "mobile"
+      ],
+      "scopes": [
+        "devDependencies"
+      ]
+    },
+    {
+      "name": "next",
+      "specs": [
+        "16.1.6"
+      ],
+      "consumers": [
+        "admin-panel"
+      ],
+      "scopes": [
+        "dependencies"
+      ]
+    },
+    {
+      "name": "pg",
+      "specs": [
+        "^8.18.0"
+      ],
+      "consumers": [
+        "liveops-backend"
+      ],
+      "scopes": [
+        "dependencies"
+      ]
+    },
+    {
+      "name": "pino",
+      "specs": [
+        "^10.3.1"
+      ],
+      "consumers": [
+        "liveops-backend"
+      ],
+      "scopes": [
+        "devDependencies"
+      ]
+    },
+    {
+      "name": "prettier",
+      "specs": [
+        "^3.2.5",
+        "^3.8.1"
+      ],
+      "consumers": [
+        "FrontendMonorepo",
+        "poseidon-studio"
+      ],
+      "scopes": [
+        "dependencies",
+        "devDependencies"
+      ]
+    },
+    {
+      "name": "prisma",
+      "specs": [
+        "6.19.2"
+      ],
+      "consumers": [
+        "liveops-backend"
+      ],
+      "scopes": [
+        "devDependencies"
+      ]
+    },
+    {
+      "name": "prop-types",
+      "specs": [
+        "^15.8.1"
+      ],
+      "consumers": [
+        "admin-dashboard",
+        "mobile"
+      ],
+      "scopes": [
+        "dependencies"
+      ]
+    },
+    {
+      "name": "react",
+      "specs": [
+        "^18.0.0",
+        "^18.2.0",
+        "^19.2.0",
+        "18.3.1",
+        "19.1.0",
+        "19.2.4"
+      ],
+      "consumers": [
+        "admin-panel",
+        "FrontendMonorepo",
+        "mobile",
+        "poseidon-desktop",
+        "poseidon-desktop-renderer",
+        "poseidon-studio",
+        "ui",
+        "web"
+      ],
+      "scopes": [
+        "dependencies"
+      ]
+    },
+    {
+      "name": "react-dom",
+      "specs": [
+        "^18.0.0",
+        "^18.2.0",
+        "^19.2.0",
+        "19.2.4"
+      ],
+      "consumers": [
+        "admin-panel",
+        "FrontendMonorepo",
+        "poseidon-desktop",
+        "poseidon-desktop-renderer",
+        "poseidon-studio",
+        "web"
+      ],
+      "scopes": [
+        "dependencies"
+      ]
+    },
+    {
+      "name": "react-dropzone",
+      "specs": [
+        "^15.0.0"
+      ],
+      "consumers": [
+        "FrontendMonorepo"
+      ],
+      "scopes": [
+        "dependencies"
+      ]
+    },
+    {
+      "name": "react-i18next",
+      "specs": [
+        "^13.2.2"
+      ],
+      "consumers": [
+        "admin-dashboard",
+        "mobile"
+      ],
+      "scopes": [
+        "dependencies"
+      ]
+    },
+    {
+      "name": "react-icons",
+      "specs": [
+        "^4.10.1",
+        "^5.5.0"
+      ],
+      "consumers": [
+        "FrontendMonorepo",
+        "poseidon-studio"
+      ],
+      "scopes": [
+        "dependencies"
+      ]
+    },
+    {
+      "name": "react-native",
+      "specs": [
+        "^0.84.0",
+        "0.81.5",
+        "0.84.0"
+      ],
+      "consumers": [
+        "admin-dashboard",
+        "FrontendMonorepo",
+        "mobile",
+        "ui"
+      ],
+      "scopes": [
+        "dependencies",
+        "devDependencies"
+      ]
+    },
+    {
+      "name": "react-native-safe-area-context",
+      "specs": [
+        "^5.6.2"
+      ],
+      "consumers": [
+        "api"
+      ],
+      "scopes": [
+        "dependencies"
+      ]
+    },
+    {
+      "name": "react-native-screens",
+      "specs": [
+        "^4.23.0"
+      ],
+      "consumers": [
+        "api"
+      ],
+      "scopes": [
+        "dependencies"
+      ]
+    },
+    {
+      "name": "react-query",
+      "specs": [
+        "^3.39.3"
+      ],
+      "consumers": [
+        "admin-dashboard",
+        "api",
+        "FrontendMonorepo",
+        "mobile"
+      ],
+      "scopes": [
+        "dependencies"
+      ]
+    },
+    {
+      "name": "react-quill",
+      "specs": [
+        "^2.0.0"
+      ],
+      "consumers": [
+        "admin-dashboard"
+      ],
+      "scopes": [
+        "dependencies"
+      ]
+    },
+    {
+      "name": "react-router-dom",
+      "specs": [
+        "^6.22.3",
+        "^7.13.0"
+      ],
+      "consumers": [
+        "FrontendMonorepo",
+        "poseidon-studio"
+      ],
+      "scopes": [
+        "dependencies"
+      ]
+    },
+    {
+      "name": "supertest",
+      "specs": [
+        "^7.2.2"
+      ],
+      "consumers": [
+        "liveops-backend"
+      ],
+      "scopes": [
+        "devDependencies"
+      ]
+    },
+    {
+      "name": "swagger-jsdoc",
+      "specs": [
+        "^6.2.8"
+      ],
+      "consumers": [
+        "liveops-backend"
+      ],
+      "scopes": [
+        "dependencies"
+      ]
+    },
+    {
+      "name": "swagger-ui-express",
+      "specs": [
+        "^5.0.1"
+      ],
+      "consumers": [
+        "liveops-backend"
+      ],
+      "scopes": [
+        "dependencies"
+      ]
+    },
+    {
+      "name": "tailwindcss",
+      "specs": [
+        "^4"
+      ],
+      "consumers": [
+        "admin-panel"
+      ],
+      "scopes": [
+        "devDependencies"
+      ]
+    },
+    {
+      "name": "ts-jest",
+      "specs": [
+        "^29.4.6"
+      ],
+      "consumers": [
+        "admin-dashboard",
+        "liveops-backend",
+        "mobile"
+      ],
+      "scopes": [
+        "devDependencies"
+      ]
+    },
+    {
+      "name": "ts-node-dev",
+      "specs": [
+        "^2.0.0"
+      ],
+      "consumers": [
+        "liveops-backend"
+      ],
+      "scopes": [
+        "devDependencies"
+      ]
+    },
+    {
+      "name": "tsx",
+      "specs": [
+        "^4.21.0"
+      ],
+      "consumers": [
+        "liveops-backend"
+      ],
+      "scopes": [
+        "devDependencies"
+      ]
+    },
+    {
+      "name": "turbo",
+      "specs": [
+        "^2.8.9"
+      ],
+      "consumers": [
+        "FrontendMonorepo"
+      ],
+      "scopes": [
+        "devDependencies"
+      ]
+    },
+    {
+      "name": "typescript",
+      "specs": [
+        "^5",
+        "^5.0.0",
+        "^5.3.3",
+        "^5.9.3",
+        "~5.9.3"
+      ],
+      "consumers": [
+        "admin-dashboard",
+        "admin-panel",
+        "api",
+        "FrontendMonorepo",
+        "liveops-backend",
+        "mobile",
+        "models",
+        "poseidon-desktop",
+        "poseidon-desktop-renderer",
+        "poseidon-studio",
+        "ui",
+        "web"
+      ],
+      "scopes": [
+        "devDependencies"
+      ]
+    },
+    {
+      "name": "typescript-eslint",
+      "specs": [
+        "^8.48.0"
+      ],
+      "consumers": [
+        "web"
+      ],
+      "scopes": [
+        "devDependencies"
+      ]
+    },
+    {
+      "name": "vite",
+      "specs": [
+        "^4.0.0",
+        "^5.2.0",
+        "^7.3.1"
+      ],
+      "consumers": [
+        "FrontendMonorepo",
+        "poseidon-desktop-renderer",
+        "poseidon-studio",
+        "web"
+      ],
+      "scopes": [
+        "dependencies",
+        "devDependencies"
+      ]
+    },
+    {
+      "name": "zod",
+      "specs": [
+        "^4.3.6"
+      ],
+      "consumers": [
+        "FrontendMonorepo",
+        "models"
+      ],
+      "scopes": [
+        "dependencies"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,96 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-02-18T20:53:27.665Z",
+  "strictMode": true,
+  "check": "MONO-02",
+  "policyFile": "governance\\policies\\release-lanes-policy.json",
+  "candidateFile": "governance\\release-lanes\\release-candidate.json",
+  "reportFile": "governance-artifacts\\mono-release-lanes-report.json",
+  "summary": {
+    "lanesRequired": 3,
+    "lanesPassed": 3,
+    "lanesFailed": 0,
+    "errors": 0
+  },
+  "computed": {
+    "lockfileSha256": "915a86ff344c33a1cfc62b622f6623eaeef53db6f6d130ffeaf072c0efeea0b3",
+    "workspaceFingerprintSha256": "068e0e94f1789960c052083a5cf9f5c6da5e9f0d5dae65f1ee03e41136eae8e0",
+    "workspaceFingerprintInputs": [
+      {
+        "file": "package.json",
+        "sha256": "4931e64b8738e7e7b1fe8d579109dfe95577f21d8d017cc454d24c1190416d1d"
+      },
+      {
+        "file": "pnpm-lock.yaml",
+        "sha256": "915a86ff344c33a1cfc62b622f6623eaeef53db6f6d130ffeaf072c0efeea0b3"
+      },
+      {
+        "file": "pnpm-workspace.yaml",
+        "sha256": "b2b923dd91e2aa66418b9bfb5406c50a41f566e1536ec1cd20441c275205a52f"
+      },
+      {
+        "file": "tsconfig.base.json",
+        "sha256": "cfce228515f4c4cd9f2f7c64bfd7f52a04bd198c2528e9c32125ed09418e95da"
+      },
+      {
+        "file": "turbo.json",
+        "sha256": "5ddf4a72021b9d0d58a93a604d267fe79c7ab0cf65e94957aa0fabe0b5c25cb3"
+      }
+    ]
+  },
+  "candidate": {
+    "schemaVersion": 1,
+    "releaseId": "mono-20260218.1",
+    "sourceCommit": "local-dev-snapshot",
+    "createdAt": "2026-02-18T21:00:00.000Z",
+    "lockfileSha256": "915a86ff344c33a1cfc62b622f6623eaeef53db6f6d130ffeaf072c0efeea0b3",
+    "workspaceFingerprintSha256": "068e0e94f1789960c052083a5cf9f5c6da5e9f0d5dae65f1ee03e41136eae8e0",
+    "bundleSha256": "c783055117880a24777de69ff0fe2c4dea5558eab2d1d7b9835b86d959696df2"
+  },
+  "lanes": [
+    {
+      "lane": "dev",
+      "manifestFile": "governance\\release-lanes\\dev.manifest.json",
+      "artifactFile": "governance/release-lanes/artifacts/dev/bundle-c783055117880a24777de69ff0fe2c4dea5558eab2d1d7b9835b86d959696df2.json",
+      "artifactSha256": "c783055117880a24777de69ff0fe2c4dea5558eab2d1d7b9835b86d959696df2",
+      "computedArtifactSha256": "c783055117880a24777de69ff0fe2c4dea5558eab2d1d7b9835b86d959696df2",
+      "reproducibility": {
+        "lockfileSha256": "915a86ff344c33a1cfc62b622f6623eaeef53db6f6d130ffeaf072c0efeea0b3",
+        "workspaceFingerprintSha256": "068e0e94f1789960c052083a5cf9f5c6da5e9f0d5dae65f1ee03e41136eae8e0",
+        "bundleSha256": "c783055117880a24777de69ff0fe2c4dea5558eab2d1d7b9835b86d959696df2"
+      },
+      "errors": [],
+      "passed": true
+    },
+    {
+      "lane": "stage",
+      "manifestFile": "governance\\release-lanes\\stage.manifest.json",
+      "artifactFile": "governance/release-lanes/artifacts/stage/bundle-c783055117880a24777de69ff0fe2c4dea5558eab2d1d7b9835b86d959696df2.json",
+      "artifactSha256": "c783055117880a24777de69ff0fe2c4dea5558eab2d1d7b9835b86d959696df2",
+      "computedArtifactSha256": "c783055117880a24777de69ff0fe2c4dea5558eab2d1d7b9835b86d959696df2",
+      "reproducibility": {
+        "lockfileSha256": "915a86ff344c33a1cfc62b622f6623eaeef53db6f6d130ffeaf072c0efeea0b3",
+        "workspaceFingerprintSha256": "068e0e94f1789960c052083a5cf9f5c6da5e9f0d5dae65f1ee03e41136eae8e0",
+        "bundleSha256": "c783055117880a24777de69ff0fe2c4dea5558eab2d1d7b9835b86d959696df2"
+      },
+      "errors": [],
+      "passed": true
+    },
+    {
+      "lane": "prod",
+      "manifestFile": "governance\\release-lanes\\prod.manifest.json",
+      "artifactFile": "governance/release-lanes/artifacts/prod/bundle-c783055117880a24777de69ff0fe2c4dea5558eab2d1d7b9835b86d959696df2.json",
+      "artifactSha256": "c783055117880a24777de69ff0fe2c4dea5558eab2d1d7b9835b86d959696df2",
+      "computedArtifactSha256": "c783055117880a24777de69ff0fe2c4dea5558eab2d1d7b9835b86d959696df2",
+      "reproducibility": {
+        "lockfileSha256": "915a86ff344c33a1cfc62b622f6623eaeef53db6f6d130ffeaf072c0efeea0b3",
+        "workspaceFingerprintSha256": "068e0e94f1789960c052083a5cf9f5c6da5e9f0d5dae65f1ee03e41136eae8e0",
+        "bundleSha256": "c783055117880a24777de69ff0fe2c4dea5558eab2d1d7b9835b86d959696df2"
+      },
+      "errors": [],
+      "passed": true
+    }
+  ],
+  "errors": [],
+  "ok": true
+}

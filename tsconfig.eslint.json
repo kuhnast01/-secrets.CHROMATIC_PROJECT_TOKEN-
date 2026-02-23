@@ -1,0 +1,15 @@
+{
+  "extends": "./tsconfig.base.json",
+  "include": [
+    "apps/*/src/**/*",
+    "packages/models/src/**/*",
+    "packages/api/src/**/*",
+    "packages/ui/src/**/*"
+  ]
+  ,
+  "references": [
+    { "path": "./packages/models/tsconfig.eslint.json" },
+    { "path": "./packages/api/tsconfig.eslint.json" },
+    { "path": "./packages/ui/tsconfig.eslint.json" }
+  ]
+}

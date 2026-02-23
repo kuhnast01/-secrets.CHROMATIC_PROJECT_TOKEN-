@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "checkId": "LIC-ANOMALY-POLICY",
+  "generatedAt": "2026-02-18T00:00:00.000Z",
+  "status": "pass",
+  "policyPath": "governance/policies/license-anomaly-escalation-policy.json",
+  "workflowPath": ".github/workflows/backend-license-events-weekly-issue.yml",
+  "docsPath": "backend/ENTERPRISE_LICENSING.md",
+  "policyId": "LIC-ANOMALY-ESCALATION",
+  "policySchemaVersion": 1,
+  "failureCount": 1,
+  "failures": [
+    "simulated failure"
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "pipeline": "AGENT-02",
+  "status": "fail",
+  "generatedAt": "2026-02-18T20:12:59.085Z",
+  "reportPath": "C:\\Users\\kuhna\\OneDrive\\Desktop\\SIMgameFiles\\VisualStudio\\FrontendMonorepo\\backend\\tmp\\liveops-artifacts\\agent-02-concurrency-20260218T201259Z.json",
+  "runId": "agent-conflict-20260218T201259Z",
+  "conflictDirectory": "C:\\Users\\kuhna\\OneDrive\\Desktop\\SIMgameFiles\\VisualStudio\\FrontendMonorepo\\backend\\tmp\\agent-conflicts\\agent-conflict-20260218T201259Z",
+  "policy": "priority",
+  "steps": [
+    {
+      "name": "agent-conflict-policy-resolution",
+      "status": "fail",
+      "details": "ENOENT: no such file or directory, open 'C:\\Users\\kuhna\\OneDrive\\Desktop\\SIMgameFiles\\VisualStudio\\FrontendMonorepo\\backend\\tmp\\agent-conflicts\\agent-conflict-20260218T201259Z\\rollout\\feature-flags.json'"
+    }
+  ],
+  "resolutions": [],
+  "events": []
+}

@@ -1,0 +1,8 @@
+{
+  "ok": false,
+  "mode": "error",
+  "message": "Missing token. Set GITHUB_TOKEN (or GH_TOKEN).",
+  "errorType": "auth",
+  "exitCode": 3,
+  "outputPath": "stress-artifacts/workflow-run-weekly-reliability.json"
+}

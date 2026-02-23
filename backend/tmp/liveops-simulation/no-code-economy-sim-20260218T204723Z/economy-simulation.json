@@ -1,0 +1,74 @@
+{
+  "schemaVersion": 1,
+  "runId": "no-code-economy-sim-20260218T204723Z",
+  "generatedAt": "2026-02-18T20:47:23.769Z",
+  "scenarios": [
+    {
+      "scenario": "valid",
+      "publishDecision": "allow",
+      "reasons": [],
+      "signals": [
+        {
+          "name": "economy_delta_percent",
+          "value": 8.5,
+          "threshold": 15,
+          "passed": true
+        },
+        {
+          "name": "whale_advantage_index",
+          "value": 1.9,
+          "threshold": 2.5,
+          "passed": true
+        },
+        {
+          "name": "inflation_risk_score",
+          "value": 0.42,
+          "threshold": 0.65,
+          "passed": true
+        },
+        {
+          "name": "payout_per_user",
+          "value": 1450,
+          "threshold": 3000,
+          "passed": true
+        }
+      ]
+    },
+    {
+      "scenario": "invalid",
+      "publishDecision": "block",
+      "reasons": [
+        "economy_delta_percent:21.4>15",
+        "whale_advantage_index:3.2>2.5",
+        "inflation_risk_score:0.78>0.65",
+        "payout_per_user:4600>3000"
+      ],
+      "signals": [
+        {
+          "name": "economy_delta_percent",
+          "value": 21.4,
+          "threshold": 15,
+          "passed": false
+        },
+        {
+          "name": "whale_advantage_index",
+          "value": 3.2,
+          "threshold": 2.5,
+          "passed": false
+        },
+        {
+          "name": "inflation_risk_score",
+          "value": 0.78,
+          "threshold": 0.65,
+          "passed": false
+        },
+        {
+          "name": "payout_per_user",
+          "value": 4600,
+          "threshold": 3000,
+          "passed": false
+        }
+      ]
+    }
+  ]
+}

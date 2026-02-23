@@ -1,0 +1,14 @@
+{
+    "startedAt":  "2026-02-17T22:18:37.2520883-05:00",
+    "healthBefore":  200,
+    "usersBefore":  200,
+    "dbOutageStart":  "2026-02-17T22:18:37.4674148-05:00",
+    "usersDuringOutage":  200,
+    "healthDuringOutage":  200,
+    "usersAfterRecovery":  200,
+    "recovered":  true,
+    "recoveryObservedAt":  "2026-02-17T22:18:39.6461763-05:00",
+    "dbRecoverySeconds":  0.009,
+    "outageWindowSeconds":  2.179,
+    "finishedAt":  "2026-02-17T22:18:39.6521769-05:00"
+}

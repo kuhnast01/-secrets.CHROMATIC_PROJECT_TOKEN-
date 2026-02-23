@@ -1,0 +1,9 @@
+{
+  "schemaVersion": 1,
+  "ok": false,
+  "mode": "error",
+  "message": "Missing token. Set GITHUB_TOKEN (or GH_TOKEN).",
+  "errorType": "auth",
+  "exitCode": 3,
+  "outputPath": "stress-artifacts/poll-output-schema-version.json"
+}

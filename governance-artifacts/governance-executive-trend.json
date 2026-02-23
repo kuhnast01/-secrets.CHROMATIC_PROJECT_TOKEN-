@@ -1,0 +1,46 @@
+{
+  "schemaVersion": 1,
+  "mode": "governance-executive-trend-monthly",
+  "generatedAt": "2026-02-18T22:01:01.794Z",
+  "repository": "local",
+  "branch": "local",
+  "runId": "local",
+  "runNumber": "local",
+  "runUrl": null,
+  "current": {
+    "snapshotPath": "governance-artifacts/governance-executive-snapshot.json",
+    "generatedAt": "2026-02-18T22:01:01.742Z",
+    "overallStatus": "partial",
+    "attentionCount": 0,
+    "missingCount": 1,
+    "riskCount": 1,
+    "controlCount": 2,
+    "sourceWorkflow": {
+      "trigger": "local",
+      "workflowName": null,
+      "workflowRunId": null,
+      "workflowConclusion": null
+    }
+  },
+  "previous": {
+    "snapshotPath": "governance-artifacts/governance-executive-snapshot.previous.json",
+    "present": false,
+    "generatedAt": null,
+    "overallStatus": null,
+    "attentionCount": null,
+    "missingCount": null,
+    "riskCount": null,
+    "controlCount": null,
+    "runId": null,
+    "runNumber": null,
+    "runUrl": null
+  },
+  "delta": {
+    "overallStatusChanged": null,
+    "attentionCountDelta": null,
+    "missingCountDelta": null,
+    "riskCountDelta": null,
+    "controlCountDelta": null
+  },
+  "trendDirection": "baseline"
+}

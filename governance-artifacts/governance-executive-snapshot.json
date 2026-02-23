@@ -1,0 +1,48 @@
+{
+  "schemaVersion": 1,
+  "mode": "governance-executive-snapshot-monthly",
+  "generatedAt": "2026-02-18T22:01:01.742Z",
+  "repository": "local",
+  "branch": "local",
+  "runId": "local",
+  "runNumber": "local",
+  "runUrl": null,
+  "eventName": "local",
+  "sourceWorkflow": {
+    "trigger": "local",
+    "workflowName": null,
+    "workflowRunId": null,
+    "workflowConclusion": null
+  },
+  "controlCount": 2,
+  "controls": [
+    {
+      "id": "LIC-ANOMALY-POLICY",
+      "sourcePath": "governance-artifacts/license-anomaly-escalation-policy-report.json",
+      "present": true,
+      "status": "pass",
+      "generatedAt": "2026-02-18T21:52:38.651Z",
+      "details": {
+        "failureCount": 0,
+        "checkId": "LIC-ANOMALY-POLICY"
+      }
+    },
+    {
+      "id": "RELEASE-ENV-AUDIT",
+      "sourcePath": "governance-artifacts/release-environment-audit-report.json",
+      "present": false,
+      "status": "missing",
+      "generatedAt": null,
+      "details": {
+        "auditStatus": null,
+        "findingCount": null,
+        "targetEnvironment": null
+      }
+    }
+  ],
+  "overallStatus": "partial",
+  "attentionControls": [],
+  "missingControls": [
+    "RELEASE-ENV-AUDIT"
+  ]
+}
