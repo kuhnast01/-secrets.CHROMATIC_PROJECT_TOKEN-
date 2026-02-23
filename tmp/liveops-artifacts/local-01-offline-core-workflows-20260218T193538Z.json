@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "pipeline": "LOCAL-01",
+  "status": "pass",
+  "generatedAt": "2026-02-18T19:35:38.427Z",
+  "reportPath": "C:\\Users\\kuhna\\OneDrive\\Desktop\\SIMgameFiles\\VisualStudio\\FrontendMonorepo\\tmp\\liveops-artifacts\\local-01-offline-core-workflows-20260218T193538Z.json",
+  "stagedEventPath": "C:\\Users\\kuhna\\OneDrive\\Desktop\\SIMgameFiles\\VisualStudio\\FrontendMonorepo\\tmp\\liveops-staging\\offline\\local-01-event-20260218T193538Z.json",
+  "steps": [
+    {
+      "name": "offline-guard:external-network-blocked",
+      "status": "pass",
+      "durationMs": 1,
+      "details": "Outbound external request was blocked as expected"
+    },
+    {
+      "name": "core-workflow:healthz",
+      "status": "pass",
+      "durationMs": 27,
+      "details": "GET /healthz returned ok"
+    },
+    {
+      "name": "core-workflow:system-health",
+      "status": "pass",
+      "durationMs": 3,
+      "details": "GET /system-health returned ok"
+    },
+    {
+      "name": "core-workflow:auth-login",
+      "status": "pass",
+      "durationMs": 67,
+      "details": "POST /auth/login succeeded with token issuance"
+    },
+    {
+      "name": "core-workflow:event-author-validate-stage",
+      "status": "pass",
+      "durationMs": 1,
+      "details": "Event draft validated and staged to C:\\Users\\kuhna\\OneDrive\\Desktop\\SIMgameFiles\\VisualStudio\\FrontendMonorepo\\tmp\\liveops-staging\\offline\\local-01-event-20260218T193538Z.json"
+    }
+  ]
+}

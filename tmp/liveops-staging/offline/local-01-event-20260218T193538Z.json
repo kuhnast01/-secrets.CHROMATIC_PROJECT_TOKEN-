@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "pipeline": "LOCAL-01",
+  "stagedAt": "2026-02-18T19:35:38.427Z",
+  "event": {
+    "name": "LOCAL-01 Event 2026-02-18",
+    "config": {
+      "trigger": {
+        "type": "manual"
+      },
+      "segments": [
+        "all_players"
+      ],
+      "metadata": {
+        "source": "LOCAL-01-offline-drill",
+        "generatedAt": "2026-02-18T19:35:38.426Z"
+      }
+    },
+    "created_by": 1
+  }
+}
