@@ -1,0 +1,29 @@
+/* Dashboard styles extracted from inline styles */
+.section-margin {
+  margin-bottom: 24px;
+}
+.section-error {
+  color: red;
+}
+.health-list {
+  margin-bottom: 16px;
+}
+.flex-wrap {
+  display: flex;
+  gap: 32px;
+  flex-wrap: wrap;
+}
+.memory-panel,
+.load-panel {
+  min-width: 260px;
+  height: 180px;
+}
+.panel-title {
+  margin: 0;
+}
+.backend-pre {
+  background: #f4f4f4;
+  padding: 12px;
+  border-radius: 4px;
+  font-size: 14px;
+}
