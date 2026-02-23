@@ -2,10 +2,12 @@ import express from 'express';
 let dotenvLoaded = false;
 import { json } from 'express';
 
+
 import authRoutes from './routes/auth';
 import battleRoutes from './routes/battle';
 import eventRoutes from './routes/events';
 import userRoutes from './routes/users';
+import playerRoutes from './routes/player';
 import analyticsRoutes from './routes/analytics';
 import enemyTemplatesApi from './api/enemyTemplates';
 import licenseRoutes from './routes/license';
@@ -25,6 +27,7 @@ import { auditLogger } from './middleware/auditLogger';
 import { licenseGuard } from './middleware/licenseGuard';
 import i18nMiddleware from './middleware/i18n';
 import { getLicenseMode } from './security/license';
+import { authenticateJWT } from './middleware/auth';
 // Only load dotenv if not running in test environment
 if (process.env.NODE_ENV !== 'test') {
   // Dynamically import dotenv in ESM context
@@ -72,6 +75,9 @@ app.use(systemHealthRoutes); // /system-health endpoint for admin panel
 app.use('/auth', authRoutes);
 app.use('/events', eventRoutes);
 app.use('/users', userRoutes);
+
+// Secure all /players endpoints with JWT authentication
+app.use('/players', authenticateJWT, playerRoutes);
 
 app.use('/api/analytics', analyticsRoutes);
 
