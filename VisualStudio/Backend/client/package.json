@@ -2,8 +2,6 @@
   "name": "galaxy-ascendant-client",
   "version": "0.1.0",
   "private": true,
-  // ...existing code...
-  },
   "dependencies": {
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
