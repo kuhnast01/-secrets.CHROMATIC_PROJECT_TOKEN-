@@ -1,0 +1,110 @@
+import { z } from 'zod';
+export declare const ShopItemSchema: z.ZodObject<{
+    id: z.ZodString;
+    name: z.ZodString;
+    description: z.ZodString;
+    price: z.ZodNumber;
+    currency: z.ZodString;
+    imageUrl: z.ZodOptional<z.ZodString>;
+    type: z.ZodString;
+    available: z.ZodBoolean;
+    timer: z.ZodOptional<z.ZodString>;
+}, z.core.$strip>;
+export declare const ShopResponseSchema: z.ZodObject<{
+    featured: z.ZodArray<z.ZodObject<{
+        id: z.ZodString;
+        name: z.ZodString;
+        description: z.ZodString;
+        price: z.ZodNumber;
+        currency: z.ZodString;
+        imageUrl: z.ZodOptional<z.ZodString>;
+        type: z.ZodString;
+        available: z.ZodBoolean;
+        timer: z.ZodOptional<z.ZodString>;
+    }, z.core.$strip>>;
+    seasonal: z.ZodArray<z.ZodObject<{
+        id: z.ZodString;
+        name: z.ZodString;
+        description: z.ZodString;
+        price: z.ZodNumber;
+        currency: z.ZodString;
+        imageUrl: z.ZodOptional<z.ZodString>;
+        type: z.ZodString;
+        available: z.ZodBoolean;
+        timer: z.ZodOptional<z.ZodString>;
+    }, z.core.$strip>>;
+    arena: z.ZodArray<z.ZodObject<{
+        id: z.ZodString;
+        name: z.ZodString;
+        description: z.ZodString;
+        price: z.ZodNumber;
+        currency: z.ZodString;
+        imageUrl: z.ZodOptional<z.ZodString>;
+        type: z.ZodString;
+        available: z.ZodBoolean;
+        timer: z.ZodOptional<z.ZodString>;
+    }, z.core.$strip>>;
+    raid: z.ZodArray<z.ZodObject<{
+        id: z.ZodString;
+        name: z.ZodString;
+        description: z.ZodString;
+        price: z.ZodNumber;
+        currency: z.ZodString;
+        imageUrl: z.ZodOptional<z.ZodString>;
+        type: z.ZodString;
+        available: z.ZodBoolean;
+        timer: z.ZodOptional<z.ZodString>;
+    }, z.core.$strip>>;
+    guild: z.ZodArray<z.ZodObject<{
+        id: z.ZodString;
+        name: z.ZodString;
+        description: z.ZodString;
+        price: z.ZodNumber;
+        currency: z.ZodString;
+        imageUrl: z.ZodOptional<z.ZodString>;
+        type: z.ZodString;
+        available: z.ZodBoolean;
+        timer: z.ZodOptional<z.ZodString>;
+    }, z.core.$strip>>;
+    faction: z.ZodArray<z.ZodObject<{
+        id: z.ZodString;
+        name: z.ZodString;
+        description: z.ZodString;
+        price: z.ZodNumber;
+        currency: z.ZodString;
+        imageUrl: z.ZodOptional<z.ZodString>;
+        type: z.ZodString;
+        available: z.ZodBoolean;
+        timer: z.ZodOptional<z.ZodString>;
+    }, z.core.$strip>>;
+}, z.core.$strip>;
+export type ShopItem = z.infer<typeof ShopItemSchema>;
+export type ShopResponse = z.infer<typeof ShopResponseSchema>;
+export declare const PurchaseResponseSchema: z.ZodObject<{
+    success: z.ZodBoolean;
+    newBalance: z.ZodNumber;
+    newLimit: z.ZodNumber;
+    reward: z.ZodObject<{
+        id: z.ZodString;
+        name: z.ZodString;
+        amount: z.ZodNumber;
+        rarity: z.ZodString;
+        imageUrl: z.ZodOptional<z.ZodString>;
+    }, z.core.$strip>;
+    error: z.ZodOptional<z.ZodString>;
+}, z.core.$strip>;
+export type PurchaseResponse = z.infer<typeof PurchaseResponseSchema>;
+export declare const GiftShopItemResponseSchema: z.ZodObject<{
+    success: z.ZodBoolean;
+    newBalance: z.ZodNumber;
+    reward: z.ZodObject<{
+        id: z.ZodString;
+        name: z.ZodString;
+        amount: z.ZodNumber;
+        rarity: z.ZodString;
+        imageUrl: z.ZodOptional<z.ZodString>;
+    }, z.core.$strip>;
+    error: z.ZodOptional<z.ZodString>;
+}, z.core.$strip>;
+export type GiftShopItemResponse = z.infer<typeof GiftShopItemResponseSchema>;
+//# sourceMappingURL=shop.zod.d.ts.map

@@ -1,0 +1,20 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const auth_1 = __importDefault(require("./auth"));
+const player_1 = __importDefault(require("./player"));
+const economy_1 = __importDefault(require("./economy"));
+const fleet_1 = __importDefault(require("./fleet"));
+const combat_1 = __importDefault(require("./combat"));
+const staticData_1 = __importDefault(require("./staticData"));
+const router = (0, express_1.Router)();
+router.use('/auth', auth_1.default);
+router.use('/player', player_1.default);
+router.use('/economy', economy_1.default);
+router.use('/fleet', fleet_1.default);
+router.use('/combat', combat_1.default);
+router.use('/static', staticData_1.default);
+exports.default = router;

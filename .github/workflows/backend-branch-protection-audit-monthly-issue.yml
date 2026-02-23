@@ -1,0 +1,141 @@
+name: Backend Branch Protection Audit Monthly Issue
+
+on:
+  schedule:
+    - cron: "15 9 1 * *"
+  workflow_dispatch:
+    inputs:
+      auditAssignees:
+        description: Comma-separated GitHub usernames to assign (overrides repository variable for this run)
+        required: false
+        default: ""
+        type: string
+
+permissions:
+  contents: read
+  issues: write
+
+concurrency:
+  group: backend-branch-protection-audit-monthly-issue
+  cancel-in-progress: true
+
+jobs:
+  monthly-audit-issue:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      AUDIT_ASSIGNEES: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.auditAssignees || vars.BRANCH_PROTECTION_AUDIT_ASSIGNEES || '' }}
+    steps:
+      - name: Upsert monthly branch protection audit issue
+        id: upsert_audit_issue
+        if: github.ref_name == github.event.repository.default_branch
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            const marker = '<!-- backend-branch-protection-audit-monthly-issue -->';
+            const title = 'Security: Monthly branch protection audit';
+            const runUrl = `https://github.com/${owner}/${repo}/actions/runs/${context.runId}`;
+            const runbookPath = 'backend/DOCUMENTATION_RUNBOOKS.md';
+            const securityPath = 'backend/SECURITY.md';
+
+            const configuredLabels = ['security', 'governance', 'backend'];
+            let labels = [];
+            try {
+              const { data: repoLabels } = await github.rest.issues.listLabelsForRepo({
+                owner,
+                repo,
+                per_page: 100,
+              });
+              const available = new Set(repoLabels.map((label) => label.name));
+              labels = configuredLabels.filter((label) => available.has(label));
+            } catch (error) {
+              core.warning(`Unable to resolve repository labels: ${error.message}`);
+            }
+
+            const configuredAssignees = (process.env.AUDIT_ASSIGNEES || '')
+              .split(',')
+              .map((value) => value.trim())
+              .filter(Boolean);
+            const assignees = [];
+            for (const username of configuredAssignees) {
+              try {
+                await github.rest.users.getByUsername({ username });
+                assignees.push(username);
+              } catch (error) {
+                core.warning(`Skipping unknown assignee '${username}': ${error.message}`);
+              }
+            }
+
+            const body = [
+              marker,
+              '## Monthly Branch Protection Audit',
+              '',
+              `- workflow run: ${runUrl}`,
+              `- policy reference: [${securityPath}](../blob/${context.ref.replace('refs/heads/', '')}/${securityPath})`,
+              `- audit log table: [${runbookPath}](../blob/${context.ref.replace('refs/heads/', '')}/${runbookPath})`,
+              '',
+              '### Required verification',
+              '- [ ] Confirm required checks are still enforced on `main`:',
+              '  - `CI / build-and-test`',
+              '  - `CI / legal-release-record-check`',
+              '  - `Governance Dry Run / governance-dry-run`',
+              '  - `Backend Docs Link Check / docs-link-check`',
+              '  - `Backend DB Change Evidence Check / evidence-check`',
+              '- [ ] Confirm "Require branches to be up to date before merging" remains enabled.',
+              '- [ ] Confirm pull request reviews and stale-approval dismissal remain enabled.',
+              '- [ ] Confirm "Require conversation resolution before merging" remains enabled.',
+              '- [ ] Confirm push access on protected branches is restricted to maintainers only.',
+              '- [ ] Update Branch Protection Audit Log table in `backend/DOCUMENTATION_RUNBOOKS.md` with date, owner, findings, and evidence link.',
+              '',
+              '### Completion',
+              '- [ ] Add remediation tasks for any gaps and link tracking issues.',
+              '- [ ] Close this issue after the audit log row is recorded.',
+            ].join('\n');
+
+            const { data: issues } = await github.rest.issues.listForRepo({
+              owner,
+              repo,
+              state: 'all',
+              per_page: 100,
+            });
+
+            const existing = issues.find((issue) => issue.title === title);
+            if (existing) {
+              await github.rest.issues.update({
+                owner,
+                repo,
+                issue_number: existing.number,
+                state: 'open',
+                body,
+                labels,
+                assignees,
+              });
+              core.setOutput('issue_number', String(existing.number));
+              core.setOutput('operation', 'updated');
+            } else {
+              const created = await github.rest.issues.create({
+                owner,
+                repo,
+                title,
+                body,
+                labels,
+                assignees,
+              });
+              core.setOutput('issue_number', String(created.data.number));
+              core.setOutput('operation', 'created');
+            }
+
+      - name: Write summary
+        if: github.ref_name == github.event.repository.default_branch
+        run: |
+          echo "## Branch Protection Audit Issue" >> "$GITHUB_STEP_SUMMARY"
+          echo "- operation: **${{ steps.upsert_audit_issue.outputs.operation }}**" >> "$GITHUB_STEP_SUMMARY"
+          echo "- issue number: **#${{ steps.upsert_audit_issue.outputs.issue_number }}**" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Note skip on non-default branch
+        if: github.ref_name != github.event.repository.default_branch
+        run: |
+          echo "## Branch Protection Audit Issue" >> "$GITHUB_STEP_SUMMARY"
+          echo "- issue upsert skipped on non-default branch \`${{ github.ref_name }}\` (default: \`${{ github.event.repository.default_branch }}\`)." >> "$GITHUB_STEP_SUMMARY"

@@ -1,0 +1,186 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-02-18T19:51:37.767Z",
+  "strictMode": true,
+  "check": "MONO-01",
+  "contracts": [
+    {
+      "contract": "api",
+      "alias": "@api",
+      "packageName": "api",
+      "packageVersion": "1.0.0",
+      "root": "packages\\api\\src"
+    },
+    {
+      "contract": "models",
+      "alias": "@models",
+      "packageName": "models",
+      "packageVersion": "1.0.0",
+      "root": "packages\\models\\src"
+    }
+  ],
+  "summary": {
+    "surfacesChecked": 5,
+    "surfacesPassed": 5,
+    "surfacesFailed": 0,
+    "errors": 0
+  },
+  "surfaces": [
+    {
+      "name": "backend",
+      "sourceRoot": "backend\\src",
+      "sourceFilesScanned": 90,
+      "contractImportsFound": 0,
+      "resolved": [],
+      "errors": [],
+      "passed": true
+    },
+    {
+      "name": "admin-panel",
+      "sourceRoot": "apps\\admin-panel\\src",
+      "sourceFilesScanned": 24,
+      "contractImportsFound": 0,
+      "resolved": [],
+      "errors": [],
+      "passed": true
+    },
+    {
+      "name": "admin-dashboard",
+      "sourceRoot": "apps\\admin-dashboard\\src",
+      "sourceFilesScanned": 35,
+      "contractImportsFound": 0,
+      "resolved": [],
+      "errors": [],
+      "passed": true
+    },
+    {
+      "name": "web",
+      "sourceRoot": "apps\\web\\src",
+      "sourceFilesScanned": 2,
+      "contractImportsFound": 0,
+      "resolved": [],
+      "errors": [],
+      "passed": true
+    },
+    {
+      "name": "mobile",
+      "sourceRoot": "apps\\mobile\\src",
+      "sourceFilesScanned": 69,
+      "contractImportsFound": 18,
+      "resolved": [
+        {
+          "sourceFile": "apps\\mobile\\src\\components\\BannerCarousel.tsx",
+          "specifier": "@models",
+          "resolvedTo": "packages\\models\\src\\index.ts",
+          "contract": "models"
+        },
+        {
+          "sourceFile": "apps\\mobile\\src\\components\\BannerDetail.tsx",
+          "specifier": "@models",
+          "resolvedTo": "packages\\models\\src\\index.ts",
+          "contract": "models"
+        },
+        {
+          "sourceFile": "apps\\mobile\\src\\hooks\\normalizeShopItems.ts",
+          "specifier": "@api/src/shopApi",
+          "resolvedTo": "packages\\api\\src\\shopApi.ts",
+          "contract": "api"
+        },
+        {
+          "sourceFile": "apps\\mobile\\src\\hooks\\useShop.ts",
+          "specifier": "@api/src/shopApi",
+          "resolvedTo": "packages\\api\\src\\shopApi.ts",
+          "contract": "api"
+        },
+        {
+          "sourceFile": "apps\\mobile\\src\\hooks\\useVip.ts",
+          "specifier": "@api",
+          "resolvedTo": "packages\\api\\src\\index.ts",
+          "contract": "api"
+        },
+        {
+          "sourceFile": "apps\\mobile\\src\\hooks\\useVipDailyReward.ts",
+          "specifier": "@api",
+          "resolvedTo": "packages\\api\\src\\index.ts",
+          "contract": "api"
+        },
+        {
+          "sourceFile": "apps\\mobile\\src\\screens\\BattlePassScreen.tsx",
+          "specifier": "@api",
+          "resolvedTo": "packages\\api\\src\\index.ts",
+          "contract": "api"
+        },
+        {
+          "sourceFile": "apps\\mobile\\src\\screens\\CosmeticDetailScreen.tsx",
+          "specifier": "@api",
+          "resolvedTo": "packages\\api\\src\\index.ts",
+          "contract": "api"
+        },
+        {
+          "sourceFile": "apps\\mobile\\src\\screens\\PurchaseHistoryScreen.tsx",
+          "specifier": "@api/src/shopApi",
+          "resolvedTo": "packages\\api\\src\\shopApi.ts",
+          "contract": "api"
+        },
+        {
+          "sourceFile": "apps\\mobile\\src\\screens\\RegisterScreen.tsx",
+          "specifier": "@api",
+          "resolvedTo": "packages\\api\\src\\index.ts",
+          "contract": "api"
+        },
+        {
+          "sourceFile": "apps\\mobile\\src\\screens\\ShopScreen.tsx",
+          "specifier": "@api/src/shopApi",
+          "resolvedTo": "packages\\api\\src\\shopApi.ts",
+          "contract": "api"
+        },
+        {
+          "sourceFile": "apps\\mobile\\src\\screens\\ShopScreen.tsx",
+          "specifier": "@api/src/shopTimerUtils",
+          "resolvedTo": "packages\\api\\src\\shopTimerUtils.ts",
+          "contract": "api"
+        },
+        {
+          "sourceFile": "apps\\mobile\\src\\state\\BattlePassContext.tsx",
+          "specifier": "@api",
+          "resolvedTo": "packages\\api\\src\\index.ts",
+          "contract": "api"
+        },
+        {
+          "sourceFile": "apps\\mobile\\src\\state\\PlayerContext.tsx",
+          "specifier": "@models",
+          "resolvedTo": "packages\\models\\src\\index.ts",
+          "contract": "models"
+        },
+        {
+          "sourceFile": "apps\\mobile\\src\\__tests__\\PurchaseHistoryScreen.test.tsx",
+          "specifier": "@api/src/shopApi",
+          "resolvedTo": "packages\\api\\src\\shopApi.ts",
+          "contract": "api"
+        },
+        {
+          "sourceFile": "apps\\mobile\\src\\__tests__\\ShopScreen.battery.test.tsx",
+          "specifier": "@api/src/shopApi",
+          "resolvedTo": "packages\\api\\src\\shopApi.ts",
+          "contract": "api"
+        },
+        {
+          "sourceFile": "apps\\mobile\\src\\__tests__\\ShopScreen.gift.test.tsx",
+          "specifier": "@api/src/shopApi",
+          "resolvedTo": "packages\\api\\src\\shopApi.ts",
+          "contract": "api"
+        },
+        {
+          "sourceFile": "apps\\mobile\\src\\__tests__\\ShopScreen.test.tsx",
+          "specifier": "@api/src/shopApi",
+          "resolvedTo": "packages\\api\\src\\shopApi.ts",
+          "contract": "api"
+        }
+      ],
+      "errors": [],
+      "passed": true
+    }
+  ],
+  "errors": [],
+  "ok": true
+}

@@ -1,0 +1,141 @@
+name: Weekly Dev Dependency Audit
+
+on:
+  schedule:
+    - cron: "0 9 * * 1"
+  push:
+    branches:
+      - main
+    paths:
+      - package.json
+      - pnpm-lock.yaml
+      - pnpm-workspace.yaml
+      - apps/**/package.json
+      - packages/**/package.json
+      - backend/package.json
+  pull_request:
+    branches:
+      - main
+    paths:
+      - package.json
+      - pnpm-lock.yaml
+      - pnpm-workspace.yaml
+      - apps/**/package.json
+      - packages/**/package.json
+      - backend/package.json
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+concurrency:
+  group: weekly-dev-dependency-audit
+  cancel-in-progress: true
+
+jobs:
+  dev-dependency-audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Run full dependency audit and capture output
+        id: audit
+        shell: bash
+        run: |
+          set +e
+          pnpm run audit:all > audit-output.txt 2>&1
+          exit_code=$?
+          echo "exit_code=$exit_code" >> "$GITHUB_OUTPUT"
+
+          if grep -Eiq "([0-9]+ vulnerabilities found|Severity:)" audit-output.txt; then
+            echo "has_vuln=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "has_vuln=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Upload audit output artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: weekly-dev-audit-output
+          path: audit-output.txt
+
+      - name: Upsert tracking issue
+        if: github.ref_name == github.event.repository.default_branch
+        uses: actions/github-script@v7
+        env:
+          HAS_VULN: ${{ steps.audit.outputs.has_vuln }}
+          AUDIT_EXIT_CODE: ${{ steps.audit.outputs.exit_code }}
+        with:
+          script: |
+            const fs = require('fs');
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            const title = 'Security: Dev dependency advisories (weekly audit)';
+
+            const output = fs.readFileSync('audit-output.txt', 'utf8');
+            const trimmedOutput = output.length > 65000
+              ? `${output.slice(0, 65000)}\n\n[truncated]`
+              : output;
+
+            const marker = '<!-- security-dev-audit-issue -->';
+            const runUrl = `https://github.com/${owner}/${repo}/actions/runs/${context.runId}`;
+            const body = `${marker}\n## Weekly Dev Dependency Audit\n\n- Workflow run: ${runUrl}\n- Audit exit code: ${process.env.AUDIT_EXIT_CODE}\n- Findings present: ${process.env.HAS_VULN}\n\n### Latest audit output\n\n\`\`\`text\n${trimmedOutput}\n\`\`\``;
+
+            const { data: issues } = await github.rest.issues.listForRepo({
+              owner,
+              repo,
+              state: 'all',
+              per_page: 100
+            });
+
+            const existing = issues.find(issue => issue.title === title);
+
+            if (process.env.HAS_VULN === 'true') {
+              if (existing) {
+                await github.rest.issues.update({
+                  owner,
+                  repo,
+                  issue_number: existing.number,
+                  body,
+                  state: 'open'
+                });
+              } else {
+                await github.rest.issues.create({
+                  owner,
+                  repo,
+                  title,
+                  body
+                });
+              }
+            } else if (existing) {
+              await github.rest.issues.update({
+                owner,
+                repo,
+                issue_number: existing.number,
+                body: `${marker}\n## Weekly Dev Dependency Audit\n\n- Workflow run: ${runUrl}\n- Audit exit code: ${process.env.AUDIT_EXIT_CODE}\n- Findings present: false\n\nNo dev dependency advisories detected in the latest run.`,
+                state: 'closed'
+              });
+            }
+
+      - name: Note issue-write guard skip
+        if: github.ref_name != github.event.repository.default_branch
+        run: |
+          echo "## Weekly Dev Dependency Audit" >> "$GITHUB_STEP_SUMMARY"
+          echo "- issue upsert skipped on non-default branch \`${{ github.ref_name }}\` (default: \`${{ github.event.repository.default_branch }}\`)." >> "$GITHUB_STEP_SUMMARY"

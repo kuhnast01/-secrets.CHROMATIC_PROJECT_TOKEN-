@@ -1,0 +1,13 @@
+{
+  "id": "ENERGY_PACK_01",
+  "type": "resource_pack",
+  "priceSoft": 10000,
+  "contents": {
+    "resources": { "energy": 50000 }
+  },
+  "visibility": {
+    "minSector": 1,
+    "maxSector": 10,
+    "oneTimePurchase": false
+  }
+}

@@ -1,0 +1,8 @@
+.errorBoundaryContainer {
+  text-align: center;
+  padding: 40px;
+}
+
+.errorBoundaryTitle {
+  color: red;
+}

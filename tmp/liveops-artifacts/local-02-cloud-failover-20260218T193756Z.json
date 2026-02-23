@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "pipeline": "LOCAL-02",
+  "status": "pass",
+  "generatedAt": "2026-02-18T19:37:56.308Z",
+  "reportPath": "C:\\Users\\kuhna\\OneDrive\\Desktop\\SIMgameFiles\\VisualStudio\\FrontendMonorepo\\tmp\\liveops-artifacts\\local-02-cloud-failover-20260218T193756Z.json",
+  "stagedEventPath": "C:\\Users\\kuhna\\OneDrive\\Desktop\\SIMgameFiles\\VisualStudio\\FrontendMonorepo\\tmp\\liveops-staging\\failover\\local-02-event-20260218T193756Z.json",
+  "steps": [
+    {
+      "name": "cloud-failover:simulate-cloud-outage",
+      "status": "pass",
+      "durationMs": 0,
+      "details": "Cloud outage simulation active for optional integrations"
+    },
+    {
+      "name": "core-path:healthz",
+      "status": "pass",
+      "durationMs": 27,
+      "details": "Health endpoint remained operational during cloud outage"
+    },
+    {
+      "name": "core-path:system-health",
+      "status": "pass",
+      "durationMs": 3,
+      "details": "System health endpoint remained operational"
+    },
+    {
+      "name": "core-path:auth-login",
+      "status": "pass",
+      "durationMs": 70,
+      "details": "Authentication flow remained operational"
+    },
+    {
+      "name": "core-path:event-validate-stage",
+      "status": "pass",
+      "durationMs": 1,
+      "details": "Event author/validate/stage succeeded at C:\\Users\\kuhna\\OneDrive\\Desktop\\SIMgameFiles\\VisualStudio\\FrontendMonorepo\\tmp\\liveops-staging\\failover\\local-02-event-20260218T193756Z.json"
+    }
+  ]
+}

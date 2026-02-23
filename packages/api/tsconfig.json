@@ -1,0 +1,24 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "declaration": true,
+    "emitDeclarationOnly": true,
+    "outDir": "dist",
+    "rootDir": "src",
+    "composite": true,
+    "declarationMap": true,
+    "types": ["node"],
+    "paths": {
+      "models": ["../models/dist/index"],
+      "models/*": ["../models/dist/*"],
+      "models/event": ["../models/dist/event"],
+      "@api": ["./index"],
+      "@api/*": ["./*"]
+    }
+  },
+  "include": ["src"],
+  "exclude": ["**/*.test.ts", "**/*.test.tsx", "**/*.battery.test.ts"],
+  "references": [
+    { "path": "../models" }
+  ]
+}

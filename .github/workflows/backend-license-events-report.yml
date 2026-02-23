@@ -1,0 +1,108 @@
+name: Backend License Events Report
+
+on:
+  schedule:
+    - cron: "30 8 * * 1"
+  workflow_dispatch:
+    inputs:
+      logFile:
+        description: Path to NDJSON/Pino backend log file
+        required: true
+        default: backend/stress-artifacts/backend-dev.log
+        type: string
+      sinceHours:
+        description: Rolling window in hours
+        required: true
+        default: "168"
+        type: string
+      retentionDays:
+        description: Artifact retention days
+        required: true
+        default: "30"
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: backend-license-events-report
+  cancel-in-progress: true
+
+jobs:
+  export-license-events:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: backend
+    env:
+      LICENSE_LOG_FILE: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.logFile || 'backend/stress-artifacts/backend-dev.log' }}
+      SINCE_HOURS: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.sinceHours || '168' }}
+      RETENTION_DAYS: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.retentionDays || '30' }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Ensure artifacts directory
+        run: mkdir -p stress-artifacts
+
+      - name: Check log file presence
+        id: log_check
+        run: |
+          if [ -f "../${LICENSE_LOG_FILE}" ]; then
+            echo "has_log=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "has_log=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Export timestamped license event artifacts
+        if: steps.log_check.outputs.has_log == 'true'
+        run: pnpm run license:export-events -- --file=../${LICENSE_LOG_FILE} --sinceHours=${SINCE_HOURS} --format=both --outDir=stress-artifacts
+
+      - name: Create no-data placeholder artifacts
+        if: steps.log_check.outputs.has_log != 'true'
+        run: |
+          ts=$(date -u +%Y%m%dT%H%M%SZ)
+          cat > stress-artifacts/license-events-summary-${ts}.json <<EOF
+          {
+            "schemaVersion": 1,
+            "status": "no_data",
+            "message": "Configured log file not found",
+            "logFile": "${LICENSE_LOG_FILE}",
+            "generatedAt": "$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+          }
+          EOF
+          cat > stress-artifacts/license-events-summary-${ts}.csv <<EOF
+          section,key,count
+          meta,no_data,1
+          EOF
+
+      - name: Upload license event artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: backend-license-events-report
+          retention-days: ${{ env.RETENTION_DAYS }}
+          path: |
+            backend/stress-artifacts/license-events-summary-*.json
+            backend/stress-artifacts/license-events-summary-*.csv
+
+      - name: Write workflow summary
+        run: |
+          echo "## Backend License Events Report" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Log file: ${LICENSE_LOG_FILE}" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Since hours: ${SINCE_HOURS}" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Log file present: ${{ steps.log_check.outputs.has_log }}" >> "$GITHUB_STEP_SUMMARY"

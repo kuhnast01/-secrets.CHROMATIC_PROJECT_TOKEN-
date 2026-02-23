@@ -1,0 +1,91 @@
+name: Elite Board Refresh
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "45 10 * * 1"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: elite-board-refresh-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  elite-board-refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Generate elite execution board
+        run: node scripts/governance/generate-elite-execution-board.mjs
+
+      - name: Compute elite board diff
+        id: board_diff
+        shell: bash
+        run: |
+          mkdir -p governance-artifacts
+          git diff -- ELITE_EXECUTION_BOARD.md > governance-artifacts/elite-board.diff || true
+
+          if [ -s governance-artifacts/elite-board.diff ]; then
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+            added=$(grep -E '^\+' governance-artifacts/elite-board.diff | grep -Ev '^\+\+\+' | wc -l | tr -d ' ')
+            removed=$(grep -E '^-' governance-artifacts/elite-board.diff | grep -Ev '^---' | wc -l | tr -d ' ')
+            echo "added_lines=$added" >> "$GITHUB_OUTPUT"
+            echo "removed_lines=$removed" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            echo "added_lines=0" >> "$GITHUB_OUTPUT"
+            echo "removed_lines=0" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Run elite readiness check
+        run: node scripts/governance/check-elite-readiness.mjs
+
+      - name: Publish refresh summary
+        if: always()
+        shell: bash
+        run: |
+          echo "## Elite Board Refresh" >> "$GITHUB_STEP_SUMMARY"
+          echo "- board changed: **${{ steps.board_diff.outputs.changed == 'true' && 'YES' || 'NO' }}**" >> "$GITHUB_STEP_SUMMARY"
+          echo "- added lines: \`${{ steps.board_diff.outputs.added_lines }}\`" >> "$GITHUB_STEP_SUMMARY"
+          echo "- removed lines: \`${{ steps.board_diff.outputs.removed_lines }}\`" >> "$GITHUB_STEP_SUMMARY"
+          echo "- artifacts: \`elite-execution-board\`, \`elite-board-diff\`, \`elite-readiness-report\`" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload elite execution board artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: elite-execution-board
+          path: ELITE_EXECUTION_BOARD.md
+
+      - name: Upload elite board diff artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: elite-board-diff
+          path: governance-artifacts/elite-board.diff
+
+      - name: Upload elite readiness report artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: elite-readiness-report
+          path: governance-artifacts/elite-readiness-report.json

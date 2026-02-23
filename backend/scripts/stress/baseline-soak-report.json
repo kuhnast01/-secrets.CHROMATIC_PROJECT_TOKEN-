@@ -1,0 +1,36 @@
+{
+  "profile": "soak",
+  "baseUrl": "http://127.0.0.1:4000",
+  "generatedAt": "2026-02-18T01:43:38.588Z",
+  "config": {
+    "duration": 90,
+    "connections": 40,
+    "pipelining": 1,
+    "thresholds": {
+      "maxErrorRate": 0.01,
+      "maxP95Ms": 500,
+      "minRequests": 3000
+    }
+  },
+  "results": [
+    {
+      "path": "/healthz",
+      "total": 883127,
+      "errors": 0,
+      "non2xx": 0,
+      "p95": 8,
+      "errorRate": 0,
+      "passed": true
+    },
+    {
+      "path": "/system-health",
+      "total": 791083,
+      "errors": 0,
+      "non2xx": 0,
+      "p95": 8,
+      "errorRate": 0,
+      "passed": true
+    }
+  ],
+  "passed": true
+}

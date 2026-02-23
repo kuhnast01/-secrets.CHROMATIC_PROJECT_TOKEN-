@@ -1,0 +1,21 @@
+# Snyk configuration for Poseidon
+
+See: [Snyk CLI Documentation](https://docs.snyk.io/snyk-cli/test-your-projects-for-vulnerabilities)
+
+## Snyk is enabled via GitHub Actions in CI
+
+## To use locally: `npx snyk test`
+
+## Example: .snyk policy file (optional, can be customized)
+
+### version: v1.20.0
+
+### ignore
+
+#### "lodash"
+
+- "SNYK-JS-LODASH-567746"
+
+  # reason: "Not used in production code"
+  # expires: "2024-12-31T23:59:59.000Z"
+

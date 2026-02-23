@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "lane": "stage",
+  "releaseId": "mono-20260218.1",
+  "promotedFrom": "dev",
+  "immutable": true,
+  "artifact": {
+    "file": "governance/release-lanes/artifacts/stage/bundle-c783055117880a24777de69ff0fe2c4dea5558eab2d1d7b9835b86d959696df2.json",
+    "sha256": "c783055117880a24777de69ff0fe2c4dea5558eab2d1d7b9835b86d959696df2",
+    "writeOnce": true
+  },
+  "reproducibility": {
+    "lockfileSha256": "915a86ff344c33a1cfc62b622f6623eaeef53db6f6d130ffeaf072c0efeea0b3",
+    "workspaceFingerprintSha256": "068e0e94f1789960c052083a5cf9f5c6da5e9f0d5dae65f1ee03e41136eae8e0",
+    "bundleSha256": "c783055117880a24777de69ff0fe2c4dea5558eab2d1d7b9835b86d959696df2"
+  }
+}

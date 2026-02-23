@@ -1,0 +1,89 @@
+.audit-log-modal {
+  position: fixed;
+  top: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #fff;
+  border: 2px solid #3182ce;
+  border-radius: 8px;
+  z-index: 4000;
+  min-width: 400px;
+  max-width: 700px;
+  box-shadow: 0 4px 24px #0002;
+  padding: 24px;
+}
+
+.audit-log-title {
+  color: #3182ce;
+}
+
+.audit-log-list {
+  max-height: 300px;
+  overflow: auto;
+  font-size: 14px;
+}
+
+.audit-log-item {
+  margin-bottom: 8px;
+}
+
+.audit-log-details {
+  background: #f5f5f5;
+  padding: 4px;
+  margin: 0;
+}
+
+.audit-log-close {
+  margin-top: 12px;
+  background: #3182ce;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+}
+
+.event-composer-nav {
+  margin-bottom: 16px;
+}
+
+.event-composer-error {
+  color: red;
+}
+
+.version-history-dialog {
+  background: #fff;
+  border: 1px solid #888;
+  padding: 16px;
+  position: fixed;
+  top: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2000;
+  min-width: 400px;
+}
+
+.version-history-item {
+  margin-bottom: 12px;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 8px;
+}
+
+.calendar-view {
+  margin: 16px 0;
+  border: 1px solid #ccc;
+  padding: 16px;
+}
+
+.instructions-section {
+  margin-top: 16px;
+}
+
+.lang-select-group {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 8px;
+}
+
+.lang-select-label {
+  margin-right: 8px;
+}

@@ -1,0 +1,19 @@
+{
+    "logs": [
+        {
+            "outputFile": "com.anonymous.simgamemobile.app-mergeDebugResources-42:/values-v35/values-v35.xml",
+            "map": [
+                {
+                    "source": "C:\\Users\\kuhna\\.gradle\\caches\\8.14.3\\transforms\\fbbfc0c7130602c6be177d24c2d87317\\transformed\\material-1.13.0\\res\\values-v35\\values-v35.xml",
+                    "from": {
+                        "startLines": "2,3,4,5",
+                        "startColumns": "4,4,4,4",
+                        "startOffsets": "55,149,247,349",
+                        "endColumns": "93,97,101,99",
+                        "endOffsets": "144,242,344,444"
+                    }
+                }
+            ]
+        }
+    ]
+}

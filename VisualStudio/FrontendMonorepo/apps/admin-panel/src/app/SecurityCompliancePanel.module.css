@@ -1,0 +1,12 @@
+.security-compliance-panel {
+  background: #f7fafc;
+  border: 1px solid #3182ce;
+  border-radius: 8px;
+  padding: 24px;
+  margin: 24px 0;
+}
+
+.security-compliance-note {
+  color: #888;
+  margin-top: 8px;
+}

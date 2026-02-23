@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 1,
+  "description": "Policy-as-code source of truth for AI-03 human approval gate enforcement.",
+  "approvalRequiredFor": [
+    "balancing",
+    "deployment"
+  ],
+  "requiredApproverRoles": [
+    "LiveOpsLead",
+    "SRELead"
+  ],
+  "requireSignedApprovalRecord": true,
+  "maxApprovalAgeMinutes": 60
+}

@@ -1,0 +1,18 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const router = (0, express_1.Router)();
+// GET /api/player/profile
+router.get('/profile', (_req, res) => {
+    res.json({
+        playerId: 'player-1',
+        level: 5,
+        resources: {
+            energy: 1200,
+            alloy: 540,
+            credits: 12000,
+            data: 320
+        }
+    });
+});
+exports.default = router;

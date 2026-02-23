@@ -1,0 +1,29 @@
+{
+    "startedAt":  "2026-02-17T22:26:29.1814460-05:00",
+    "sourceDatabase":  "liveops",
+    "restoreDatabase":  "liveops_restore_drill",
+    "dumpPath":  "stress-artifacts/liveops-backup-20260217-222629.dump",
+    "preBackupCounts":  {
+                            "Analytics":  0,
+                            "AuditLog":  0,
+                            "Event":  0,
+                            "User":  0
+                        },
+    "backupSeconds":  0.099,
+    "restoreSeconds":  0.095,
+    "postRestoreCounts":  {
+                              "Analytics":  0,
+                              "AuditLog":  0,
+                              "Event":  0,
+                              "User":  0
+                          },
+    "rpoRowCountDelta":  {
+                             "Analytics":  0,
+                             "AuditLog":  0,
+                             "Event":  0,
+                             "User":  0
+                         },
+    "rpoRowsMatch":  true,
+    "rtoSeconds":  0.095,
+    "finishedAt":  "2026-02-17T22:26:29.7920321-05:00"
+}

@@ -1,0 +1,111 @@
+{
+  "schemaVersion": 1,
+  "pipeline": "NC-02",
+  "status": "pass",
+  "generatedAt": "2026-02-18T20:47:23.769Z",
+  "runId": "no-code-economy-sim-20260218T204723Z",
+  "policyPath": "C:\\Users\\kuhna\\OneDrive\\Desktop\\SIMgameFiles\\VisualStudio\\FrontendMonorepo\\governance\\policies\\no-code-economy-simulation-policy.json",
+  "reportPath": "C:\\Users\\kuhna\\OneDrive\\Desktop\\SIMgameFiles\\VisualStudio\\FrontendMonorepo\\backend\\tmp\\liveops-artifacts\\nc-02-economy-simulation-20260218T204723Z.json",
+  "simulationPath": "C:\\Users\\kuhna\\OneDrive\\Desktop\\SIMgameFiles\\VisualStudio\\FrontendMonorepo\\backend\\tmp\\liveops-simulation\\no-code-economy-sim-20260218T204723Z\\economy-simulation.json",
+  "policy": {
+    "schemaVersion": 1,
+    "description": "Policy gates for NC-02 reward/economy simulation validation before publish.",
+    "riskThresholds": {
+      "maxEconomyDeltaPercent": 15,
+      "maxWhaleAdvantageIndex": 2.5,
+      "maxInflationRiskScore": 0.65,
+      "maxPayoutPerUser": 3000
+    },
+    "blockPublishOnViolation": true,
+    "requiredSignals": [
+      "economy_delta_percent",
+      "whale_advantage_index",
+      "inflation_risk_score",
+      "payout_per_user"
+    ]
+  },
+  "checks": [
+    {
+      "name": "required-signals-present",
+      "status": "pass",
+      "details": "required=economy_delta_percent,whale_advantage_index,inflation_risk_score,payout_per_user"
+    },
+    {
+      "name": "valid-scenario-allows-publish",
+      "status": "pass",
+      "details": "decision=allow"
+    },
+    {
+      "name": "invalid-scenario-blocks-publish",
+      "status": "pass",
+      "details": "economy_delta_percent:21.4>15, whale_advantage_index:3.2>2.5, inflation_risk_score:0.78>0.65, payout_per_user:4600>3000"
+    }
+  ],
+  "validScenario": {
+    "scenario": "valid",
+    "publishDecision": "allow",
+    "reasons": [],
+    "signals": [
+      {
+        "name": "economy_delta_percent",
+        "value": 8.5,
+        "threshold": 15,
+        "passed": true
+      },
+      {
+        "name": "whale_advantage_index",
+        "value": 1.9,
+        "threshold": 2.5,
+        "passed": true
+      },
+      {
+        "name": "inflation_risk_score",
+        "value": 0.42,
+        "threshold": 0.65,
+        "passed": true
+      },
+      {
+        "name": "payout_per_user",
+        "value": 1450,
+        "threshold": 3000,
+        "passed": true
+      }
+    ]
+  },
+  "invalidScenario": {
+    "scenario": "invalid",
+    "publishDecision": "block",
+    "reasons": [
+      "economy_delta_percent:21.4>15",
+      "whale_advantage_index:3.2>2.5",
+      "inflation_risk_score:0.78>0.65",
+      "payout_per_user:4600>3000"
+    ],
+    "signals": [
+      {
+        "name": "economy_delta_percent",
+        "value": 21.4,
+        "threshold": 15,
+        "passed": false
+      },
+      {
+        "name": "whale_advantage_index",
+        "value": 3.2,
+        "threshold": 2.5,
+        "passed": false
+      },
+      {
+        "name": "inflation_risk_score",
+        "value": 0.78,
+        "threshold": 0.65,
+        "passed": false
+      },
+      {
+        "name": "payout_per_user",
+        "value": 4600,
+        "threshold": 3000,
+        "passed": false
+      }
+    ]
+  }
+}

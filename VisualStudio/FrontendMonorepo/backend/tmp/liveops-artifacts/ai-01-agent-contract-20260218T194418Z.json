@@ -1,0 +1,81 @@
+{
+  "schemaVersion": 1,
+  "pipeline": "AI-01",
+  "status": "pass",
+  "generatedAt": "2026-02-18T19:44:18.873Z",
+  "reportPath": "C:\\Users\\kuhna\\OneDrive\\Desktop\\SIMgameFiles\\VisualStudio\\FrontendMonorepo\\backend\\tmp\\liveops-artifacts\\ai-01-agent-contract-20260218T194418Z.json",
+  "contractPath": "C:\\Users\\kuhna\\OneDrive\\Desktop\\SIMgameFiles\\VisualStudio\\FrontendMonorepo\\backend\\tmp\\agent-contracts\\agent-contracts-20260218T194418Z.json",
+  "steps": [
+    {
+      "name": "agent-contracts:versioned-contracts-published",
+      "status": "pass",
+      "details": "Published 5 domain contracts at C:\\Users\\kuhna\\OneDrive\\Desktop\\SIMgameFiles\\VisualStudio\\FrontendMonorepo\\backend\\tmp\\agent-contracts\\agent-contracts-20260218T194418Z.json"
+    },
+    {
+      "name": "agent-contracts:deny-by-default-policy",
+      "status": "pass",
+      "details": "Unknown tools are denied for every domain contract"
+    },
+    {
+      "name": "agent-contracts:runtime-deny-default-enforced",
+      "status": "pass",
+      "details": "Runtime guard prevented write when write permission was disabled"
+    }
+  ],
+  "contracts": [
+    {
+      "agent": "Engineering",
+      "contractVersion": "2026-02-18.v1",
+      "allowedTools": [
+        "file.read",
+        "file.write",
+        "code.build",
+        "code.test",
+        "git.diff"
+      ],
+      "deniedByDefault": true
+    },
+    {
+      "agent": "QA",
+      "contractVersion": "2026-02-18.v1",
+      "allowedTools": [
+        "file.read",
+        "code.test",
+        "code.lint"
+      ],
+      "deniedByDefault": true
+    },
+    {
+      "agent": "LiveOps",
+      "contractVersion": "2026-02-18.v1",
+      "allowedTools": [
+        "file.read",
+        "event.validate",
+        "event.stage"
+      ],
+      "deniedByDefault": true
+    },
+    {
+      "agent": "SRE",
+      "contractVersion": "2026-02-18.v1",
+      "allowedTools": [
+        "file.read",
+        "deploy.preflight",
+        "deploy.rollback",
+        "health.check"
+      ],
+      "deniedByDefault": true
+    },
+    {
+      "agent": "Security",
+      "contractVersion": "2026-02-18.v1",
+      "allowedTools": [
+        "file.read",
+        "secrets.audit",
+        "secrets.rotate",
+        "policy.validate"
+      ],
+      "deniedByDefault": true
+    }
+  ]
+}

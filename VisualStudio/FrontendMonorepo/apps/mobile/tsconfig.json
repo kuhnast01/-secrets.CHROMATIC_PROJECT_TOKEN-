@@ -1,0 +1,21 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "jsx": "react-native",
+    "ignoreDeprecations": "6.0",
+    "types": ["react", "react-native", "node", "jest"],
+    "baseUrl": "./src",
+    "paths": {
+      "@api": ["./../../packages/api/src/index"],
+      "@api/*": ["./../../packages/api/src/*"],
+      "@models": ["./../../packages/models/src/index"],
+      "@models/*": ["./../../packages/models/src/*"],
+      "@ui": ["./../../packages/ui/src/index"],
+      "@ui/*": ["./../../packages/ui/src/*"],
+      "@api/shopApi": ["./../../packages/api/dist/shopApi"],
+      "@api/src/shopApi": ["./../../packages/api/src/shopApi"]
+    }
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules"]
+}

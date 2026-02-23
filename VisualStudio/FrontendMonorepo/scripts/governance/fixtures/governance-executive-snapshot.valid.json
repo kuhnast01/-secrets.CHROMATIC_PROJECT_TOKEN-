@@ -1,0 +1,46 @@
+{
+  "schemaVersion": 1,
+  "mode": "governance-executive-snapshot-monthly",
+  "generatedAt": "2026-02-18T00:00:00.000Z",
+  "repository": "owner/repo",
+  "branch": "main",
+  "runId": "123456789",
+  "runNumber": "42",
+  "runUrl": "https://github.com/owner/repo/actions/runs/123456789",
+  "eventName": "workflow_run",
+  "sourceWorkflow": {
+    "trigger": "workflow_run",
+    "workflowName": "Release Environment Audit Monthly Issue",
+    "workflowRunId": "123456700",
+    "workflowConclusion": "success"
+  },
+  "controlCount": 2,
+  "controls": [
+    {
+      "id": "LIC-ANOMALY-POLICY",
+      "sourcePath": "governance-artifacts/license-anomaly-escalation-policy-report.json",
+      "present": true,
+      "status": "pass",
+      "generatedAt": "2026-02-18T00:00:00.000Z",
+      "details": {
+        "failureCount": 0,
+        "checkId": "LIC-ANOMALY-POLICY"
+      }
+    },
+    {
+      "id": "RELEASE-ENV-AUDIT",
+      "sourcePath": "governance-artifacts/release-environment-audit-report.json",
+      "present": true,
+      "status": "pass",
+      "generatedAt": "2026-02-18T00:00:00.000Z",
+      "details": {
+        "auditStatus": "PASS",
+        "findingCount": 0,
+        "targetEnvironment": "production-release"
+      }
+    }
+  ],
+  "overallStatus": "ok",
+  "attentionControls": [],
+  "missingControls": []
+}

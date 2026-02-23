@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "approvals": [
+    {
+      "suggestionId": "SUG-BAL-001",
+      "approver": "liveops-owner",
+      "role": "LiveOpsLead",
+      "approvedAt": "2026-02-18T20:25:51.175Z",
+      "reason": "validated-economy-sim",
+      "signature": "32843fbc8b508e2bc7772fd19ca7e7872fd6a91f8310c73bb15157659e97984c"
+    },
+    {
+      "suggestionId": "SUG-DEP-001",
+      "approver": "sre-owner",
+      "role": "SRELead",
+      "approvedAt": "2026-02-18T20:25:51.175Z",
+      "reason": "validated-rollout-and-rollback-plan",
+      "signature": "c7468835e11656d26032495cc0fb2b34d282f6a254a19546743a03026300b43f"
+    }
+  ]
+}

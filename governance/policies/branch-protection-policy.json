@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "description": "Policy-as-code source of truth for branch protection audit drift checks.",
+  "requiredChecks": [
+    "CI / build-and-test",
+    "CI / legal-release-record-check",
+    "Governance Dry Run / governance-dry-run",
+    "Backend Docs Link Check / docs-link-check",
+    "Backend DB Change Evidence Check / evidence-check"
+  ],
+  "requiredControls": [
+    "Require branches to be up to date before merging",
+    "pull request reviews and stale-approval dismissal remain enabled",
+    "Require conversation resolution before merging",
+    "push access on protected branches is restricted to maintainers only"
+  ],
+  "requiredRunbookChecklistLines": [
+    "- Require branches to be up to date before merging: Yes/No",
+    "- Require pull request reviews + dismiss stale approvals: Yes/No",
+    "- Require conversation resolution before merging: Yes/No",
+    "- Restrict who can push to matching branches (maintainers only): Yes/No"
+  ],
+  "requiredRunbookHeadings": [
+    "Audit control checklist (record Yes/No and evidence each month):",
+    "### Monthly Audit Issue Comment Template"
+  ],
+  "requiredKpiLabels": [
+    "kpi:legal-drift-review"
+  ]
+}

@@ -1,0 +1,16 @@
+# Release Drafter configuration for Poseidon
+# See: https://github.com/release-drafter/release-drafter
+name-template: 'Poseidon Backend v$NEXT_PATCH_VERSION'
+tag-template: 'v$NEXT_PATCH_VERSION'
+categories:
+  - title: '🚀 Features'
+    labels:
+      - 'feature'
+  - title: '🐛 Fixes'
+    labels:
+      - 'bug'
+  - title: '🧰 Maintenance'
+    labels:
+      - 'chore'
+change-template: '- $TITLE (#$NUMBER) @$AUTHOR'
+no-changes-template: 'No user-facing changes.'

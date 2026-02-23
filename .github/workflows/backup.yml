@@ -1,0 +1,28 @@
+name: Backup
+on:
+  schedule:
+    - cron: '0 3 * * *' # Every day at 3am UTC
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: backup-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Archive repository
+        run: |
+          git archive --format=tar.gz -o repo-backup-$(date +%F).tar.gz HEAD
+      - name: Upload backup artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: repo-backup
+          path: repo-backup-*.tar.gz

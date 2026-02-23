@@ -1,0 +1,17 @@
+{
+    "startedAt":  "2026-02-17T22:21:44.0507266-05:00",
+    "method":  "application-layer-db-unavailability-via-invalid-database-url",
+    "serviceControlAttempt":  "blocked",
+    "serviceControlError":  "Cannot open postgresql-x64-16 service on computer .",
+    "degradedBehavior":  {
+                             "healthzStatus":  200,
+                             "usersStatus":  500,
+                             "usersError":  "Failed to fetch users / PrismaClientInitializationError (DB unreachable)"
+                         },
+    "recovery":  {
+                     "usersStatus":  200,
+                     "recoverySeconds":  0.179,
+                     "recoveryTs":  "2026-02-17T22:21:29.6320781-05:00"
+                 },
+    "notes":  "Host-level PostgreSQL stop/start requires elevated permissions in this environment. Fallback validates graceful API error handling and recovery semantics."
+}

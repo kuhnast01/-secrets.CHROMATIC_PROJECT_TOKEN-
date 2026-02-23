@@ -1,0 +1,167 @@
+name: Backend Label Bootstrap
+
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: Operation mode for label bootstrap
+        required: true
+        default: dry-run
+        type: choice
+        options:
+          - list-defaults
+          - dry-run
+          - apply
+      repository:
+        description: Target repository (owner/repo). Leave empty to use current repository.
+        required: false
+        default: ''
+        type: string
+
+permissions:
+  contents: read
+  issues: write
+
+concurrency:
+  group: backend-label-bootstrap
+  cancel-in-progress: false
+
+jobs:
+  bootstrap-labels:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: backend
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      TARGET_REPOSITORY: ${{ github.event.inputs.repository }}
+      MODE: ${{ github.event.inputs.mode }}
+      DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Run label bootstrap
+        id: bootstrap
+        run: |
+          mkdir -p stress-artifacts
+          cmd=(pnpm exec tsx scripts/stress/bootstrap-github-labels.ts --json)
+
+          if [ "$MODE" = "apply" ] && [ "$GITHUB_REF_NAME" != "$DEFAULT_BRANCH" ]; then
+            echo '{"ok":false,"mode":"error","errorType":"usage","exitCode":2,"message":"apply mode is restricted to the default branch"}' > stress-artifacts/label-bootstrap-result.json
+            echo "apply mode is allowed only on default branch '$DEFAULT_BRANCH' (current: '$GITHUB_REF_NAME')"
+            echo "exit_code=2" >> "$GITHUB_OUTPUT"
+            exit 2
+          fi
+
+          if [ -n "$TARGET_REPOSITORY" ]; then
+            cmd+=(--repo "$TARGET_REPOSITORY")
+          fi
+
+          case "$MODE" in
+            list-defaults)
+              cmd+=(--list-defaults)
+              ;;
+            dry-run)
+              cmd+=(--dry-run)
+              ;;
+            apply)
+              ;;
+            *)
+              echo '{"ok":false,"mode":"error","errorType":"usage","exitCode":2,"message":"Invalid mode input"}' > stress-artifacts/label-bootstrap-result.json
+              echo "Unsupported mode: $MODE"
+              exit 2
+              ;;
+          esac
+
+          set +e
+          output="$(${cmd[@]} 2>&1)"
+          exit_code=$?
+          set -e
+
+          printf '%s\n' "$output" | tee stress-artifacts/label-bootstrap-result.json
+          echo "exit_code=$exit_code" >> "$GITHUB_OUTPUT"
+
+          if [ "$exit_code" -ne 0 ]; then
+            exit "$exit_code"
+          fi
+
+      - name: Publish summary
+        if: always()
+        run: |
+          if [ -f stress-artifacts/label-bootstrap-result.json ]; then
+            node - <<'NODE'
+            const fs = require('fs');
+            const p = 'stress-artifacts/label-bootstrap-result.json';
+            const raw = fs.readFileSync(p, 'utf8');
+            let obj;
+            try {
+              obj = JSON.parse(raw);
+            } catch {
+              obj = { ok: false, mode: 'error', message: 'Output was not valid JSON' };
+            }
+
+            const lines = [];
+            lines.push('## Backend Label Bootstrap');
+            lines.push('');
+            lines.push('- mode: `'+(process.env.MODE || 'unknown')+'`');
+            lines.push('- exit code: `'+(process.env.EXIT_CODE || 'unknown')+'`');
+            lines.push('- ok: `'+String(Boolean(obj.ok))+'`');
+            if (obj.repository) lines.push('- repository: `'+obj.repository+'`');
+            if (obj.errorType) lines.push('- error type: `'+obj.errorType+'`');
+            if (obj.message) lines.push('- message: '+obj.message);
+            if (Array.isArray(obj.createdLabels)) lines.push('- created labels: `'+obj.createdLabels.length+'`');
+            if (Array.isArray(obj.missingLabels)) lines.push('- missing labels: `'+obj.missingLabels.length+'`');
+
+            const target = 'kpi:legal-drift-review';
+            const createdNames = Array.isArray(obj.createdLabels)
+              ? obj.createdLabels.map((item) => typeof item === 'string' ? item : item && item.name).filter(Boolean)
+              : [];
+            const missingNames = Array.isArray(obj.missingLabels)
+              ? obj.missingLabels.map((item) => typeof item === 'string' ? item : item && item.name).filter(Boolean)
+              : [];
+
+            let kpiStatus = 'unknown';
+            if (Array.isArray(obj.labels)) {
+              const defaultNames = obj.labels
+                .map((item) => item && item.name)
+                .filter(Boolean);
+              kpiStatus = defaultNames.includes(target) ? 'present-in-defaults' : 'missing-from-defaults';
+            } else if (missingNames.includes(target)) {
+              kpiStatus = 'missing-in-repo';
+            } else if (createdNames.includes(target)) {
+              kpiStatus = 'created-this-run';
+            } else if (obj.ok && (obj.mode === 'dry-run' || obj.mode === 'apply')) {
+              kpiStatus = 'present-in-repo';
+            }
+
+            lines.push('- `kpi:legal-drift-review`: `'+kpiStatus+'`');
+
+            fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY, lines.join('\n')+'\n');
+            NODE
+          else
+            echo "## Backend Label Bootstrap" >> "$GITHUB_STEP_SUMMARY"
+            echo "No result artifact generated." >> "$GITHUB_STEP_SUMMARY"
+          fi
+        env:
+          EXIT_CODE: ${{ steps.bootstrap.outputs.exit_code }}
+
+      - name: Upload bootstrap artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: backend-label-bootstrap-result
+          path: backend/stress-artifacts/label-bootstrap-result.json

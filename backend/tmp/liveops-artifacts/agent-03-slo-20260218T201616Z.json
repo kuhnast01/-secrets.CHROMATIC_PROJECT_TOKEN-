@@ -1,0 +1,155 @@
+{
+  "schemaVersion": 1,
+  "pipeline": "AGENT-03",
+  "status": "pass",
+  "generatedAt": "2026-02-18T20:16:16.449Z",
+  "reportPath": "C:\\Users\\kuhna\\OneDrive\\Desktop\\SIMgameFiles\\VisualStudio\\FrontendMonorepo\\backend\\tmp\\liveops-artifacts\\agent-03-slo-20260218T201616Z.json",
+  "runId": "agent-slo-20260218T201616Z",
+  "telemetryPath": "C:\\Users\\kuhna\\OneDrive\\Desktop\\SIMgameFiles\\VisualStudio\\FrontendMonorepo\\backend\\tmp\\agent-slo\\agent-slo-20260218T201616Z\\agent-slo-telemetry.ndjson",
+  "policyPath": "C:\\Users\\kuhna\\OneDrive\\Desktop\\SIMgameFiles\\VisualStudio\\FrontendMonorepo\\governance\\policies\\agent-slo-policy.json",
+  "policy": {
+    "schemaVersion": 1,
+    "description": "Policy-as-code source of truth for AGENT-03 multi-agent SLO thresholds.",
+    "latency": {
+      "p95MsMax": 300,
+      "averageMsMax": 220
+    },
+    "success": {
+      "minRate": 0.95
+    },
+    "rollback": {
+      "minRate": 0.99,
+      "maxDurationMs": 180
+    }
+  },
+  "metrics": {
+    "totalOperations": 8,
+    "successRate": 1,
+    "latencyAverageMs": 191.25,
+    "latencyP95Ms": 260,
+    "rollbackCount": 1,
+    "rollbackSuccessRate": 1,
+    "rollbackMaxDurationMs": 140
+  },
+  "thresholds": {
+    "latencyP95MsMax": 300,
+    "latencyAverageMsMax": 220,
+    "successRateMin": 0.95,
+    "rollbackRateMin": 0.99,
+    "rollbackDurationMsMax": 180
+  },
+  "checks": [
+    {
+      "name": "success-rate-threshold",
+      "status": "pass",
+      "actual": 1,
+      "expected": ">= 0.95"
+    },
+    {
+      "name": "latency-average-threshold",
+      "status": "pass",
+      "actual": 191.25,
+      "expected": "<= 220"
+    },
+    {
+      "name": "latency-p95-threshold",
+      "status": "pass",
+      "actual": 260,
+      "expected": "<= 300"
+    },
+    {
+      "name": "rollback-success-threshold",
+      "status": "pass",
+      "actual": 1,
+      "expected": ">= 0.99"
+    },
+    {
+      "name": "rollback-duration-threshold",
+      "status": "pass",
+      "actual": 140,
+      "expected": "<= 180"
+    }
+  ],
+  "samples": [
+    {
+      "agent": "engineering-agent",
+      "operation": "generate-release-plan",
+      "latencyMs": 120,
+      "success": true,
+      "rollbackTriggered": false,
+      "rollbackSuccess": true,
+      "rollbackDurationMs": 0,
+      "timestamp": "2026-02-18T20:16:16.449Z"
+    },
+    {
+      "agent": "engineering-agent",
+      "operation": "update-targeting-rules",
+      "latencyMs": 160,
+      "success": true,
+      "rollbackTriggered": false,
+      "rollbackSuccess": true,
+      "rollbackDurationMs": 0,
+      "timestamp": "2026-02-18T20:16:17.449Z"
+    },
+    {
+      "agent": "qa-agent",
+      "operation": "execute-smoke-suite",
+      "latencyMs": 210,
+      "success": true,
+      "rollbackTriggered": false,
+      "rollbackSuccess": true,
+      "rollbackDurationMs": 0,
+      "timestamp": "2026-02-18T20:16:18.449Z"
+    },
+    {
+      "agent": "qa-agent",
+      "operation": "validate-regression-diff",
+      "latencyMs": 190,
+      "success": true,
+      "rollbackTriggered": false,
+      "rollbackSuccess": true,
+      "rollbackDurationMs": 0,
+      "timestamp": "2026-02-18T20:16:19.449Z"
+    },
+    {
+      "agent": "sre-agent",
+      "operation": "approve-rollout-gate",
+      "latencyMs": 240,
+      "success": true,
+      "rollbackTriggered": false,
+      "rollbackSuccess": true,
+      "rollbackDurationMs": 0,
+      "timestamp": "2026-02-18T20:16:20.449Z"
+    },
+    {
+      "agent": "sre-agent",
+      "operation": "observe-error-budget",
+      "latencyMs": 180,
+      "success": true,
+      "rollbackTriggered": false,
+      "rollbackSuccess": true,
+      "rollbackDurationMs": 0,
+      "timestamp": "2026-02-18T20:16:21.449Z"
+    },
+    {
+      "agent": "qa-agent",
+      "operation": "detect-risky-config-change",
+      "latencyMs": 260,
+      "success": true,
+      "rollbackTriggered": true,
+      "rollbackSuccess": true,
+      "rollbackDurationMs": 140,
+      "timestamp": "2026-02-18T20:16:22.449Z"
+    },
+    {
+      "agent": "sre-agent",
+      "operation": "post-rollback-stability-check",
+      "latencyMs": 170,
+      "success": true,
+      "rollbackTriggered": false,
+      "rollbackSuccess": true,
+      "rollbackDurationMs": 0,
+      "timestamp": "2026-02-18T20:16:23.449Z"
+    }
+  ]
+}

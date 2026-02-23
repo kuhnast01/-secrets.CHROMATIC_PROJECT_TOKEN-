@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "stageId": "20260218T190530Z-auto-01-event-2026-02-18",
+  "stagedAt": "2026-02-18T19:05:30.408Z",
+  "pipeline": "AUTO-01",
+  "event": {
+    "name": "AUTO-01 Event 2026-02-18",
+    "config": {
+      "trigger": {
+        "type": "schedule",
+        "startAt": "2026-02-18T20:05:30.407Z",
+        "endAt": "2026-02-19T20:05:30.407Z",
+        "timezone": "UTC"
+      },
+      "segments": [
+        "all_players"
+      ],
+      "rewards": [
+        {
+          "sku": "coins",
+          "amount": 250
+        }
+      ],
+      "rollout": {
+        "mode": "staged",
+        "percentage": 10
+      },
+      "metadata": {
+        "source": "AUTO-01-one-click-pipeline",
+        "generatedAt": "2026-02-18T19:05:30.407Z"
+      }
+    }
+  }
+}

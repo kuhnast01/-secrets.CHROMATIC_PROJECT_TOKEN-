@@ -1,0 +1,33 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "ESNext",
+    "outDir": "dist",
+    "rootDir": ".",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    // Allow TypeScript to auto-include all types
+    "typeRoots": [
+      "./src/types",
+      "./node_modules/@types",
+      "./node_modules/@prisma/client",
+      "./node_modules/pino"
+    ],
+    "types": [
+      "jest"
+    ],
+    "baseUrl": "./",
+    "ignoreDeprecations": "6.0",
+    "forceConsistentCasingInFileNames": true,
+    "paths": {
+      "@models/*": ["./../packages/models/src/*"],
+      "@api/*": ["./../packages/api/src/*"]
+    }
+  },
+  "include": [
+    "src/**/*",
+    "scripts/**/*",
+    "src/liveops/**/*"
+  ]
+}

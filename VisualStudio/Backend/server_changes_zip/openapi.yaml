@@ -1,0 +1,26 @@
+openapi: 3.0.3
+info:
+  title: Galaxy: Ascendant — MVP API
+  version: 0.1.0
+paths:
+  /api/auth/login:
+    post:
+      summary: Login (MVP stub)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                playerId:
+                  type: string
+      responses:
+        '200':
+          description: Token
+  /api/player/profile:
+    get:
+      summary: Player profile
+      responses:
+        '200':
+          description: Profile

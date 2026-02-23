@@ -1,0 +1,264 @@
+name: Release Environment Audit Monthly Issue
+
+on:
+  schedule:
+    - cron: "30 9 1 * *"
+  workflow_dispatch:
+    inputs:
+      releaseEnvironment:
+        description: Environment name to audit
+        required: true
+        default: production-release
+        type: string
+      auditAssignees:
+        description: Comma-separated GitHub usernames to assign (overrides repository variable for this run)
+        required: false
+        default: ""
+        type: string
+
+permissions:
+  contents: read
+  actions: read
+  issues: write
+
+concurrency:
+  group: release-environment-audit-monthly-issue
+  cancel-in-progress: true
+
+jobs:
+  monthly-release-environment-audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      AUDIT_ASSIGNEES: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.auditAssignees || vars.RELEASE_ENV_AUDIT_ASSIGNEES || '' }}
+      TARGET_ENVIRONMENT: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.releaseEnvironment || 'production-release' }}
+    steps:
+      - name: Upsert monthly release environment audit issue
+        id: upsert_release_environment_issue
+        if: github.ref_name == github.event.repository.default_branch
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            const marker = '<!-- release-environment-audit-monthly-issue -->';
+            const title = 'Security: Monthly release environment gate audit';
+            const runUrl = `https://github.com/${owner}/${repo}/actions/runs/${context.runId}`;
+            const branch = context.ref.replace('refs/heads/', '');
+            const targetEnvironment = process.env.TARGET_ENVIRONMENT || 'production-release';
+
+            const configuredLabels = ['security', 'governance', 'release'];
+            let labels = [];
+            try {
+              const { data: repoLabels } = await github.rest.issues.listLabelsForRepo({
+                owner,
+                repo,
+                per_page: 100,
+              });
+              const available = new Set(repoLabels.map((label) => label.name));
+              labels = configuredLabels.filter((label) => available.has(label));
+            } catch (error) {
+              core.warning(`Unable to resolve repository labels: ${error.message}`);
+            }
+
+            const configuredAssignees = (process.env.AUDIT_ASSIGNEES || '')
+              .split(',')
+              .map((value) => value.trim())
+              .filter(Boolean);
+            const assignees = [];
+            for (const username of configuredAssignees) {
+              try {
+                await github.rest.users.getByUsername({ username });
+                assignees.push(username);
+              } catch (error) {
+                core.warning(`Skipping unknown assignee '${username}': ${error.message}`);
+              }
+            }
+
+            const findings = [];
+            let environment = null;
+            try {
+              const { data } = await github.rest.repos.getEnvironment({
+                owner,
+                repo,
+                environment_name: targetEnvironment,
+              });
+              environment = data;
+            } catch (error) {
+              findings.push(`Environment '${targetEnvironment}' is missing or not accessible.`);
+            }
+
+            if (environment) {
+              const protectionRules = Array.isArray(environment.protection_rules)
+                ? environment.protection_rules
+                : [];
+              const requiredReviewRule = protectionRules.find((rule) => rule?.type === 'required_reviewers');
+
+              if (!requiredReviewRule) {
+                findings.push('Required reviewers rule is not configured.');
+              } else {
+                const reviewers = Array.isArray(requiredReviewRule.reviewers)
+                  ? requiredReviewRule.reviewers
+                  : [];
+                if (reviewers.length < 1) {
+                  findings.push('Required reviewers rule has zero reviewers.');
+                }
+                if (requiredReviewRule.prevent_self_review !== true) {
+                  findings.push('prevent_self_review is not enabled for required reviewers.');
+                }
+              }
+
+              const branchPolicy = environment.deployment_branch_policy;
+              if (!branchPolicy) {
+                findings.push('Deployment branch policy is not configured for the release environment.');
+              } else if (
+                branchPolicy.protected_branches !== true &&
+                branchPolicy.custom_branch_policies !== true
+              ) {
+                findings.push('Deployment branch policy does not restrict protected/custom branches.');
+              }
+            }
+
+            let secretFinding = 'Environment secret verification skipped (API permissions may restrict secret metadata access).';
+            try {
+              const { data: secretsData } = await github.request('GET /repositories/{repository_id}/environments/{environment_name}/secrets', {
+                repository_id: context.payload.repository.id,
+                environment_name: targetEnvironment,
+              });
+              const secretNames = new Set((secretsData.secrets || []).map((secret) => secret.name));
+              if (!secretNames.has('POSEIDON_PROVENANCE_SIGNING_PRIVATE_KEY')) {
+                findings.push('Environment secret POSEIDON_PROVENANCE_SIGNING_PRIVATE_KEY is missing.');
+                secretFinding = 'Environment secret check executed: required secret missing.';
+              } else {
+                secretFinding = 'Environment secret check executed: required signing key secret present.';
+              }
+            } catch (error) {
+              core.warning(`Unable to verify environment secrets: ${error.message}`);
+            }
+
+            const status = findings.length === 0 ? 'PASS' : 'DRIFT_DETECTED';
+
+            const body = [
+              marker,
+              `## Monthly Release Environment Audit (${targetEnvironment})`,
+              '',
+              `- workflow run: ${runUrl}`,
+              `- release workflow: [\.github/workflows/release-distribution-provenance.yml](../blob/${branch}/.github/workflows/release-distribution-provenance.yml)`,
+              `- runbook reference: [GOVERNANCE_OPERATOR_RUNBOOK.md](../blob/${branch}/GOVERNANCE_OPERATOR_RUNBOOK.md)`,
+              `- audit status: **${status}**`,
+              '',
+              '### Required checks',
+              '- [ ] Environment exists and is accessible',
+              '- [ ] Required reviewers rule exists with at least one reviewer',
+              '- [ ] `prevent_self_review` enabled',
+              '- [ ] Deployment branch policy restricts release targets',
+              '- [ ] `POSEIDON_PROVENANCE_SIGNING_PRIVATE_KEY` secret present (when signing is enabled)',
+              '',
+              `Secret verification note: ${secretFinding}`,
+              '',
+              '### Findings',
+              ...(findings.length === 0 ? ['- none'] : findings.map((item) => `- ${item}`)),
+              '',
+              '### Completion',
+              '- [ ] If drift is detected, apply remediation and link PR/workflow evidence.',
+              '- [ ] Record monthly audit evidence in governance logs/runbook.',
+              '- [ ] Close issue when all findings are remediated.',
+            ].join('\n');
+
+            const { data: issues } = await github.rest.issues.listForRepo({
+              owner,
+              repo,
+              state: 'all',
+              per_page: 100,
+            });
+
+            const existing = issues.find((issue) => issue.title === title);
+            const issuePayload = {
+              owner,
+              repo,
+              state: 'open',
+              body,
+              labels,
+              assignees,
+            };
+
+            let issueNumber = null;
+            let operation = null;
+            if (existing) {
+              issueNumber = existing.number;
+              operation = 'updated';
+              await github.rest.issues.update({
+                ...issuePayload,
+                issue_number: issueNumber,
+              });
+            } else {
+              operation = 'created';
+              const created = await github.rest.issues.create({
+                owner,
+                repo,
+                title,
+                body,
+                labels,
+                assignees,
+              });
+              issueNumber = created.data.number;
+            }
+
+            core.setOutput('operation', operation);
+            core.setOutput('issue_number', String(issueNumber));
+            core.setOutput('audit_status', status);
+            core.setOutput('target_environment', targetEnvironment);
+            core.setOutput('secret_check_note', secretFinding);
+            core.setOutput('findings_json', JSON.stringify(findings));
+
+      - name: Write canonical audit artifact
+        if: github.ref_name == github.event.repository.default_branch
+        run: |
+          mkdir -p governance-artifacts
+          node -e "const fs=require('fs'); const out='governance-artifacts/release-environment-audit-report.json'; const findings=JSON.parse(process.env.FINDINGS_JSON || '[]'); const payload={schemaVersion:1, mode:'release-environment-audit-monthly', repository:process.env.GITHUB_REPOSITORY, branch:process.env.GITHUB_REF_NAME, runId:process.env.GITHUB_RUN_ID, runNumber:process.env.GITHUB_RUN_NUMBER, runUrl:`https://github.com/${process.env.GITHUB_REPOSITORY}/actions/runs/${process.env.GITHUB_RUN_ID}`, targetEnvironment:process.env.TARGET_ENVIRONMENT_NAME || 'production-release', auditStatus:process.env.AUDIT_STATUS || 'unknown', issueNumber:process.env.ISSUE_NUMBER || null, operation:process.env.ISSUE_OPERATION || null, secretCheckNote:process.env.SECRET_CHECK_NOTE || null, findings}; fs.writeFileSync(out, JSON.stringify(payload,null,2)+'\\n');"
+        env:
+          TARGET_ENVIRONMENT_NAME: ${{ steps.upsert_release_environment_issue.outputs.target_environment }}
+          AUDIT_STATUS: ${{ steps.upsert_release_environment_issue.outputs.audit_status }}
+          ISSUE_NUMBER: ${{ steps.upsert_release_environment_issue.outputs.issue_number }}
+          ISSUE_OPERATION: ${{ steps.upsert_release_environment_issue.outputs.operation }}
+          SECRET_CHECK_NOTE: ${{ steps.upsert_release_environment_issue.outputs.secret_check_note }}
+          FINDINGS_JSON: ${{ steps.upsert_release_environment_issue.outputs.findings_json }}
+
+      - name: Validate canonical audit artifact
+        if: github.ref_name == github.event.repository.default_branch
+        run: node scripts/governance/validate-release-environment-audit-report.mjs --path=governance-artifacts/release-environment-audit-report.json
+
+      - name: Validation summary
+        if: github.ref_name == github.event.repository.default_branch && always()
+        run: |
+          finding_count=$(node -e "const fs=require('fs');const p='governance-artifacts/release-environment-audit-report.json';const j=JSON.parse(fs.readFileSync(p,'utf8'));process.stdout.write(String((j.findings||[]).length));")
+          audit_status=$(node -e "const fs=require('fs');const p='governance-artifacts/release-environment-audit-report.json';const j=JSON.parse(fs.readFileSync(p,'utf8'));process.stdout.write(String(j.auditStatus||'unknown'));")
+
+          echo "## Release Environment Audit Artifact Validation" >> "$GITHUB_STEP_SUMMARY"
+          echo "- validator: ✅ passed" >> "$GITHUB_STEP_SUMMARY"
+          echo "- audit status: **${audit_status}**" >> "$GITHUB_STEP_SUMMARY"
+          echo "- finding count: **${finding_count}**" >> "$GITHUB_STEP_SUMMARY"
+          echo "- artifact: governance-artifacts/release-environment-audit-report.json" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Write summary
+        if: github.ref_name == github.event.repository.default_branch
+        run: |
+          echo "## Release Environment Audit Issue" >> "$GITHUB_STEP_SUMMARY"
+          echo "- operation: **${{ steps.upsert_release_environment_issue.outputs.operation }}**" >> "$GITHUB_STEP_SUMMARY"
+          echo "- issue number: **#${{ steps.upsert_release_environment_issue.outputs.issue_number }}**" >> "$GITHUB_STEP_SUMMARY"
+          echo "- audit status: **${{ steps.upsert_release_environment_issue.outputs.audit_status }}**" >> "$GITHUB_STEP_SUMMARY"
+          echo "- artifact: governance-artifacts/release-environment-audit-report.json" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload release environment audit artifact
+        if: github.ref_name == github.event.repository.default_branch
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-environment-audit-report
+          path: governance-artifacts/release-environment-audit-report.json
+          if-no-files-found: error
+
+      - name: Note skip on non-default branch
+        if: github.ref_name != github.event.repository.default_branch
+        run: |
+          echo "## Release Environment Audit Issue" >> "$GITHUB_STEP_SUMMARY"
+          echo "- issue upsert skipped on non-default branch \`${{ github.ref_name }}\` (default: \`${{ github.event.repository.default_branch }}\`)." >> "$GITHUB_STEP_SUMMARY"

@@ -1,0 +1,38 @@
+{
+  "name": "poseidon-studio",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
+    "format": "prettier --write .",
+    "test": "jest --config=jest.config.mjs",
+    "test:coverage": "jest --coverage --config=jest.config.mjs"
+  },
+  "dependencies": {
+    "@chakra-ui/icons": "^2.2.4",
+    "@chakra-ui/react": "^2.8.0",
+    "@emotion/react": "^11.11.1",
+    "@emotion/styled": "^11.11.0",
+    "@tanstack/react-query": "^4.29.0",
+    "@tanstack/react-query-devtools": "^4.29.0",
+    "framer-motion": "^10.16.4",
+    "react": "19.2.4",
+    "react-dom": "19.2.4",
+    "react-icons": "^4.10.1",
+    "react-router-dom": "^6.22.3"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.37",
+    "@types/react-dom": "^18.2.15",
+    "@vitejs/plugin-react": "^4.2.1",
+    "eslint": "^8.56.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-react": "^7.33.2",
+    "prettier": "^3.2.5",
+    "typescript": "^5.9.3",
+    "vite": "^5.2.0"
+  }
+}

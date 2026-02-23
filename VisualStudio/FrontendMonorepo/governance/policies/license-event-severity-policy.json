@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "description": "Policy defaults for backend license event severity classification and escalation",
+  "sourceWorkflow": ".github/workflows/backend-license-events-weekly-issue.yml",
+  "severityThresholds": {
+    "medium": 5,
+    "high": 25,
+    "highTotalInvalidMultiplier": 2
+  },
+  "escalation": {
+    "defaultFailOnHighSeverity": false,
+    "defaultHighSeverityAssignees": [],
+    "responseSlaMinutes": {
+      "low": 1440,
+      "medium": 480,
+      "high": 60
+    }
+  }
+}

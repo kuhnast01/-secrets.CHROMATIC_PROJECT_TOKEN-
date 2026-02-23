@@ -1,0 +1,1 @@
+{"version":3,"file":"summonActionApi.d.ts","sourceRoot":"","sources":["../src/summonActionApi.ts"],"names":[],"mappings":"AAAA,MAAM,WAAW,YAAY;IAC3B,KAAK,EAAE,MAAM,EAAE,CAAC;IAChB,OAAO,EAAE,MAAM,CAAC;CACjB;AAID,wBAAsB,cAAc,CAAC,QAAQ,EAAE,MAAM,GAAG,OAAO,CAAC,YAAY,CAAC,CAG5E"}

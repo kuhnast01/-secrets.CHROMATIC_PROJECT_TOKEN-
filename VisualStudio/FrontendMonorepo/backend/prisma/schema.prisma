@@ -1,0 +1,613 @@
+// --- CORE GAMEPLAY MODELS ---
+model Player {
+  id           Int        @id @default(autoincrement())
+  username     String     @unique
+  email        String?    @unique
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  resources    Resource[]
+  buildings    Building[]
+  commanders   Commander[]
+  ships        Ship[]
+  techs        Tech[]
+  sectors      Sector[]
+  missions     Mission[]
+  // Social & meta
+  guildId      Int?
+  guild        Guild?     @relation(fields: [guildId], references: [id])
+  friends      Player[]   @relation("PlayerFriends")
+  invitedById  Int?
+  invitedBy    Player?    @relation("PlayerInvites", fields: [invitedById], references: [id])
+  invites      Player[]   @relation("PlayerInvites")
+  // Analytics & meta
+  lastLogin    DateTime?
+  isVIP        Boolean    @default(false)
+  meta         Json?
+}
+
+model Resource {
+  id        Int      @id @default(autoincrement())
+  player    Player   @relation(fields: [playerId], references: [id])
+  playerId  Int
+  type      String   // e.g. "energy", "alloy", "credits", "premium"
+  amount    Int      @default(0)
+  updatedAt DateTime @updatedAt
+}
+
+model Building {
+  id         Int      @id @default(autoincrement())
+  player     Player   @relation(fields: [playerId], references: [id])
+  playerId   Int
+  type       String   // e.g. "barracks", "factory"
+  level      Int      @default(1)
+  startedAt  DateTime?
+  completedAt DateTime?
+  meta       Json?
+}
+
+model Commander {
+  id         Int      @id @default(autoincrement())
+  player     Player   @relation(fields: [playerId], references: [id])
+  playerId   Int
+  name       String
+  rarity     String   // e.g. "common", "rare", "epic", "legendary"
+  level      Int      @default(1)
+  shards     Int      @default(0)
+  stats      Json?
+  abilities  Json?
+  meta       Json?
+}
+
+model Ship {
+  id         Int      @id @default(autoincrement())
+  player     Player   @relation(fields: [playerId], references: [id])
+  playerId   Int
+  name       String
+  class      String   // e.g. "frigate", "destroyer"
+  level      Int      @default(1)
+  stats      Json?
+  unlockCost Json?
+  meta       Json?
+}
+
+model Tech {
+  id         Int      @id @default(autoincrement())
+  player     Player   @relation(fields: [playerId], references: [id])
+  playerId   Int
+  branch     String   // e.g. "offense", "defense"
+  tier       Int
+  effect     Json?
+  unlocked   Boolean  @default(false)
+  meta       Json?
+}
+
+model Sector {
+  id         Int      @id @default(autoincrement())
+  player     Player   @relation(fields: [playerId], references: [id])
+  playerId   Int
+  name       String
+  level      Int      @default(1)
+  missions   Mission[]
+  meta       Json?
+}
+
+model Mission {
+  id         Int      @id @default(autoincrement())
+  player     Player   @relation(fields: [playerId], references: [id])
+  playerId   Int
+  sector     Sector?  @relation(fields: [sectorId], references: [id])
+  sectorId   Int?
+  name       String
+  status     String   // e.g. "locked", "unlocked", "completed"
+  reward     Json?
+  startedAt  DateTime?
+  completedAt DateTime?
+  meta       Json?
+}
+
+model Guild {
+  id         Int      @id @default(autoincrement())
+  name       String   @unique
+  createdAt  DateTime @default(now())
+  members    Player[]
+  meta       Json?
+}
+model EnemyTemplate {
+  id           String   @id
+  faction      String
+  ships        Json
+  modifiers    Json
+  anomaly      Json?
+  bossAbility  Json?
+}
+model SystemMetric {
+  id                 Int      @id @default(autoincrement())
+  timestamp          DateTime @default(now())
+  service_name       String
+  host               String
+  cpu_usage_pct      Float?
+  memory_used_mb     Int?
+  memory_total_mb    Int?
+  load_avg_1m        Float?
+  load_avg_5m        Float?
+  load_avg_15m       Float?
+  uptime_seconds     BigInt?
+  request_rate_per_sec Float?
+  error_rate_per_sec Float?
+  avg_response_time_ms Float?
+  custom_tags        Json?
+  // Pillar 4: Source/Environment Metadata
+  environment        String?   @default("prod")
+  source_host        String?
+  deployment_version String?
+  // Pillar 8: Data Provenance
+  created_by         Int?
+  updated_by         Int?
+  // Pillar 9: Soft Delete
+  is_deleted         Boolean?  @default(false)
+  deleted_at         DateTime?
+  // Pillar 10: Extensible JSONB
+  metadata           Json?
+}
+
+model RequestTrace {
+  id                    Int      @id @default(autoincrement())
+  timestamp             DateTime @default(now())
+  trace_id              String
+  span_id               String
+  parent_span_id        String?
+  service_name          String
+  route                 String?
+  method                String?
+  status_code           Int?
+  duration_ms           Float?
+  user_id               Int?
+  ip_address            String?
+  user_agent            String?
+  request_body_snapshot Json?
+  response_body_snapshot Json?
+  error_flag            Boolean?
+  error_message         String?
+  // Pillar 5: Error/Anomaly Flags
+  is_anomaly            Boolean? @default(false)
+  error_severity        String?
+  // Pillar 1: Session/Correlation Tracking
+  correlation_id        String?
+  session_id            String?
+  // Pillar 3: Retention/Archival Metadata
+  retention_policy      String?
+  archived_at           DateTime?
+  // Pillar 4: Source/Environment Metadata
+  environment           String?  @default("prod")
+  source_host           String?
+  deployment_version    String?
+  // Pillar 7: Feature Flag/Experiment Tracking
+  feature_flag          String?
+  experiment_id         String?
+  // Pillar 8: Data Provenance
+  created_by            Int?
+  updated_by            Int?
+  source_system         String?
+  // Pillar 9: Soft Delete
+  is_deleted            Boolean? @default(false)
+  deleted_at            DateTime?
+  // Pillar 10: Extensible JSONB
+  metadata              Json?
+  meta                  Json?
+}
+
+model AppLog {
+  id             Int      @id @default(autoincrement())
+  timestamp      DateTime @default(now())
+  service_name   String
+  level          String
+  message        String
+  context        Json?
+  stack_trace    String?
+  correlation_id String?
+  // Pillar 1: Session/Correlation Tracking
+  session_id     String?
+  // Pillar 3: Retention/Archival Metadata
+  retention_policy String?
+  archived_at     DateTime?
+  // Pillar 4: Source/Environment Metadata
+  environment     String? @default("prod")
+  source_host     String?
+  deployment_version String?
+  // Pillar 5: Error/Anomaly Flags
+  is_anomaly      Boolean? @default(false)
+  error_severity  String?
+  // Pillar 6: User Agent/Device Metadata
+  user_agent      String?
+  device_type     String?
+  geo_ip          String?
+  // Pillar 7: Feature Flag/Experiment Tracking
+  feature_flag    String?
+  experiment_id   String?
+  // Pillar 8: Data Provenance
+  created_by      Int?
+  updated_by      Int?
+  source_system   String?
+  // Pillar 9: Soft Delete
+  is_deleted      Boolean? @default(false)
+  deleted_at      DateTime?
+  // Pillar 10: Extensible JSONB
+  metadata        Json?
+}
+
+model AuditEvent {
+  id           Int      @id @default(autoincrement())
+  timestamp    DateTime @default(now())
+  actor_type   String
+  actor_id     Int?
+  action       String
+  target_type  String
+  target_id    Int?
+  ip_address   String?
+  user_agent   String?
+  before_state Json?
+  after_state  Json?
+  // Pillar 1: Session/Correlation Tracking
+  correlation_id String?
+  session_id     String?
+  // Pillar 3: Retention/Archival Metadata
+  retention_policy String?
+  archived_at     DateTime?
+  // Pillar 4: Source/Environment Metadata
+  environment     String? @default("prod")
+  source_host     String?
+  deployment_version String?
+  // Pillar 5: Error/Anomaly Flags
+  is_anomaly      Boolean? @default(false)
+  error_severity  String?
+  // Pillar 6: User Agent/Device Metadata
+  device_type     String?
+  geo_ip          String?
+  // Pillar 7: Feature Flag/Experiment Tracking
+  feature_flag    String?
+  experiment_id   String?
+  // Pillar 8: Data Provenance
+  created_by      Int?
+  updated_by      Int?
+  source_system   String?
+  // Pillar 9: Soft Delete
+  is_deleted      Boolean? @default(false)
+  deleted_at      DateTime?
+  // Pillar 10: Extensible JSONB
+  metadata        Json?
+  meta            Json?
+}
+
+model LiveOpsEvent {
+  id                  Int      @id @default(autoincrement())
+  name                String
+  type                String
+  status              String
+  start_time          DateTime?
+  end_time            DateTime?
+  config              Json?
+  created_by_admin_id Int?
+  updated_by_admin_id Int?
+  created_at          DateTime @default(now())
+  updated_at          DateTime @updatedAt
+  metrics             LiveOpsEventMetric[]
+  // Pillar 8: Data Provenance
+  created_by          Int?
+  updated_by          Int?
+  // Pillar 9: Soft Delete
+  is_deleted          Boolean? @default(false)
+  deleted_at          DateTime?
+  // Pillar 10: Extensible JSONB
+  metadata            Json?
+}
+
+model LiveOpsEventMetric {
+  id                Int      @id @default(autoincrement())
+  event_id          Int
+  timestamp         DateTime @default(now())
+  active_users      Int?
+  revenue           Float?
+  engagement_score  Float?
+  conversion_rate   Float?
+  retention_delta   Float?
+  meta              Json?
+  // Pillar 8: Data Provenance
+  created_by        Int?
+  updated_by        Int?
+  // Pillar 9: Soft Delete
+  is_deleted        Boolean? @default(false)
+  deleted_at        DateTime?
+  // Pillar 10: Extensible JSONB
+  metadata          Json?
+  event             LiveOpsEvent @relation(fields: [event_id], references: [id])
+}
+
+model UserSession {
+  id          Int      @id @default(autoincrement())
+  user_id     Int
+  session_id  String
+  started_at  DateTime @default(now())
+  ended_at    DateTime?
+  ip_address  String?
+  user_agent  String?
+  device_info Json?
+  meta        Json?
+  // Pillar 4: Source/Environment Metadata
+  environment String? @default("prod")
+  source_host String?
+  // Pillar 8: Data Provenance
+  created_by  Int?
+  updated_by  Int?
+  // Pillar 9: Soft Delete
+  is_deleted  Boolean? @default(false)
+  deleted_at  DateTime?
+  // Pillar 10: Extensible JSONB
+  metadata    Json?
+}
+
+model UserEvent {
+  id          Int      @id @default(autoincrement())
+  timestamp   DateTime @default(now())
+  user_id     Int
+  session_id  String?
+  event_type  String
+  event_name  String?
+  properties  Json?
+  source      String?
+  // Pillar 1: Session/Correlation Tracking
+  correlation_id String?
+  // Pillar 3: Retention/Archival Metadata
+  retention_policy String?
+  archived_at     DateTime?
+  // Pillar 4: Source/Environment Metadata
+  environment     String? @default("prod")
+  source_host     String?
+  // Pillar 7: Feature Flag/Experiment Tracking
+  feature_flag    String?
+  experiment_id   String?
+  // Pillar 8: Data Provenance
+  created_by      Int?
+  updated_by      Int?
+  // Pillar 9: Soft Delete
+  is_deleted      Boolean? @default(false)
+  deleted_at      DateTime?
+  // Pillar 10: Extensible JSONB
+  metadata        Json?
+}
+
+model PoseidonSession {
+  id         Int      @id @default(autoincrement())
+  started_at DateTime @default(now())
+  ended_at   DateTime?
+  initiator  String?
+  purpose    String?
+  meta       Json?
+  actions    PoseidonAction[]
+  // Pillar 8: Data Provenance
+  created_by Int?
+  updated_by Int?
+  // Pillar 9: Soft Delete
+  is_deleted Boolean? @default(false)
+  deleted_at DateTime?
+  // Pillar 10: Extensible JSONB
+  metadata   Json?
+}
+
+model PoseidonAction {
+  id                     Int      @id @default(autoincrement())
+  timestamp              DateTime @default(now())
+  session_id             Int
+  action_type            String
+  input_context          Json?
+  output_summary         String?
+  confidence_score       Float?
+  requires_human_approval Boolean?
+  approved_by_admin_id   Int?
+  approved_at            DateTime?
+  meta                   Json?
+  // Pillar 1: Session/Correlation Tracking
+  correlation_id         String?
+  // Pillar 3: Retention/Archival Metadata
+  retention_policy       String?
+  archived_at            DateTime?
+  // Pillar 4: Source/Environment Metadata
+  environment            String? @default("prod")
+  source_host            String?
+  // Pillar 7: Feature Flag/Experiment Tracking
+  feature_flag           String?
+  experiment_id          String?
+  // Pillar 8: Data Provenance
+  created_by             Int?
+  updated_by             Int?
+  // Pillar 9: Soft Delete
+  is_deleted             Boolean? @default(false)
+  deleted_at             DateTime?
+  // Pillar 10: Extensible JSONB
+  metadata               Json?
+  session                PoseidonSession @relation(fields: [session_id], references: [id])
+}
+
+model PoseidonInsight {
+  id                  Int      @id @default(autoincrement())
+  timestamp           DateTime @default(now())
+  category            String
+  title               String
+  description         String?
+  severity            String?
+  related_trace_id    String?
+  related_event_id    Int?
+  meta                Json?
+  status              String?
+  resolved_by_admin_id Int?
+  resolved_at         DateTime?
+  // Pillar 8: Data Provenance
+  created_by          Int?
+  updated_by          Int?
+  // Pillar 9: Soft Delete
+  is_deleted          Boolean? @default(false)
+  deleted_at          DateTime?
+  // Pillar 10: Extensible JSONB
+  metadata            Json?
+}
+
+model Device {
+  id          Int      @id @default(autoincrement())
+  type        String
+  name        String
+  location    String?
+  ip_address  String?
+  protocol    String?
+  status      String?
+  meta        Json?
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+  health      DeviceHealthMetric[]
+  events      DeviceEvent[]
+  // Pillar 8: Data Provenance
+  created_by  Int?
+  updated_by  Int?
+  // Pillar 9: Soft Delete
+  is_deleted  Boolean? @default(false)
+  deleted_at  DateTime?
+  // Pillar 10: Extensible JSONB
+  metadata    Json?
+}
+
+model DeviceHealthMetric {
+  id                Int      @id @default(autoincrement())
+  device_id         Int
+  timestamp         DateTime @default(now())
+  status            String?
+  latency_ms        Float?
+  frame_rate        Float?
+  storage_used_pct  Float?
+  temperature_c     Float?
+  meta              Json?
+  // Pillar 8: Data Provenance
+  created_by        Int?
+  updated_by        Int?
+  // Pillar 9: Soft Delete
+  is_deleted        Boolean? @default(false)
+  deleted_at        DateTime?
+  // Pillar 10: Extensible JSONB
+  metadata          Json?
+  device            Device @relation(fields: [device_id], references: [id])
+}
+
+model DeviceEvent {
+  id             Int      @id @default(autoincrement())
+  device_id      Int
+  timestamp      DateTime @default(now())
+  event_type     String
+  severity       String?
+  details        Json?
+  correlation_id String?
+  // Pillar 3: Retention/Archival Metadata
+  retention_policy String?
+  archived_at      DateTime?
+  // Pillar 4: Source/Environment Metadata
+  environment      String? @default("prod")
+  source_host      String?
+  // Pillar 5: Error/Anomaly Flags
+  is_anomaly       Boolean? @default(false)
+  error_severity   String?
+  // Pillar 8: Data Provenance
+  created_by       Int?
+  updated_by       Int?
+  // Pillar 9: Soft Delete
+  is_deleted       Boolean? @default(false)
+  deleted_at       DateTime?
+  // Pillar 10: Extensible JSONB
+  metadata         Json?
+  device         Device @relation(fields: [device_id], references: [id])
+}
+
+model SystemConfig {
+  id                  Int      @id @default(autoincrement())
+  key                 String  @unique
+  value               Json
+  description         String?
+  updated_by_admin_id Int?
+  updated_at          DateTime @updatedAt
+  // Pillar 8: Data Provenance
+  created_by          Int?
+  // Pillar 9: Soft Delete
+  is_deleted          Boolean? @default(false)
+  deleted_at          DateTime?
+  // Pillar 10: Extensible JSONB
+  metadata            Json?
+}
+
+model FeatureFlag {
+  id            Int      @id @default(autoincrement())
+  name          String  @unique
+  enabled       Boolean
+  target_segment String?
+  meta          Json?
+  created_at    DateTime @default(now())
+  updated_at    DateTime @updatedAt
+  // Pillar 7: Feature Flag/Experiment Tracking
+  experiment_id String?
+  // Pillar 8: Data Provenance
+  created_by    Int?
+  updated_by    Int?
+  // Pillar 9: Soft Delete
+  is_deleted    Boolean? @default(false)
+  deleted_at    DateTime?
+  // Pillar 10: Extensible JSONB
+  metadata      Json?
+}
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id         Int      @id @default(autoincrement())
+  username   String   @unique
+  password   String
+  role       Role     @default(USER)
+  twoFactorEnabled Boolean @default(false)
+  twoFactorSecret  String?  // Encrypted TOTP secret
+  twoFactorBackupCodes String[] // Encrypted backup codes
+  created_at DateTime @default(now())
+  events     Event[]
+  auditLogs  AuditLog[]
+}
+
+enum Role {
+  USER
+  ADMIN
+  SUPERADMIN
+  SUPPORT
+  READONLY
+}
+
+model Event {
+  id         Int      @id @default(autoincrement())
+  name       String
+  config     Json
+  created_by Int?
+  createdAt  DateTime @default(now())
+  user       User?    @relation(fields: [created_by], references: [id])
+}
+
+model Analytics {
+  id          Int      @id @default(autoincrement())
+  metric      String
+  value       Float
+  recorded_at DateTime @default(now())
+}
+
+model AuditLog {
+  id        Int      @id @default(autoincrement())
+  action    String
+  user_id   Int?
+  details   Json?
+  timestamp DateTime @default(now())
+  user      User?    @relation(fields: [user_id], references: [id])
+}

@@ -1,0 +1,6 @@
+*       @kuhna
+/github/workflows/backend-*.yml  @kuhna
+/backend/.github/workflows/*.yml  @kuhna
+/backend/**/*.md                   @kuhna
+/legal/**/*.md                     @kuhna
+/legal/releases/*.md               @kuhna

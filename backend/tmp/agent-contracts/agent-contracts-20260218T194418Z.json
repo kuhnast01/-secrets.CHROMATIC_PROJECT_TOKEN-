@@ -1,0 +1,60 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-02-18T19:44:18.871Z",
+  "contracts": [
+    {
+      "agent": "Engineering",
+      "contractVersion": "2026-02-18.v1",
+      "allowedTools": [
+        "file.read",
+        "file.write",
+        "code.build",
+        "code.test",
+        "git.diff"
+      ],
+      "deniedByDefault": true
+    },
+    {
+      "agent": "QA",
+      "contractVersion": "2026-02-18.v1",
+      "allowedTools": [
+        "file.read",
+        "code.test",
+        "code.lint"
+      ],
+      "deniedByDefault": true
+    },
+    {
+      "agent": "LiveOps",
+      "contractVersion": "2026-02-18.v1",
+      "allowedTools": [
+        "file.read",
+        "event.validate",
+        "event.stage"
+      ],
+      "deniedByDefault": true
+    },
+    {
+      "agent": "SRE",
+      "contractVersion": "2026-02-18.v1",
+      "allowedTools": [
+        "file.read",
+        "deploy.preflight",
+        "deploy.rollback",
+        "health.check"
+      ],
+      "deniedByDefault": true
+    },
+    {
+      "agent": "Security",
+      "contractVersion": "2026-02-18.v1",
+      "allowedTools": [
+        "file.read",
+        "secrets.audit",
+        "secrets.rotate",
+        "policy.validate"
+      ],
+      "deniedByDefault": true
+    }
+  ]
+}

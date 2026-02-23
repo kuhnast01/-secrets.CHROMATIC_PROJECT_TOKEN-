@@ -1,0 +1,20 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "ignoreDeprecations": "6.0",
+    // ...existing code...
+    "typeRoots": ["./types", "./node_modules/@types"],
+    "types": ["jest", "react-native", "react-quill-css"],
+    "paths": {
+      "@ui/*": ["./packages/ui/src/*"],
+      "@api": ["./packages/api/src/index"],
+      "@api/*": ["./packages/api/src/*"],
+      "@models": ["./packages/models/src/index"],
+      "@models/*": ["./packages/models/src/*"]
+    }
+  },
+  "references": [
+    { "path": "./packages/models" },
+    { "path": "./packages/api" }
+  ]
+}

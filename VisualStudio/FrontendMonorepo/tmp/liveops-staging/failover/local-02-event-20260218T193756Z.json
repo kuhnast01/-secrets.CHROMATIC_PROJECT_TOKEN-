@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "pipeline": "LOCAL-02",
+  "stagedAt": "2026-02-18T19:37:56.308Z",
+  "event": {
+    "name": "LOCAL-02 Event 2026-02-18",
+    "config": {
+      "trigger": {
+        "type": "manual"
+      },
+      "metadata": {
+        "source": "LOCAL-02-cloud-failover-drill",
+        "generatedAt": "2026-02-18T19:37:56.307Z"
+      }
+    },
+    "created_by": 1
+  }
+}

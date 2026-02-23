@@ -1,0 +1,120 @@
+{
+  "schemaVersion": 1,
+  "pipeline": "AI-02",
+  "status": "pass",
+  "generatedAt": "2026-02-18T20:20:07.739Z",
+  "runId": "ai-debug-loop-20260218T202007Z",
+  "policyPath": "C:\\Users\\kuhna\\OneDrive\\Desktop\\SIMgameFiles\\VisualStudio\\FrontendMonorepo\\governance\\policies\\ai-debug-loop-policy.json",
+  "reportPath": "C:\\Users\\kuhna\\OneDrive\\Desktop\\SIMgameFiles\\VisualStudio\\FrontendMonorepo\\backend\\tmp\\liveops-artifacts\\ai-02-debug-loop-20260218T202007Z.json",
+  "logArtifactPath": "C:\\Users\\kuhna\\OneDrive\\Desktop\\SIMgameFiles\\VisualStudio\\FrontendMonorepo\\backend\\tmp\\ai-debug-loop\\ai-debug-loop-20260218T202007Z\\debug.log",
+  "testArtifactPath": "C:\\Users\\kuhna\\OneDrive\\Desktop\\SIMgameFiles\\VisualStudio\\FrontendMonorepo\\backend\\tmp\\ai-debug-loop\\ai-debug-loop-20260218T202007Z\\test-results.json",
+  "proposalPath": "C:\\Users\\kuhna\\OneDrive\\Desktop\\SIMgameFiles\\VisualStudio\\FrontendMonorepo\\backend\\tmp\\ai-debug-loop\\ai-debug-loop-20260218T202007Z\\remediation-proposals.json",
+  "policy": {
+    "schemaVersion": 1,
+    "description": "Policy-as-code source of truth for AI-02 debug-loop remediation proposal quality gates.",
+    "minimumProposalCount": 3,
+    "requireCommandSuggestion": true,
+    "requireEvidenceReference": true,
+    "priorityOrder": [
+      "P0",
+      "P1",
+      "P2"
+    ],
+    "ownerByCategory": {
+      "test-failure": "Engineering",
+      "regression": "QA",
+      "latency": "SRE",
+      "dependency": "Security"
+    }
+  },
+  "sourceSummary": {
+    "logErrors": 3,
+    "testFailures": 2
+  },
+  "checks": [
+    {
+      "name": "proposal-count",
+      "status": "pass",
+      "details": "found=4, required>=3"
+    },
+    {
+      "name": "proposal-command-suggestions",
+      "status": "pass",
+      "details": "all proposals include commands"
+    },
+    {
+      "name": "proposal-evidence-references",
+      "status": "pass",
+      "details": "all proposals include evidence references"
+    }
+  ],
+  "proposals": [
+    {
+      "id": "AI02-P0-TEST-FAILURES",
+      "priority": "P0",
+      "category": "test-failure",
+      "owner": "Engineering",
+      "summary": "Stabilize failing regression tests blocking release confidence.",
+      "rootCauseHypothesis": "UI rollout synchronization and rollback prompt hooks are drifting from expected state transitions.",
+      "recommendedActions": [
+        "Add deterministic wait for rollout-state hydration before banner assertions.",
+        "Patch mobile rollback trigger predicate to use staged risk signal contract.",
+        "Add unit coverage for rollback prompt visibility conditions."
+      ],
+      "command": "pnpm exec jest apps/web/src apps/mobile/src --runInBand",
+      "evidence": [
+        "C:\\Users\\kuhna\\OneDrive\\Desktop\\SIMgameFiles\\VisualStudio\\FrontendMonorepo\\backend\\tmp\\ai-debug-loop\\ai-debug-loop-20260218T202007Z\\test-results.json#failingTests"
+      ]
+    },
+    {
+      "id": "AI02-P1-DEPENDENCY",
+      "priority": "P1",
+      "category": "dependency",
+      "owner": "Security",
+      "summary": "Remediate moderate dependency advisory before next release lane promotion.",
+      "rootCauseHypothesis": "A transitive package introduced by recent regression tooling update contains known advisory risk.",
+      "recommendedActions": [
+        "Run production audit and capture vulnerable dependency tree.",
+        "Pin patched transitive version via overrides and regenerate lockfile.",
+        "Re-run MONO-03 supply-chain gate after patch."
+      ],
+      "command": "pnpm run audit:prod",
+      "evidence": [
+        "C:\\Users\\kuhna\\OneDrive\\Desktop\\SIMgameFiles\\VisualStudio\\FrontendMonorepo\\backend\\tmp\\ai-debug-loop\\ai-debug-loop-20260218T202007Z\\debug.log#dependency-audit-error"
+      ]
+    },
+    {
+      "id": "AI02-P1-LATENCY",
+      "priority": "P1",
+      "category": "latency",
+      "owner": "SRE",
+      "summary": "Reduce rollout validation timeout risk in staging checks.",
+      "rootCauseHypothesis": "Rollout banner fetch path intermittently exceeds timeout budget under concurrent validation load.",
+      "recommendedActions": [
+        "Instrument banner fetch latency histogram in staging.",
+        "Raise retry budget from 1 to 3 with exponential backoff in regression harness.",
+        "Alert when p95 exceeds 2.5s for rollout banner endpoint."
+      ],
+      "command": "pnpm --dir backend exec tsx scripts/liveops/run-agent-slo-drill.ts",
+      "evidence": [
+        "C:\\Users\\kuhna\\OneDrive\\Desktop\\SIMgameFiles\\VisualStudio\\FrontendMonorepo\\backend\\tmp\\ai-debug-loop\\ai-debug-loop-20260218T202007Z\\debug.log#timeout-warning"
+      ]
+    },
+    {
+      "id": "AI02-P2-REGRESSION-GUARD",
+      "priority": "P2",
+      "category": "regression",
+      "owner": "QA",
+      "summary": "Harden stage->prod channel checksum consistency checks.",
+      "rootCauseHypothesis": "Artifact promotion sequence can race with channel snapshot publication.",
+      "recommendedActions": [
+        "Gate prod checksum verify on stage promotion completion marker.",
+        "Persist stage and prod checksums in one canonical comparison report."
+      ],
+      "command": "pnpm --dir backend exec tsx scripts/liveops/run-channel-regression.ts --channels=stage,prod",
+      "evidence": [
+        "C:\\Users\\kuhna\\OneDrive\\Desktop\\SIMgameFiles\\VisualStudio\\FrontendMonorepo\\backend\\tmp\\ai-debug-loop\\ai-debug-loop-20260218T202007Z\\debug.log#checksum-mismatch"
+      ]
+    }
+  ]
+}

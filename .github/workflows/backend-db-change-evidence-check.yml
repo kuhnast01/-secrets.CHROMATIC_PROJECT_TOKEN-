@@ -1,0 +1,92 @@
+name: Backend DB Change Evidence Check
+
+on:
+  pull_request:
+    types:
+      - opened
+      - edited
+      - synchronize
+      - reopened
+      - ready_for_review
+
+permissions:
+  contents: read
+  pull-requests: read
+
+concurrency:
+  group: backend-db-change-evidence-check-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  evidence-check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Validate DB change evidence in PR body
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const pr = context.payload.pull_request;
+            if (!pr) {
+              core.setFailed('This workflow only supports pull_request events.');
+              return;
+            }
+
+            const files = await github.paginate(github.rest.pulls.listFiles, {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: pr.number,
+              per_page: 100,
+            });
+
+            const sensitivePathRegex = /^(backend\/(\.env(\..+)?|docker-compose\.yml|\.github\/workflows\/ci\.yml|prisma\/schema\.prisma)|\.github\/workflows\/backend-(nightly-stress|weekly-reliability)\.yml)$/i;
+            const keywordRegex = /POSEIDON_DB_NAME|DATABASE_URL/i;
+
+            const dbIdentifierTouched = files.some((file) => {
+              const filename = file.filename || '';
+              const patch = file.patch || '';
+              return (
+                sensitivePathRegex.test(filename) ||
+                keywordRegex.test(filename) ||
+                keywordRegex.test(patch)
+              );
+            });
+
+            if (!dbIdentifierTouched) {
+              core.info('No DB identifier changes detected; evidence check not required.');
+              return;
+            }
+
+            const body = (pr.body || '').trim();
+
+            const requiredFields = [
+              { label: 'Change ticket', regex: /Change ticket:\s*(.+)/i },
+              { label: 'Staging validation', regex: /Staging validation:\s*(.+)/i },
+              { label: 'Backup\/restore test', regex: /Backup\/restore test:\s*(.+)/i },
+              { label: 'Rollback plan', regex: /Rollback plan:\s*(.+)/i },
+            ];
+
+            const missing = requiredFields
+              .filter(({ regex }) => {
+                const match = body.match(regex);
+                if (!match) {
+                  return true;
+                }
+
+                const value = (match[1] || '').trim();
+                return value.length < 5;
+              })
+              .map(({ label }) => label);
+
+            if (missing.length > 0) {
+              core.setFailed(
+                [
+                  'DB identifier changes detected (`POSEIDON_DB_NAME` or `DATABASE_URL`).',
+                  `Missing or empty PR evidence fields: ${missing.join(', ')}.`,
+                  'Provide evidence links in the PR body using the repository PR template.',
+                ].join(' ')
+              );
+              return;
+            }
+
+            core.info('DB identifier evidence fields are present.');

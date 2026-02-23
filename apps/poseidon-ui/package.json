@@ -1,0 +1,17 @@
+{
+  "name": "poseidon-ui",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Poseidon desktop UI application",
+  "author": "Poseidon Engine",
+  "main": "main.js",
+  "scripts": {
+    "dev": "electron .",
+    "build": "echo 'poseidon-ui: no transpile step required; run pnpm run build:package for installer packaging' && exit 0",
+    "build:package": "electron-builder"
+  },
+  "devDependencies": {
+    "electron": "^40.6.0",
+    "electron-builder": "^26.7.0"
+  }
+}

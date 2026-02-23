@@ -1,0 +1,81 @@
+name: Backend License Strict Staging Gate
+
+on:
+  workflow_dispatch:
+    inputs:
+      enduranceRequests:
+        description: Number of strict-mode valid-license endurance requests
+        required: false
+        default: "250"
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: backend-license-strict-staging-gate
+  cancel-in-progress: false
+
+jobs:
+  strict-staging-gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+          cache-dependency-path: pnpm-lock.yaml
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Execute strict-mode staging gate drill
+        run: pnpm --dir backend exec tsx scripts/liveops/run-license-strict-staging-drill.ts --enduranceRequests=${{ inputs.enduranceRequests }}
+
+      - name: Strict-mode staging gate summary
+        if: always()
+        run: |
+          report_path=$(ls -1t backend/tmp/liveops-artifacts/lic-02-license-strict-staging-*.json 2>/dev/null | head -n1 || true)
+          echo "## License Strict Staging Gate (LIC-02)" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Artifact bundle: license-strict-staging-gate-${{ github.run_id }}" >> "$GITHUB_STEP_SUMMARY"
+
+          if [[ -n "$report_path" && -f "$report_path" ]]; then
+            status=$(node -e "const fs=require('fs');const p=process.argv[1];const j=JSON.parse(fs.readFileSync(p,'utf8'));process.stdout.write(String(j.status || 'unknown'));" "$report_path")
+            run_id=$(node -e "const fs=require('fs');const p=process.argv[1];const j=JSON.parse(fs.readFileSync(p,'utf8'));process.stdout.write(String(j.runId || 'n/a'));" "$report_path")
+            mode=$(node -e "const fs=require('fs');const p=process.argv[1];const j=JSON.parse(fs.readFileSync(p,'utf8'));process.stdout.write(String(j.enforcementMode || 'n/a'));" "$report_path")
+            success_rate=$(node -e "const fs=require('fs');const p=process.argv[1];const j=JSON.parse(fs.readFileSync(p,'utf8'));process.stdout.write(String(j?.endurance?.successRate ?? 'n/a'));" "$report_path")
+            failures=$(node -e "const fs=require('fs');const p=process.argv[1];const j=JSON.parse(fs.readFileSync(p,'utf8'));process.stdout.write(String(j?.endurance?.failureCount ?? 'n/a'));" "$report_path")
+
+            if [[ "$status" == "pass" ]]; then
+              echo "- LIC-02: ✅ pass" >> "$GITHUB_STEP_SUMMARY"
+            else
+              echo "- LIC-02: ❌ ${status}" >> "$GITHUB_STEP_SUMMARY"
+            fi
+
+            echo "- Run ID: ${run_id}" >> "$GITHUB_STEP_SUMMARY"
+            echo "- Enforcement Mode: ${mode}" >> "$GITHUB_STEP_SUMMARY"
+            echo "- Endurance Success Rate: ${success_rate}" >> "$GITHUB_STEP_SUMMARY"
+            echo "- Endurance Failures: ${failures}" >> "$GITHUB_STEP_SUMMARY"
+            echo "- Artifact: ${report_path}" >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "- LIC-02: ⚠️ artifact not found" >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+      - name: Upload strict-mode staging gate artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: license-strict-staging-gate-${{ github.run_id }}
+          path: |
+            backend/tmp/liveops-artifacts/lic-02-license-strict-staging-*.json
+            backend/tmp/licensing-strict-staging/**
+          if-no-files-found: warn

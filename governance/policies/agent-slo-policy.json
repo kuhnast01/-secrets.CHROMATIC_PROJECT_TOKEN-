@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "description": "Policy-as-code source of truth for AGENT-03 multi-agent SLO thresholds.",
+  "latency": {
+    "p95MsMax": 300,
+    "averageMsMax": 220
+  },
+  "success": {
+    "minRate": 0.95
+  },
+  "rollback": {
+    "minRate": 0.99,
+    "maxDurationMs": 180
+  }
+}

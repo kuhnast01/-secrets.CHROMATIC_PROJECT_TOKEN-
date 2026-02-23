@@ -1,0 +1,49 @@
+name: Monorepo Supply Chain
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: monorepo-supply-chain-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  mono-supply-chain:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Run MONO-03 strict supply-chain check
+        run: node scripts/governance/check-mono-supply-chain.mjs --strict
+
+      - name: Upload MONO-03 artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mono-supply-chain-artifacts
+          path: |
+            governance-artifacts/mono-sbom.json
+            governance-artifacts/mono-supply-chain-report.json

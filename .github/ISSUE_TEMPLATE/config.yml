@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Security vulnerability report
+    url: https://github.com/kuhna/FrontendMonorepo/security/advisories/new
+    about: Report security vulnerabilities privately through GitHub Security Advisories.
+  - name: Governance rollout checklist
+    url: https://github.com/kuhna/FrontendMonorepo/issues/new?template=governance_rollout_checklist.md
+    about: Use the governance rollout checklist template for policy, CI-gate, and audit-evidence implementation work.

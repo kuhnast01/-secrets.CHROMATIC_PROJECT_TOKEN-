@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "description": "Policy-as-code source of truth for MONO-03 SBOM generation and dependency policy gating.",
+  "requirePnpmPackageManager": true,
+  "requirePnpmLockfile": true,
+  "minComponentCount": 10,
+  "disallowedVersionLiterals": [
+    "*",
+    "latest"
+  ],
+  "disallowedSpecProtocols": [
+    "http:",
+    "https:",
+    "git+",
+    "github:",
+    "link:"
+  ],
+  "allowWorkspaceProtocol": true
+}

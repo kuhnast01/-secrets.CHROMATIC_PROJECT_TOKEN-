@@ -1,0 +1,53 @@
+name: Backend Docs Link Check
+
+on:
+  pull_request:
+    paths:
+      - backend/**/*.md
+      - backend/scripts/docs/check-markdown-links.ts
+      - backend/package.json
+      - .github/workflows/backend-doc-links-check.yml
+  push:
+    branches:
+      - main
+    paths:
+      - backend/**/*.md
+      - backend/scripts/docs/check-markdown-links.ts
+      - backend/package.json
+      - .github/workflows/backend-doc-links-check.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: backend-doc-links-check-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  docs-link-check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: backend
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Check backend markdown links
+        run: pnpm run docs:check-links

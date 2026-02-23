@@ -1,0 +1,119 @@
+{
+  "schemaVersion": 1,
+  "startedAt": "2026-02-18T20:53:25.726Z",
+  "endedAt": "2026-02-18T20:53:27.736Z",
+  "ok": true,
+  "failedChecks": [],
+  "checks": [
+    {
+      "name": "governance-adversarial-break-tests",
+      "command": "node scripts/governance/run-adversarial-break-tests.mjs",
+      "startedAt": "2026-02-18T20:53:25.726Z",
+      "endedAt": "2026-02-18T20:53:26.014Z",
+      "exitCode": 0,
+      "ok": true,
+      "stdout": "Adversarial break-test report: C:\\Users\\kuhna\\AppData\\Local\\Temp\\poseidon-governance-breaktest-GqdGTU\\break-test-report.json\n[CAUGHT] S1 remove governance-dry-run check expected=FAIL exit=1\n  stderr: Missing required file: governance\\policies\\branch-protection-policy.json\n[CAUGHT] S2 remove KPI label default expected=FAIL exit=1\n  stderr: Missing required file: governance\\policies\\branch-protection-policy.json\n[CAUGHT] S3 blank matrix owner field expected=FAIL exit=1\n  stderr: GOVERNANCE_CONTROLS_MATRIX.md: row 1 missing Owner value.\n[CAUGHT] S4 legal drift baseline expected=PASS exit=0\n[CAUGHT] S5 legal drift negative fixture expected=FAIL exit=1\n  stderr: scripts\\legal\\fixtures\\APPROVAL_RECORD_TEMPLATE_MISSING_FOUNDER.md: missing required approval template field: Founder approver:\n",
+      "stderr": "",
+      "error": ""
+    },
+    {
+      "name": "governance-controls-matrix-schema",
+      "command": "node scripts/governance/check-controls-matrix.mjs",
+      "startedAt": "2026-02-18T20:53:26.014Z",
+      "endedAt": "2026-02-18T20:53:26.058Z",
+      "exitCode": 0,
+      "ok": true,
+      "stdout": "Governance controls matrix schema check passed.\n",
+      "stderr": "",
+      "error": ""
+    },
+    {
+      "name": "branch-protection-drift",
+      "command": "node scripts/governance/check-branch-protection-audit-template.mjs",
+      "startedAt": "2026-02-18T20:53:26.058Z",
+      "endedAt": "2026-02-18T20:53:26.104Z",
+      "exitCode": 0,
+      "ok": true,
+      "stdout": "Branch-protection audit template drift check passed.\n",
+      "stderr": "",
+      "error": ""
+    },
+    {
+      "name": "legal-release-records",
+      "command": "node scripts/legal/check-release-records.mjs",
+      "startedAt": "2026-02-18T20:53:26.104Z",
+      "endedAt": "2026-02-18T20:53:26.151Z",
+      "exitCode": 0,
+      "ok": true,
+      "stdout": "Legal release record check passed (1 record file(s) validated).\n",
+      "stderr": "",
+      "error": ""
+    },
+    {
+      "name": "legal-template-drift",
+      "command": "node scripts/legal/check-release-template-drift.mjs",
+      "startedAt": "2026-02-18T20:53:26.151Z",
+      "endedAt": "2026-02-18T20:53:26.197Z",
+      "exitCode": 0,
+      "ok": true,
+      "stdout": "Legal template drift check passed.\n",
+      "stderr": "",
+      "error": ""
+    },
+    {
+      "name": "backend-markdown-links",
+      "command": "pnpm --dir backend exec tsx scripts/docs/check-markdown-links.ts",
+      "startedAt": "2026-02-18T20:53:26.197Z",
+      "endedAt": "2026-02-18T20:53:26.921Z",
+      "exitCode": 0,
+      "ok": true,
+      "stdout": "Markdown link check passed.\n",
+      "stderr": "",
+      "error": ""
+    },
+    {
+      "name": "label-defaults-json",
+      "command": "pnpm --dir backend exec tsx scripts/stress/bootstrap-github-labels.ts --list-defaults --json",
+      "startedAt": "2026-02-18T20:53:26.921Z",
+      "endedAt": "2026-02-18T20:53:27.568Z",
+      "exitCode": 0,
+      "ok": true,
+      "stdout": "{\n  \"ok\": true,\n  \"mode\": \"list-defaults\",\n  \"labels\": [\n    {\n      \"name\": \"reliability\",\n      \"color\": \"0e8a16\",\n      \"description\": \"Reliability and resilience tracking\"\n    },\n    {\n      \"name\": \"backend\",\n      \"color\": \"1d76db\",\n      \"description\": \"Backend domain\"\n    },\n    {\n      \"name\": \"performance\",\n      \"color\": \"5319e7\",\n      \"description\": \"Performance and latency tracking\"\n    },\n    {\n      \"name\": \"kpi:legal-drift-review\",\n      \"color\": \"5319e7\",\n      \"description\": \"KPI tracking label for quarterly legal drift review\"\n    },\n    {\n      \"name\": \"reliability-spike\",\n      \"color\": \"fbca04\",\n      \"description\": \"Spike-profile reliability signal\"\n    },\n    {\n      \"name\": \"reliability-soak\",\n      \"color\": \"d93f0b\",\n      \"description\": \"Soak-profile reliability signal\"\n    },\n    {\n      \"name\": \"stress-spike\",\n      \"color\": \"fef2c0\",\n      \"description\": \"Stress regression in spike profile\"\n    },\n    {\n      \"name\": \"stress-soak\",\n      \"color\": \"f9d0c4\",\n      \"description\": \"Stress regression in soak profile\"\n    }\n  ],\n  \"message\": \"Built-in label definitions.\"\n}\n",
+      "stderr": "",
+      "error": ""
+    },
+    {
+      "name": "go-live-closeout-structure",
+      "command": "node scripts/governance/check-go-live-closeout.mjs",
+      "startedAt": "2026-02-18T20:53:27.568Z",
+      "endedAt": "2026-02-18T20:53:27.616Z",
+      "exitCode": 0,
+      "ok": true,
+      "stdout": "Governance go-live closeout status:\n- 1) Enforce branch protection required checks on `main`: 0/2 complete\n- 2) Apply label bootstrap for KPI coverage: 0/2 complete\n- 3) Execute one manual governance dry-run and archive artifact: 0/2 complete\n- 4) Seed quarterly evidence rows (backend + legal): 2/2 complete | evidence-linked\n- 5) Close legal execution gap with counsel: 0/3 complete\nCloseout structure check passed. Use --strict to enforce full completion and evidence.\nCloseout report written: governance-artifacts\\go-live-closeout-report.json\n",
+      "stderr": "",
+      "error": ""
+    },
+    {
+      "name": "mono-release-lanes",
+      "command": "node scripts/governance/check-mono-release-lanes.mjs --strict",
+      "startedAt": "2026-02-18T20:53:27.616Z",
+      "endedAt": "2026-02-18T20:53:27.674Z",
+      "exitCode": 0,
+      "ok": true,
+      "stdout": "Monorepo release lane status:\n- lanes required: 3\n- lanes passed: 3\n- lanes failed: 0\n- validation errors: 0\n- report: governance-artifacts\\mono-release-lanes-report.json\n",
+      "stderr": "",
+      "error": ""
+    },
+    {
+      "name": "mono-supply-chain",
+      "command": "node scripts/governance/check-mono-supply-chain.mjs --strict",
+      "startedAt": "2026-02-18T20:53:27.674Z",
+      "endedAt": "2026-02-18T20:53:27.736Z",
+      "exitCode": 0,
+      "ok": true,
+      "stdout": "Monorepo supply-chain status:\n- manifests scanned: 13\n- SBOM components: 13\n- dependency names: 127\n- policy errors: 0\n- policy warnings: 5\n- SBOM artifact: governance-artifacts/mono-sbom.json\n- report artifact: governance-artifacts/mono-supply-chain-report.json\n",
+      "stderr": "",
+      "error": ""
+    }
+  ]
+}

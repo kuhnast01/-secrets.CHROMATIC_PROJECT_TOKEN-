@@ -1,0 +1,48 @@
+{
+  "schemaVersion": 1,
+  "pipeline": "AGENT-01",
+  "status": "pass",
+  "generatedAt": "2026-02-18T19:42:43.107Z",
+  "reportPath": "C:\\Users\\kuhna\\OneDrive\\Desktop\\SIMgameFiles\\VisualStudio\\FrontendMonorepo\\backend\\tmp\\liveops-artifacts\\agent-01-handoff-20260218T194243Z.json",
+  "correlationId": "agent-handoff-20260218T194243Z",
+  "handoffDirectory": "C:\\Users\\kuhna\\OneDrive\\Desktop\\SIMgameFiles\\VisualStudio\\FrontendMonorepo\\backend\\tmp\\agent-handoff\\agent-handoff-20260218T194243Z",
+  "steps": [
+    {
+      "name": "agent-handoff:engineering-qa-sre",
+      "status": "pass",
+      "details": "Completed 3 traceable handoff events with correlationId agent-handoff-20260218T194243Z"
+    }
+  ],
+  "events": [
+    {
+      "sequence": 1,
+      "timestamp": "2026-02-18T19:42:43.104Z",
+      "correlationId": "agent-handoff-20260218T194243Z",
+      "from": "Engineering",
+      "to": "QA",
+      "handoffArtifact": "C:\\Users\\kuhna\\OneDrive\\Desktop\\SIMgameFiles\\VisualStudio\\FrontendMonorepo\\backend\\tmp\\agent-handoff\\agent-handoff-20260218T194243Z\\engineering\\engineering-handoff.json",
+      "artifactSha256": "ed83120921be6ff4cd420ef0e436bd003dcd639008a6bf7a6bfb1d21f1991457",
+      "summary": "Engineering handed off build packet to QA"
+    },
+    {
+      "sequence": 2,
+      "timestamp": "2026-02-18T19:42:43.106Z",
+      "correlationId": "agent-handoff-20260218T194243Z",
+      "from": "QA",
+      "to": "SRE",
+      "handoffArtifact": "C:\\Users\\kuhna\\OneDrive\\Desktop\\SIMgameFiles\\VisualStudio\\FrontendMonorepo\\backend\\tmp\\agent-handoff\\agent-handoff-20260218T194243Z\\qa\\qa-handoff.json",
+      "artifactSha256": "9cdc8e26d7c34969845ea85c99ff625ee43c9a5d6fa397c1ab1acfe736de88cf",
+      "summary": "QA validated build and handed off deployment packet to SRE"
+    },
+    {
+      "sequence": 3,
+      "timestamp": "2026-02-18T19:42:43.107Z",
+      "correlationId": "agent-handoff-20260218T194243Z",
+      "from": "SRE",
+      "to": "SRE",
+      "handoffArtifact": "C:\\Users\\kuhna\\OneDrive\\Desktop\\SIMgameFiles\\VisualStudio\\FrontendMonorepo\\backend\\tmp\\agent-handoff\\agent-handoff-20260218T194243Z\\sre\\sre-ack.json",
+      "artifactSha256": "e24f6f891d389b932a9efd6a1494926839a7b872278cd15bb408b63b3e5c799a",
+      "summary": "SRE acknowledged deployment readiness and rollback reference"
+    }
+  ]
+}

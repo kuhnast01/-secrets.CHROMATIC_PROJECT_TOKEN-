@@ -1,0 +1,332 @@
+name: Backend License Events Weekly Issue
+
+on:
+  schedule:
+    - cron: "45 8 * * 1"
+  workflow_dispatch:
+    inputs:
+      logFile:
+        description: Path to NDJSON/Pino backend log file
+        required: true
+        default: backend/stress-artifacts/backend-dev.log
+        type: string
+      sinceHours:
+        description: Rolling window in hours
+        required: true
+        default: "168"
+        type: string
+      retentionDays:
+        description: Artifact retention days
+        required: true
+        default: "30"
+        type: string
+      highSeverityThreshold:
+        description: High severity threshold for invalid/revoked counts
+        required: true
+        default: "25"
+        type: string
+      mediumSeverityThreshold:
+        description: Medium severity threshold for invalid/revoked counts
+        required: true
+        default: "5"
+        type: string
+      failOnHighSeverity:
+        description: Fail workflow if computed severity is high
+        required: true
+        default: false
+        type: boolean
+      highSeverityAssignees:
+        description: Comma-separated GitHub usernames to assign when severity is high
+        required: false
+        default: ""
+        type: string
+
+permissions:
+  contents: read
+  issues: write
+
+concurrency:
+  group: backend-license-events-weekly-issue
+  cancel-in-progress: true
+
+jobs:
+  weekly-license-events-issue:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: backend
+    env:
+      LICENSE_LOG_FILE: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.logFile || 'backend/stress-artifacts/backend-dev.log' }}
+      SINCE_HOURS: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.sinceHours || '168' }}
+      RETENTION_DAYS: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.retentionDays || '30' }}
+      HIGH_SEVERITY_THRESHOLD: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.highSeverityThreshold || vars.LICENSE_HIGH_SEVERITY_THRESHOLD || '' }}
+      MEDIUM_SEVERITY_THRESHOLD: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.mediumSeverityThreshold || vars.LICENSE_MEDIUM_SEVERITY_THRESHOLD || '' }}
+      FAIL_ON_HIGH_SEVERITY: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.failOnHighSeverity || vars.LICENSE_FAIL_ON_HIGH || '' }}
+      HIGH_SEVERITY_ASSIGNEES: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.highSeverityAssignees || vars.LICENSE_ALERT_ASSIGNEES || '' }}
+      LICENSE_ANOMALY_POLICY_PATH: ../governance/policies/license-anomaly-escalation-policy.json
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Ensure artifacts directory
+        run: mkdir -p stress-artifacts
+
+      - name: Check log file presence
+        id: log_check
+        run: |
+          if [ -f "../${LICENSE_LOG_FILE}" ]; then
+            echo "has_log=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "has_log=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Resolve anomaly escalation policy
+        id: resolve_policy
+        run: |
+          node -e "const fs=require('fs'); const path=require('path'); const policyPath=path.resolve(process.env.LICENSE_ANOMALY_POLICY_PATH || '../governance/policies/license-anomaly-escalation-policy.json'); let policy={severityThresholds:{medium:{revokedCount:5},high:{revokedCount:25,totalInvalidCount:50}},workflowDefaults:{failOnHighSeverity:false,highSeverityAssignees:[]}}; if(fs.existsSync(policyPath)){ policy=JSON.parse(fs.readFileSync(policyPath,'utf8')); } const medium=String(process.env.MEDIUM_SEVERITY_THRESHOLD||policy?.severityThresholds?.medium?.revokedCount||5); const high=String(process.env.HIGH_SEVERITY_THRESHOLD||policy?.severityThresholds?.high?.revokedCount||25); const failRaw=String(process.env.FAIL_ON_HIGH_SEVERITY||policy?.workflowDefaults?.failOnHighSeverity||'false').toLowerCase(); const failOnHigh=(failRaw==='true')?'true':'false'; const assigneesEnv=String(process.env.HIGH_SEVERITY_ASSIGNEES||'').trim(); const assigneesPolicy=Array.isArray(policy?.workflowDefaults?.highSeverityAssignees)?policy.workflowDefaults.highSeverityAssignees.join(','):''; const assignees=assigneesEnv || assigneesPolicy; fs.appendFileSync(process.env.GITHUB_ENV, `MEDIUM_SEVERITY_THRESHOLD=${medium}\nHIGH_SEVERITY_THRESHOLD=${high}\nFAIL_ON_HIGH_SEVERITY=${failOnHigh}\nHIGH_SEVERITY_ASSIGNEES=${assignees}\n`); fs.appendFileSync(process.env.GITHUB_OUTPUT, `policy_path=${policyPath}\nmedium_threshold=${medium}\nhigh_threshold=${high}\nfail_on_high=${failOnHigh}\nhigh_assignees=${assignees}\n`);"
+
+      - name: Export JSON summary artifact
+        if: steps.log_check.outputs.has_log == 'true'
+        run: pnpm run license:export-events -- --file=../${LICENSE_LOG_FILE} --sinceHours=${SINCE_HOURS} --format=json --outDir=stress-artifacts
+
+      - name: Create no-data summary artifact
+        if: steps.log_check.outputs.has_log != 'true'
+        run: |
+          ts=$(date -u +%Y%m%dT%H%M%SZ)
+          cat > stress-artifacts/license-events-summary-${ts}.json <<EOF
+          {
+            "schemaVersion": 1,
+            "status": "no_data",
+            "message": "Configured log file not found",
+            "logFile": "${LICENSE_LOG_FILE}",
+            "generatedAt": "$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+          }
+          EOF
+
+      - name: Upload summary artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: backend-license-events-weekly-summary
+          retention-days: ${{ env.RETENTION_DAYS }}
+          path: backend/stress-artifacts/license-events-summary-*.json
+
+      - name: Upsert weekly issue
+        id: upsert_weekly_issue
+        if: github.ref_name == github.event.repository.default_branch
+        uses: actions/github-script@v7
+        env:
+          SINCE_HOURS: ${{ env.SINCE_HOURS }}
+          LICENSE_LOG_FILE: ${{ env.LICENSE_LOG_FILE }}
+          LOG_FILE_PRESENT: ${{ steps.log_check.outputs.has_log }}
+          HIGH_SEVERITY_THRESHOLD: ${{ env.HIGH_SEVERITY_THRESHOLD }}
+          MEDIUM_SEVERITY_THRESHOLD: ${{ env.MEDIUM_SEVERITY_THRESHOLD }}
+          HIGH_SEVERITY_ASSIGNEES: ${{ env.HIGH_SEVERITY_ASSIGNEES }}
+        with:
+          script: |
+            const fs = require('fs');
+            const path = require('path');
+
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            const marker = '<!-- backend-license-events-weekly-issue -->';
+            const title = 'Security: Backend license event weekly summary';
+            const runUrl = `https://github.com/${owner}/${repo}/actions/runs/${context.runId}`;
+
+            const artifactDir = path.join(process.cwd(), 'backend', 'stress-artifacts');
+            const files = fs.existsSync(artifactDir)
+              ? fs.readdirSync(artifactDir).filter((name) => /^license-events-summary-.*\.json$/.test(name)).sort()
+              : [];
+
+            if (files.length === 0) {
+              core.setFailed('No license summary JSON artifact found.');
+              return;
+            }
+
+            const latestFile = files[files.length - 1];
+            const latestPath = path.join(artifactDir, latestFile);
+            const payload = JSON.parse(fs.readFileSync(latestPath, 'utf8'));
+
+            const isNoData = payload.status === 'no_data';
+            const byReason = !isNoData ? (payload.counts?.byReason ?? {}) : {};
+            const byEvent = !isNoData ? (payload.counts?.byEvent ?? {}) : {};
+            const byRole = !isNoData ? (payload.counts?.byRole ?? {}) : {};
+
+            const topReasons = Object.entries(byReason)
+              .sort((a, b) => Number(b[1]) - Number(a[1]))
+              .slice(0, 5);
+
+            const topEvents = Object.entries(byEvent)
+              .sort((a, b) => Number(b[1]) - Number(a[1]))
+              .slice(0, 5);
+
+            const topRoles = Object.entries(byRole)
+              .sort((a, b) => Number(b[1]) - Number(a[1]))
+              .slice(0, 5);
+
+            const highThreshold = Number(process.env.HIGH_SEVERITY_THRESHOLD || 25);
+            const mediumThreshold = Number(process.env.MEDIUM_SEVERITY_THRESHOLD || 5);
+            const revokedCount = Number(byReason.license_revoked ?? 0);
+            const invalidSignatureCount = Number(byReason.invalid_license_signature ?? 0);
+            const totalInvalid = Object.entries(byReason)
+              .filter(([reason]) => reason !== 'valid' && reason !== 'none')
+              .reduce((sum, [, count]) => sum + Number(count || 0), 0);
+
+            let severity = 'low';
+            let severityReason = 'No material invalid-license volume detected.';
+            if (isNoData) {
+              severity = 'low';
+              severityReason = 'No data; configured log file was not found.';
+            } else if (
+              revokedCount >= highThreshold ||
+              invalidSignatureCount >= highThreshold ||
+              totalInvalid >= highThreshold * 2
+            ) {
+              severity = 'high';
+              severityReason = 'Revoked/signature failures or total invalid volume exceeded high threshold.';
+            } else if (
+              revokedCount >= mediumThreshold ||
+              invalidSignatureCount >= mediumThreshold ||
+              totalInvalid >= mediumThreshold
+            ) {
+              severity = 'medium';
+              severityReason = 'Revoked/signature failures or total invalid volume exceeded medium threshold.';
+            }
+
+            const reasonLines = topReasons.length
+              ? topReasons.map(([reason, count]) => `- ${reason}: **${count}**`).join('\n')
+              : '- none';
+            const eventLines = topEvents.length
+              ? topEvents.map(([eventName, count]) => `- ${eventName}: **${count}**`).join('\n')
+              : '- none';
+            const roleLines = topRoles.length
+              ? topRoles.map(([role, count]) => `- ${role}: **${count}**`).join('\n')
+              : '- none';
+
+            const windowLine = !isNoData
+              ? `- window: **${payload.window?.fromIso ?? 'n/a'}** to **${payload.window?.toIso ?? 'n/a'}**`
+              : '- window: n/a';
+
+            const summaryLines = !isNoData
+              ? [
+                  `- scanned rows: **${payload.scanned ?? 0}**`,
+                  `- parsed rows: **${payload.parsedRows ?? 0}**`,
+                  `- ignored rows: **${payload.ignoredRows ?? 0}**`,
+                ].join('\n')
+              : '- no data available; configured log file was not found.';
+
+            const body = [
+              marker,
+              '## Backend License Event Weekly Summary',
+              '',
+              `- workflow run: ${runUrl}`,
+              `- summary artifact: \`${latestFile}\``,
+              `- configured log file: \`${process.env.LICENSE_LOG_FILE}\``,
+              `- log file present: **${process.env.LOG_FILE_PRESENT}**`,
+              `- since hours: **${process.env.SINCE_HOURS}**`,
+              `- severity: **${severity.toUpperCase()}**`,
+              `- severity reason: ${severityReason}`,
+              `- thresholds (medium/high): **${mediumThreshold}/${highThreshold}**`,
+              windowLine,
+              '',
+              '### Top Reasons',
+              reasonLines,
+              '',
+              '### Top Events',
+              eventLines,
+              '',
+              '### Top Roles',
+              roleLines,
+              '',
+              '### Run Stats',
+              summaryLines,
+            ].join('\n');
+
+            const { data: issues } = await github.rest.issues.listForRepo({
+              owner,
+              repo,
+              state: 'all',
+              per_page: 100,
+            });
+
+            const configuredAssignees = (process.env.HIGH_SEVERITY_ASSIGNEES || '')
+              .split(',')
+              .map((value) => value.trim())
+              .filter(Boolean);
+            const assignees = [];
+            if (severity === 'high') {
+              for (const username of configuredAssignees) {
+                try {
+                  await github.rest.users.getByUsername({ username });
+                  assignees.push(username);
+                } catch (error) {
+                  core.warning(`Skipping unknown assignee '${username}': ${error.message}`);
+                }
+              }
+            }
+
+            const existing = issues.find((issue) => issue.title === title);
+            const severityLabel = `severity:${severity}`;
+            const baseLabels = ['security', 'backend', 'observability'];
+            const labels = [...baseLabels, severityLabel];
+            if (existing) {
+              await github.rest.issues.update({
+                owner,
+                repo,
+                issue_number: existing.number,
+                body,
+                state: 'open',
+                labels,
+                assignees,
+              });
+            } else {
+              await github.rest.issues.create({
+                owner,
+                repo,
+                title,
+                body,
+                labels,
+                assignees,
+              });
+            }
+
+            core.setOutput('severity', severity);
+
+      - name: Write severity summary
+        if: github.ref_name == github.event.repository.default_branch
+        run: |
+          echo "## Backend License Events Severity" >> "$GITHUB_STEP_SUMMARY"
+          echo "- severity: **${{ steps.upsert_weekly_issue.outputs.severity || 'unknown' }}**" >> "$GITHUB_STEP_SUMMARY"
+          echo "- policy: **${{ steps.resolve_policy.outputs.policy_path }}**" >> "$GITHUB_STEP_SUMMARY"
+          echo "- thresholds (medium/high): **${{ steps.resolve_policy.outputs.medium_threshold }}/${{ steps.resolve_policy.outputs.high_threshold }}**" >> "$GITHUB_STEP_SUMMARY"
+          echo "- failOnHighSeverity: **${FAIL_ON_HIGH_SEVERITY}**" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Enforce high-severity gate
+        if: github.ref_name == github.event.repository.default_branch && env.FAIL_ON_HIGH_SEVERITY == 'true'
+        run: |
+          severity='${{ steps.upsert_weekly_issue.outputs.severity }}'
+          if [ "$severity" = "high" ]; then
+            echo "High severity detected and failOnHighSeverity=true; failing workflow."
+            exit 1
+          fi
+          echo "Severity gate passed (severity=$severity)."
+
+      - name: Note issue-upsert skip on non-default branch
+        if: github.ref_name != github.event.repository.default_branch
+        run: |
+          echo "## Backend License Events Weekly Issue" >> "$GITHUB_STEP_SUMMARY"
+          echo "- issue upsert skipped on non-default branch \`${{ github.ref_name }}\` (default: \`${{ github.event.repository.default_branch }}\`)." >> "$GITHUB_STEP_SUMMARY"

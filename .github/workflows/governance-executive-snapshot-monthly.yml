@@ -1,0 +1,205 @@
+name: Governance Executive Snapshot Monthly
+
+on:
+  schedule:
+    - cron: "45 9 2 * *"
+  workflow_dispatch:
+  workflow_run:
+    workflows:
+      - Release Environment Audit Monthly Issue
+    types:
+      - completed
+    branches:
+      - main
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: governance-executive-snapshot-monthly
+  cancel-in-progress: true
+
+jobs:
+  governance-executive-snapshot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Download release environment audit artifact from triggering run
+        if: github.event_name == 'workflow_run'
+        continue-on-error: true
+        uses: actions/download-artifact@v4
+        with:
+          github-token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          run-id: ${{ github.event.workflow_run.id }}
+          name: release-environment-audit-report
+          path: governance-artifacts
+
+      - name: Resolve previous executive snapshot artifact
+        id: resolve_previous_snapshot
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            const workflowId = 'governance-executive-snapshot-monthly.yml';
+            const currentRunId = Number(process.env.GITHUB_RUN_ID || '0');
+
+            const runsResponse = await github.rest.actions.listWorkflowRuns({
+              owner,
+              repo,
+              workflow_id: workflowId,
+              branch: 'main',
+              status: 'completed',
+              per_page: 50,
+            });
+
+            const previousRun = runsResponse.data.workflow_runs.find((run) => run.id !== currentRunId && run.conclusion === 'success');
+
+            if (!previousRun) {
+              core.info('No previous successful governance executive snapshot run found.');
+              core.setOutput('artifact_url', '');
+              core.setOutput('run_id', '');
+              return;
+            }
+
+            const artifactsResponse = await github.rest.actions.listWorkflowRunArtifacts({
+              owner,
+              repo,
+              run_id: previousRun.id,
+              per_page: 100,
+            });
+
+            const artifact = artifactsResponse.data.artifacts.find((entry) => !entry.expired && entry.name.startsWith('governance-executive-snapshot-'));
+
+            if (!artifact) {
+              core.info(`No usable snapshot artifact found for run ${previousRun.id}.`);
+              core.setOutput('artifact_url', '');
+              core.setOutput('run_id', String(previousRun.id));
+              return;
+            }
+
+            core.setOutput('artifact_url', artifact.archive_download_url);
+            core.setOutput('run_id', String(previousRun.id));
+
+      - name: Download previous executive snapshot baseline
+        if: steps.resolve_previous_snapshot.outputs.artifact_url != ''
+        run: |
+          mkdir -p governance-artifacts/previous
+          curl -fsSL \
+            -H "Authorization: Bearer ${{ github.token }}" \
+            -H "Accept: application/vnd.github+json" \
+            "${{ steps.resolve_previous_snapshot.outputs.artifact_url }}" \
+            -o governance-artifacts/previous-executive-snapshot.zip
+
+          unzip -o governance-artifacts/previous-executive-snapshot.zip -d governance-artifacts/previous
+          previous_snapshot=$(find governance-artifacts/previous -type f -name 'governance-executive-snapshot.json' | head -n1 || true)
+
+          if [[ -n "$previous_snapshot" ]]; then
+            cp "$previous_snapshot" governance-artifacts/governance-executive-snapshot.previous.json
+            echo "Resolved previous baseline from run ${{ steps.resolve_previous_snapshot.outputs.run_id }}"
+          else
+            echo "No prior snapshot file found in downloaded artifact."
+          fi
+
+      - name: Generate license anomaly policy report
+        run: node scripts/governance/check-license-anomaly-escalation-policy.mjs
+
+      - name: Validate license anomaly policy report
+        run: node scripts/governance/validate-license-anomaly-policy-report.mjs
+
+      - name: Generate governance executive snapshot
+        run: node scripts/governance/generate-governance-executive-snapshot.mjs
+        env:
+          SOURCE_WORKFLOW_NAME: ${{ github.event_name == 'workflow_run' && github.event.workflow_run.name || '' }}
+          SOURCE_WORKFLOW_RUN_ID: ${{ github.event_name == 'workflow_run' && github.event.workflow_run.id || '' }}
+          SOURCE_WORKFLOW_CONCLUSION: ${{ github.event_name == 'workflow_run' && github.event.workflow_run.conclusion || '' }}
+
+      - name: Validate governance executive snapshot
+        run: node scripts/governance/validate-governance-executive-snapshot.mjs
+
+      - name: Generate governance executive trend
+        run: node scripts/governance/generate-governance-executive-trend.mjs
+
+      - name: Validate governance executive trend
+        run: node scripts/governance/validate-governance-executive-trend.mjs
+
+      - name: Snapshot summary
+        if: always()
+        run: |
+          snapshot_path="governance-artifacts/governance-executive-snapshot.json"
+          trend_path="governance-artifacts/governance-executive-trend.json"
+          echo "## Governance Executive Snapshot" >> "$GITHUB_STEP_SUMMARY"
+
+          if [[ "${{ github.event_name }}" == "workflow_run" ]]; then
+            echo "- Trigger: workflow_run (Release Environment Audit Monthly Issue)" >> "$GITHUB_STEP_SUMMARY"
+            echo "- Source run id: ${{ github.event.workflow_run.id }}" >> "$GITHUB_STEP_SUMMARY"
+            echo "- Source conclusion: ${{ github.event.workflow_run.conclusion }}" >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "- Trigger: ${{ github.event_name }}" >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+          if [[ -f "$snapshot_path" ]]; then
+            overall_status=$(node -e "const fs=require('fs');const p=process.argv[1];const j=JSON.parse(fs.readFileSync(p,'utf8'));process.stdout.write(String(j.overallStatus || 'unknown'));" "$snapshot_path")
+            attention_count=$(node -e "const fs=require('fs');const p=process.argv[1];const j=JSON.parse(fs.readFileSync(p,'utf8'));process.stdout.write(String((j.attentionControls || []).length));" "$snapshot_path")
+            missing_count=$(node -e "const fs=require('fs');const p=process.argv[1];const j=JSON.parse(fs.readFileSync(p,'utf8'));process.stdout.write(String((j.missingControls || []).length));" "$snapshot_path")
+            source_workflow_name=$(node -e "const fs=require('fs');const p=process.argv[1];const j=JSON.parse(fs.readFileSync(p,'utf8'));process.stdout.write(String(j?.sourceWorkflow?.workflowName || 'n/a'));" "$snapshot_path")
+            source_workflow_run_id=$(node -e "const fs=require('fs');const p=process.argv[1];const j=JSON.parse(fs.readFileSync(p,'utf8'));process.stdout.write(String(j?.sourceWorkflow?.workflowRunId || 'n/a'));" "$snapshot_path")
+            source_workflow_conclusion=$(node -e "const fs=require('fs');const p=process.argv[1];const j=JSON.parse(fs.readFileSync(p,'utf8'));process.stdout.write(String(j?.sourceWorkflow?.workflowConclusion || 'n/a'));" "$snapshot_path")
+
+            echo "- Overall Status: **${overall_status}**" >> "$GITHUB_STEP_SUMMARY"
+            echo "- Attention Controls: **${attention_count}**" >> "$GITHUB_STEP_SUMMARY"
+            echo "- Missing Controls: **${missing_count}**" >> "$GITHUB_STEP_SUMMARY"
+            echo "- Source Workflow: ${source_workflow_name}" >> "$GITHUB_STEP_SUMMARY"
+            echo "- Source Workflow Run ID: ${source_workflow_run_id}" >> "$GITHUB_STEP_SUMMARY"
+            echo "- Source Workflow Conclusion: ${source_workflow_conclusion}" >> "$GITHUB_STEP_SUMMARY"
+            echo "- Artifact: ${snapshot_path}" >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "- Status: ⚠️ snapshot not found" >> "$GITHUB_STEP_SUMMARY"
+            echo "- Artifact: ${snapshot_path}" >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "## Governance Executive Trend" >> "$GITHUB_STEP_SUMMARY"
+
+          if [[ -f "$trend_path" ]]; then
+            trend_direction=$(node -e "const fs=require('fs');const p=process.argv[1];const j=JSON.parse(fs.readFileSync(p,'utf8'));process.stdout.write(String(j.trendDirection || 'unknown'));" "$trend_path")
+            current_status=$(node -e "const fs=require('fs');const p=process.argv[1];const j=JSON.parse(fs.readFileSync(p,'utf8'));process.stdout.write(String(j?.current?.overallStatus || 'unknown'));" "$trend_path")
+            previous_status=$(node -e "const fs=require('fs');const p=process.argv[1];const j=JSON.parse(fs.readFileSync(p,'utf8'));process.stdout.write(String(j?.previous?.overallStatus || 'none'));" "$trend_path")
+            risk_delta=$(node -e "const fs=require('fs');const p=process.argv[1];const j=JSON.parse(fs.readFileSync(p,'utf8'));const v=j?.delta?.riskCountDelta;process.stdout.write(String(v === null || v === undefined ? 'n/a' : v));" "$trend_path")
+            previous_present=$(node -e "const fs=require('fs');const p=process.argv[1];const j=JSON.parse(fs.readFileSync(p,'utf8'));process.stdout.write(String(j?.previous?.present === true ? 'yes' : 'no'));" "$trend_path")
+
+            echo "- Trend Direction: **${trend_direction}**" >> "$GITHUB_STEP_SUMMARY"
+            echo "- Current Status: **${current_status}**" >> "$GITHUB_STEP_SUMMARY"
+            echo "- Previous Status: **${previous_status}**" >> "$GITHUB_STEP_SUMMARY"
+            echo "- Previous Baseline Available: **${previous_present}**" >> "$GITHUB_STEP_SUMMARY"
+            echo "- Risk Delta (attention+missing): **${risk_delta}**" >> "$GITHUB_STEP_SUMMARY"
+            echo "- Artifact: ${trend_path}" >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "- Status: ⚠️ trend artifact not found" >> "$GITHUB_STEP_SUMMARY"
+            echo "- Artifact: ${trend_path}" >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+      - name: Upload governance executive snapshot artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: governance-executive-snapshot-${{ github.run_id }}
+          path: governance-artifacts/governance-executive-snapshot.json
+          if-no-files-found: warn
+
+      - name: Upload governance executive trend artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: governance-executive-trend-${{ github.run_id }}
+          path: governance-artifacts/governance-executive-trend.json
+          if-no-files-found: warn

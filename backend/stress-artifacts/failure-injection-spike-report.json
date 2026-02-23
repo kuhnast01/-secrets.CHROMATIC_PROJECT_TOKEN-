@@ -1,0 +1,36 @@
+{
+  "profile": "spike",
+  "baseUrl": "http://127.0.0.1:4000",
+  "generatedAt": "2026-02-18T03:14:42.818Z",
+  "config": {
+    "duration": 90,
+    "connections": 100,
+    "pipelining": 1,
+    "thresholds": {
+      "maxErrorRate": 0.02,
+      "maxP95Ms": 700,
+      "minRequests": 1500
+    }
+  },
+  "results": [
+    {
+      "path": "/healthz",
+      "total": 729754,
+      "errors": 0,
+      "non2xx": 0,
+      "p95": 16,
+      "errorRate": 0,
+      "passed": true
+    },
+    {
+      "path": "/system-health",
+      "total": 793709,
+      "errors": 0,
+      "non2xx": 0,
+      "p95": 13,
+      "errorRate": 0,
+      "passed": true
+    }
+  ],
+  "passed": true
+}

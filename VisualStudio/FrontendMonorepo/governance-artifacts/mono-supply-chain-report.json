@@ -1,0 +1,49 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-02-18T20:53:27.728Z",
+  "strictMode": true,
+  "check": "MONO-03",
+  "policyFile": "governance/policies/supply-chain-policy.json",
+  "sbomFile": "governance-artifacts/mono-sbom.json",
+  "reportFile": "governance-artifacts/mono-supply-chain-report.json",
+  "summary": {
+    "manifestsScanned": 13,
+    "components": 13,
+    "dependencyNames": 127,
+    "errors": 0,
+    "warnings": 5
+  },
+  "lockfile": {
+    "path": "pnpm-lock.yaml",
+    "sha256": "915a86ff344c33a1cfc62b622f6623eaeef53db6f6d130ffeaf072c0efeea0b3",
+    "present": true
+  },
+  "policy": {
+    "schemaVersion": 1,
+    "description": "Policy-as-code source of truth for MONO-03 SBOM generation and dependency policy gating.",
+    "requirePnpmPackageManager": true,
+    "requirePnpmLockfile": true,
+    "minComponentCount": 10,
+    "disallowedVersionLiterals": [
+      "*",
+      "latest"
+    ],
+    "disallowedSpecProtocols": [
+      "http:",
+      "https:",
+      "git+",
+      "github:",
+      "link:"
+    ],
+    "allowWorkspaceProtocol": true
+  },
+  "errors": [],
+  "warnings": [
+    "[apps/admin-panel/package.json] devDependencies.@tailwindcss/postcss uses non-standard semver range \"^4\".",
+    "[apps/admin-panel/package.json] devDependencies.@types/node uses non-standard semver range \"^20\".",
+    "[apps/admin-panel/package.json] devDependencies.eslint uses non-standard semver range \"^9\".",
+    "[apps/admin-panel/package.json] devDependencies.tailwindcss uses non-standard semver range \"^4\".",
+    "[apps/admin-panel/package.json] devDependencies.typescript uses non-standard semver range \"^5\"."
+  ],
+  "ok": true
+}

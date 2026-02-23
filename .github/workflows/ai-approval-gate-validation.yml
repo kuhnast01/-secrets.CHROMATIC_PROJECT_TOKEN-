@@ -1,0 +1,49 @@
+name: AI Approval Gate Validation
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ai-approval-gate-validation-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  ai-approval-gate-validation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Run AI-03 approval gate drill
+        run: pnpm --dir backend exec tsx scripts/liveops/run-ai-approval-gate-drill.ts
+
+      - name: Upload AI-03 artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ai-approval-gate-artifacts
+          path: |
+            backend/tmp/liveops-artifacts/ai-03-approval-gate-*.json
+            backend/tmp/ai-approval-gate/**/approvals.json

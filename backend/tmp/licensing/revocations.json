@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-02-18T22:06:34.080Z",
+  "revocations": [
+    {
+      "keyHash": "54aaa5c279c95258a84a8462a6f533c6bc8094bc15d35046bb1c81240bf0ca46",
+      "reason": "strict_mode_staging_drill",
+      "revokedAt": "2026-02-18T22:06:34.080Z",
+      "actorId": "drill-actor"
+    }
+  ]
+}

@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "runId": "license-revocation-rotation-20260218T211813Z",
+  "generatedAt": "2026-02-18T21:18:13.181Z",
+  "oldKeyHash": "da9785eeeee8fa67e88d0d81077b4aca72f366349093a511ad75d22c4703794c",
+  "rotatedKeyHash": "235dc46ac3926204b866bae635cc0d5f83723a2115d584d5eb903133bcf0d8c2",
+  "checks": [
+    {
+      "name": "source-license-valid-before-revocation",
+      "status": "pass",
+      "details": "valid"
+    },
+    {
+      "name": "source-license-blocked-after-revocation",
+      "status": "pass",
+      "details": "license_revoked"
+    },
+    {
+      "name": "rotated-license-valid",
+      "status": "pass",
+      "details": "valid"
+    },
+    {
+      "name": "revocation-removal-reactivates-source-license",
+      "status": "pass",
+      "details": "removed=true; reason=valid"
+    },
+    {
+      "name": "rotation-includes-metadata",
+      "status": "pass",
+      "details": "rotatedFrom=da9785eeeee8fa67e88d0d81077b4aca72f366349093a511ad75d22c4703794c"
+    }
+  ]
+}

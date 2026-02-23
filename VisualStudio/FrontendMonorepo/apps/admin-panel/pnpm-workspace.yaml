@@ -1,0 +1,4 @@
+ignoredBuiltDependencies:
+  - electron
+  - sharp
+  - unrs-resolver

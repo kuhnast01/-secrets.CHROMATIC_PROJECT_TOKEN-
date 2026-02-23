@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "policyId": "LIC-02",
+  "description": "Strict-mode staging rollout gate for license enforcement smoke/endurance validation.",
+  "enforcement": {
+    "requiredMode": "strict"
+  },
+  "smoke": {
+    "requiredChecks": [
+      "missing-license-blocked",
+      "invalid-format-blocked",
+      "revoked-license-blocked",
+      "valid-license-allowed"
+    ]
+  },
+  "endurance": {
+    "requestCount": 250,
+    "minSuccessRate": 0.995,
+    "maxFailureCount": 1
+  },
+  "evidence": {
+    "artifactPrefix": "lic-02-license-strict-staging",
+    "requireMachineReadableReport": true
+  }
+}

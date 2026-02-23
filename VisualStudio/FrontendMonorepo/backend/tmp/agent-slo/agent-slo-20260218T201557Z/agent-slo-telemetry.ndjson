@@ -1,0 +1,8 @@
+{"agent":"engineering-agent","operation":"generate-release-plan","latencyMs":120,"success":true,"rollbackTriggered":false,"rollbackSuccess":true,"rollbackDurationMs":0,"timestamp":"2026-02-18T20:15:57.922Z"}
+{"agent":"engineering-agent","operation":"update-targeting-rules","latencyMs":160,"success":true,"rollbackTriggered":false,"rollbackSuccess":true,"rollbackDurationMs":0,"timestamp":"2026-02-18T20:15:58.922Z"}
+{"agent":"qa-agent","operation":"execute-smoke-suite","latencyMs":210,"success":true,"rollbackTriggered":false,"rollbackSuccess":true,"rollbackDurationMs":0,"timestamp":"2026-02-18T20:15:59.922Z"}
+{"agent":"qa-agent","operation":"validate-regression-diff","latencyMs":190,"success":true,"rollbackTriggered":false,"rollbackSuccess":true,"rollbackDurationMs":0,"timestamp":"2026-02-18T20:16:00.922Z"}
+{"agent":"sre-agent","operation":"approve-rollout-gate","latencyMs":240,"success":true,"rollbackTriggered":false,"rollbackSuccess":true,"rollbackDurationMs":0,"timestamp":"2026-02-18T20:16:01.922Z"}
+{"agent":"sre-agent","operation":"observe-error-budget","latencyMs":180,"success":true,"rollbackTriggered":false,"rollbackSuccess":true,"rollbackDurationMs":0,"timestamp":"2026-02-18T20:16:02.922Z"}
+{"agent":"qa-agent","operation":"detect-risky-config-change","latencyMs":260,"success":false,"rollbackTriggered":true,"rollbackSuccess":true,"rollbackDurationMs":140,"timestamp":"2026-02-18T20:16:03.922Z"}
+{"agent":"sre-agent","operation":"post-rollback-stability-check","latencyMs":170,"success":true,"rollbackTriggered":false,"rollbackSuccess":true,"rollbackDurationMs":0,"timestamp":"2026-02-18T20:16:04.922Z"}

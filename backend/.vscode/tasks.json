@@ -1,0 +1,66 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Run All Jest Tests",
+			"type": "shell",
+			"command": "npx jest --runInBand --coverage",
+			"problemMatcher": [
+				"$tsc"
+			],
+			"group": "test"
+		},
+		{
+			"label": "Run All Cypress E2E",
+			"type": "shell",
+			"command": "npx cypress run",
+			"problemMatcher": [
+				"$tsc"
+			],
+			"group": "test"
+		},
+		{
+			"label": "Jest: Run All Tests",
+			"type": "shell",
+			"command": "npx jest --runInBand --coverage",
+			"problemMatcher": [
+				"$tsc"
+			],
+			"group": "test"
+		},
+		{
+			"label": "Cypress: Run All E2E",
+			"type": "shell",
+			"command": "npx cypress run",
+			"problemMatcher": [
+				"$tsc"
+			],
+			"group": "test"
+		},
+		{
+			"label": "Backend Stress Test (Local Smoke)",
+			"type": "shell",
+			"command": "pnpm run stress:local:smoke",
+			"isBackground": false,
+			"group": "test"
+		},
+		{
+			"label": "Backend Stress Test (Direct)",
+			"type": "shell",
+			"command": "pnpm exec tsx scripts/stress/run-local-smoke.ts",
+			"isBackground": false,
+			"group": "test"
+		},
+		{
+			"label": "Lint Backend",
+			"type": "shell",
+			"command": "pnpm run lint",
+			"args": [],
+			"isBackground": false,
+			"problemMatcher": [
+				"$eslint"
+			],
+			"group": "build"
+		}
+	]
+}

@@ -1,0 +1,7 @@
+# Ignore build output and generated files
+**/dist/
+**/*.d.ts
+!**/src/**/*.ts
+!**/src/**/*.tsx
+coverage/
+node_modules/
