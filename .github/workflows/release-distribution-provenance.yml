@@ -1,0 +1,245 @@
+name: Release Distribution Provenance
+
+on:
+  workflow_dispatch:
+    inputs:
+      component:
+        description: Select component(s) to build and package
+        required: true
+        default: both
+        type: choice
+        options:
+          - backend
+          - desktop
+          - both
+      enableSigning:
+        description: Generate detached signatures for manifests (requires secret)
+        required: true
+        default: true
+        type: boolean
+      publishToGitHubRelease:
+        description: Publish built artifacts/manifests to a GitHub Release
+        required: true
+        default: false
+        type: boolean
+      releaseTag:
+        description: Release tag (required when publishToGitHubRelease=true)
+        required: false
+        default: ''
+      releaseName:
+        description: Optional release title override
+        required: false
+        default: ''
+      releaseEnvironment:
+        description: GitHub environment required for publish approval
+        required: true
+        default: production-release
+      retentionDays:
+        description: Artifact retention days
+        required: true
+        default: '30'
+
+env:
+  PROVENANCE_ENABLE_SIGNING: ${{ github.event.inputs.enableSigning == 'true' && 'true' || 'false' }}
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release-distribution-provenance-${{ github.ref }}
+  cancel-in-progress: false
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  backend-distribution:
+    if: github.event.inputs.component == 'backend' || github.event.inputs.component == 'both'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+          cache-dependency-path: pnpm-lock.yaml
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      - name: Build backend
+        run: pnpm --dir backend run build
+      - name: Package backend artifact
+        run: |
+          mkdir -p release-artifacts/backend
+          tar -czf release-artifacts/backend/liveops-backend-${GITHUB_SHA}.tar.gz -C backend dist package.json
+      - name: Generate backend provenance manifest
+        env:
+          PROVENANCE_SIGNING_PRIVATE_KEY: ${{ secrets.POSEIDON_PROVENANCE_SIGNING_PRIVATE_KEY }}
+        run: |
+          node scripts/release/generate-provenance-manifest.mjs \
+            --component=backend \
+            --inputDir=release-artifacts/backend \
+            --output=governance-artifacts/release-provenance-backend-${GITHUB_RUN_ID}.json
+      - name: Backend provenance summary
+        if: always()
+        run: |
+          echo "## Backend Distribution Provenance" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Artifact bundle: release-distribution-backend-${GITHUB_RUN_ID}" >> "$GITHUB_STEP_SUMMARY"
+          ls -1 governance-artifacts/release-provenance-backend-${GITHUB_RUN_ID}.json* 2>/dev/null | sed 's/^/- Manifest: /' >> "$GITHUB_STEP_SUMMARY" || true
+      - name: Upload backend distribution artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-distribution-backend-${{ github.run_id }}
+          path: |
+            release-artifacts/backend/*.tar.gz
+            governance-artifacts/release-provenance-backend-${{ github.run_id }}.json
+            governance-artifacts/release-provenance-backend-${{ github.run_id }}.json.sig
+          if-no-files-found: error
+          retention-days: ${{ fromJSON(github.event.inputs.retentionDays) }}
+
+  desktop-distribution:
+    if: github.event.inputs.component == 'desktop' || github.event.inputs.component == 'both'
+    runs-on: windows-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+          cache-dependency-path: pnpm-lock.yaml
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      - name: Build desktop main bundle
+        run: pnpm --dir poseidon-desktop run build:main
+      - name: Package desktop artifact
+        shell: powershell
+        run: |
+          New-Item -ItemType Directory -Force -Path release-artifacts/desktop | Out-Null
+          Compress-Archive -Path poseidon-desktop/dist/main/* -DestinationPath release-artifacts/desktop/poseidon-desktop-main-$env:GITHUB_SHA.zip -Force
+      - name: Generate desktop provenance manifest
+        env:
+          PROVENANCE_SIGNING_PRIVATE_KEY: ${{ secrets.POSEIDON_PROVENANCE_SIGNING_PRIVATE_KEY }}
+        run: |
+          node scripts/release/generate-provenance-manifest.mjs --component=desktop --inputDir=release-artifacts/desktop --output=governance-artifacts/release-provenance-desktop-${GITHUB_RUN_ID}.json
+      - name: Desktop provenance summary
+        if: always()
+        run: |
+          echo "## Desktop Distribution Provenance" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Artifact bundle: release-distribution-desktop-${GITHUB_RUN_ID}" >> "$GITHUB_STEP_SUMMARY"
+      - name: Upload desktop distribution artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-distribution-desktop-${{ github.run_id }}
+          path: |
+            release-artifacts/desktop/*.zip
+            governance-artifacts/release-provenance-desktop-${{ github.run_id }}.json
+            governance-artifacts/release-provenance-desktop-${{ github.run_id }}.json.sig
+          if-no-files-found: error
+          retention-days: ${{ fromJSON(github.event.inputs.retentionDays) }}
+
+  publish-github-release:
+    needs:
+      - backend-distribution
+      - desktop-distribution
+    if: ${{ always() && github.event.inputs.publishToGitHubRelease == 'true' && (needs.backend-distribution.result == 'success' || needs.desktop-distribution.result == 'success') && needs.backend-distribution.result != 'failure' && needs.desktop-distribution.result != 'failure' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    environment:
+      name: ${{ github.event.inputs.releaseEnvironment }}
+      url: ${{ format('https://github.com/{0}/releases/tag/{1}', github.repository, github.event.inputs.releaseTag) }}
+    steps:
+      - name: Validate release tag input
+        run: |
+          if [[ -z "${{ github.event.inputs.releaseTag }}" ]]; then
+            echo "releaseTag is required when publishToGitHubRelease=true" >&2
+            exit 1
+          fi
+
+      - name: Download release distribution artifacts
+        uses: actions/download-artifact@v4
+        with:
+          pattern: release-distribution-*-${{ github.run_id }}
+          merge-multiple: true
+          path: release-publish-input
+
+      - name: Enforce immutable release tag
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if gh release view "${{ github.event.inputs.releaseTag }}" --repo "${{ github.repository }}" >/dev/null 2>&1; then
+            echo "Release tag already exists and immutable policy is enforced: ${{ github.event.inputs.releaseTag }}" >&2
+            exit 1
+          fi
+
+      - name: Validate release signing policy
+        run: |
+          if [[ "${{ github.event.inputs.publishToGitHubRelease }}" == "true" && "${{ github.event.inputs.enableSigning }}" != "true" ]]; then
+            echo "Production release publish requires enableSigning=true" >&2
+            exit 1
+          fi
+
+          sig_count=$(find release-publish-input -type f -name '*.sig' | wc -l | tr -d ' ')
+          if [[ "${{ github.event.inputs.enableSigning }}" == "true" && "$sig_count" -lt 1 ]]; then
+            echo "No detached provenance signatures found for release publish." >&2
+            exit 1
+          fi
+
+      - name: Create release notes
+        run: |
+          cat > release-notes.md <<'EOF'
+          Release distribution generated by workflow: release-distribution-provenance
+
+          Included artifacts:
+          - Backend packaged bundle and provenance manifest (if backend selected)
+          - Desktop packaged bundle and provenance manifest (if desktop selected)
+          - Detached provenance signatures when signing is enabled
+
+          Immutability policy:
+          - release tag must not pre-exist
+          - reruns with same tag are rejected
+          EOF
+
+      - name: Publish GitHub Release with provenance assets
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          mapfile -t files < <(find release-publish-input -type f | sort)
+          if [[ ${#files[@]} -eq 0 ]]; then
+            echo "No release assets found after artifact download." >&2
+            exit 1
+          fi
+
+          release_name="${{ github.event.inputs.releaseName }}"
+          if [[ -z "$release_name" ]]; then
+            release_name="Poseidon Release ${{ github.event.inputs.releaseTag }}"
+          fi
+
+          gh release create "${{ github.event.inputs.releaseTag }}" \
+            "${files[@]}" \
+            --repo "${{ github.repository }}" \
+            --target "${{ github.sha }}" \
+            --title "$release_name" \
+            --notes-file release-notes.md
+
+      - name: Release publish summary
+        if: always()
+        run: |
+          echo "## Immutable Release Publish" >> "$GITHUB_STEP_SUMMARY"
+          echo "- publish requested: ${{ github.event.inputs.publishToGitHubRelease }}" >> "$GITHUB_STEP_SUMMARY"
+          echo "- environment gate: ${{ github.event.inputs.releaseEnvironment }}" >> "$GITHUB_STEP_SUMMARY"
+          echo "- tag: ${{ github.event.inputs.releaseTag }}" >> "$GITHUB_STEP_SUMMARY"
+          echo "- release: https://github.com/${{ github.repository }}/releases/tag/${{ github.event.inputs.releaseTag }}" >> "$GITHUB_STEP_SUMMARY"

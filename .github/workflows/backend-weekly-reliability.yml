@@ -1,0 +1,453 @@
+name: Backend Weekly Reliability Stress
+
+on:
+  schedule:
+    - cron: "0 8 * * 1"
+  workflow_dispatch:
+    inputs:
+      failOnWarn:
+        description: Fail run on regression warnings
+        required: true
+        default: true
+        type: boolean
+      warnP95Ms:
+        description: Warn threshold for p95 increase (ms)
+        required: true
+        default: '40'
+        type: string
+      warnErrorRate:
+        description: Warn threshold for absolute error-rate increase (0-1)
+        required: true
+        default: '0.003'
+        type: string
+      warnRequestDropRatio:
+        description: Warn threshold for request-volume drop ratio (0-1)
+        required: true
+        default: '0.30'
+        type: string
+      soakDurationSeconds:
+        description: Soak duration override in seconds
+        required: true
+        default: '300'
+        type: string
+      issueWarningThreshold:
+        description: Open/update issue when warning count is >= this value
+        required: true
+        default: '1'
+        type: string
+      issueLabels:
+        description: Comma-separated labels for regression issues
+        required: true
+        default: 'reliability,backend,performance'
+        type: string
+      issueAssignees:
+        description: Comma-separated GitHub usernames to assign (optional)
+        required: false
+        default: ''
+        type: string
+
+permissions:
+  contents: read
+  issues: write
+
+concurrency:
+  group: backend-weekly-reliability-stress
+  cancel-in-progress: true
+
+jobs:
+  reliability:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    strategy:
+      fail-fast: false
+      matrix:
+        profile: [spike, soak]
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_DB: ${{ vars.POSEIDON_DB_NAME || 'liveops' }}
+          POSTGRES_USER: user
+          POSTGRES_PASSWORD: password
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    env:
+      DATABASE_URL: postgres://user:password@localhost:5432/${{ vars.POSEIDON_DB_NAME || 'liveops' }}
+      JWT_SECRET: test_secret
+      BACKEND_BASE_URL: http://127.0.0.1:4000
+      STRESS_REPORT_PATH: stress-artifacts/stress-${{ matrix.profile }}-report.json
+      STRESS_REGRESSION_WARN_P95_MS: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.warnP95Ms || '40' }}
+      STRESS_REGRESSION_WARN_ERROR_RATE: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.warnErrorRate || '0.003' }}
+      STRESS_REGRESSION_WARN_REQUEST_DROP_RATIO: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.warnRequestDropRatio || '0.30' }}
+      STRESS_REGRESSION_FAIL_ON_WARN: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.failOnWarn || 'false' }}
+      STRESS_BASELINE_PATH: scripts/stress/baseline-${{ matrix.profile }}-report.json
+      STRESS_DURATION_SECONDS: ${{ matrix.profile == 'soak' && (github.event_name == 'workflow_dispatch' && github.event.inputs.soakDurationSeconds || '300') || '' }}
+      STRESS_ISSUE_WARNING_THRESHOLD: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.issueWarningThreshold || '1' }}
+      STRESS_ISSUE_LABELS: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.issueLabels || 'reliability,backend,performance' }}
+      STRESS_ISSUE_ASSIGNEES: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.issueAssignees || '' }}
+    defaults:
+      run:
+        working-directory: backend
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Run Prisma migrations
+        run: pnpm exec prisma migrate deploy
+
+      - name: Seed database
+        run: pnpm exec ts-node prisma/seed.ts
+
+      - name: Start backend
+        run: mkdir -p stress-artifacts; pnpm run dev > stress-artifacts/backend-dev.log 2>&1 &
+
+      - name: Wait for backend
+        run: npx wait-on http://127.0.0.1:4000/healthz
+
+      - name: Run stress profile
+        run: pnpm run stress:${{ matrix.profile }} | tee stress-artifacts/stress-${{ matrix.profile }}.log
+
+      - name: Build stress markdown summary
+        if: always()
+        run: |
+          if [ -f stress-artifacts/stress-${{ matrix.profile }}-report.json ]; then
+            pnpm exec tsx scripts/stress/summarize-report.ts \
+              stress-artifacts/stress-${{ matrix.profile }}-report.json \
+              stress-artifacts/stress-${{ matrix.profile }}-summary.md \
+              "$STRESS_BASELINE_PATH" \
+              stress-artifacts/stress-${{ matrix.profile }}-summary-meta.json
+          else
+            echo "## Backend Weekly Reliability Summary (${{ matrix.profile }})" > stress-artifacts/stress-${{ matrix.profile }}-summary.md
+            echo "" >> stress-artifacts/stress-${{ matrix.profile }}-summary.md
+            echo "Stress report file missing; run likely failed before report generation." >> stress-artifacts/stress-${{ matrix.profile }}-summary.md
+            echo '{"profile":"${{ matrix.profile }}","reportPassed":false,"warningCount":0,"baselineComparable":false,"failOnWarning":false}' > stress-artifacts/stress-${{ matrix.profile }}-summary-meta.json
+          fi
+
+      - name: Read regression warning count
+        id: warning_count
+        if: always()
+        run: |
+          warnings=$(node -e "const fs=require('fs'); const p='stress-artifacts/stress-${{ matrix.profile }}-summary-meta.json'; const j=JSON.parse(fs.readFileSync(p,'utf8')); process.stdout.write(String(j.warningCount ?? 0));")
+          report_passed=$(node -e "const fs=require('fs'); const p='stress-artifacts/stress-${{ matrix.profile }}-summary-meta.json'; const j=JSON.parse(fs.readFileSync(p,'utf8')); process.stdout.write(String(Boolean(j.reportPassed)));")
+          threshold="${STRESS_ISSUE_WARNING_THRESHOLD}"
+          if [ "$warnings" -ge "$threshold" ]; then
+            should_open="true"
+          else
+            should_open="false"
+          fi
+          if [ "$warnings" -eq 0 ] && [ "$report_passed" = "true" ]; then
+            should_close="true"
+          else
+            should_close="false"
+          fi
+          echo "warnings_count=$warnings" >> "$GITHUB_OUTPUT"
+          echo "threshold=$threshold" >> "$GITHUB_OUTPUT"
+          echo "report_passed=$report_passed" >> "$GITHUB_OUTPUT"
+          echo "should_open_issue=$should_open" >> "$GITHUB_OUTPUT"
+          echo "should_close_issue=$should_close" >> "$GITHUB_OUTPUT"
+
+      - name: Build canonical weekly result JSON
+        if: always()
+        env:
+          PROFILE: ${{ matrix.profile }}
+          WARNINGS_COUNT: ${{ steps.warning_count.outputs.warnings_count }}
+          WARNING_THRESHOLD: ${{ steps.warning_count.outputs.threshold }}
+          REPORT_PASSED: ${{ steps.warning_count.outputs.report_passed }}
+          SHOULD_OPEN_ISSUE: ${{ steps.warning_count.outputs.should_open_issue }}
+          SHOULD_CLOSE_ISSUE: ${{ steps.warning_count.outputs.should_close_issue }}
+        run: |
+          node -e "const fs=require('fs'); const out='stress-artifacts/workflow-run-weekly-reliability.json'; const profile=process.env.PROFILE; const warnings=Number(process.env.WARNINGS_COUNT||0); const threshold=Number(process.env.WARNING_THRESHOLD||1); const reportPassed=(process.env.REPORT_PASSED||'false')==='true'; const shouldOpen=(process.env.SHOULD_OPEN_ISSUE||'false')==='true'; const shouldClose=(process.env.SHOULD_CLOSE_ISSUE||'false')==='true'; const metadataPath=`stress-artifacts/stress-${profile}-summary-meta.json`; let meta={baselineComparable:false,failOnWarning:false}; if(fs.existsSync(metadataPath)){ try{ const parsed=JSON.parse(fs.readFileSync(metadataPath,'utf8')); meta={baselineComparable:Boolean(parsed.baselineComparable), failOnWarning:Boolean(parsed.failOnWarning)}; }catch{} } const payload={schemaVersion:1, ok: reportPassed, mode:'weekly-reliability', profile, repository: process.env.GITHUB_REPOSITORY, branch: process.env.GITHUB_REF_NAME, runId: process.env.GITHUB_RUN_ID, runNumber: process.env.GITHUB_RUN_NUMBER, runUrl: `https://github.com/${process.env.GITHUB_REPOSITORY}/actions/runs/${process.env.GITHUB_RUN_ID}`, reportPassed, warningCount:warnings, warningThreshold:threshold, shouldOpenIssue:shouldOpen, shouldCloseIssue:shouldClose, baselineComparable:meta.baselineComparable, failOnWarning:meta.failOnWarning, metadataPath, summaryPath:`stress-artifacts/stress-${profile}-summary.md`, reportPath:`stress-artifacts/stress-${profile}-report.json`}; fs.writeFileSync(out, JSON.stringify(payload,null,2)+'\\n');"
+
+      - name: Validate canonical weekly result schema
+        if: always()
+        run: pnpm run stress:validate:canonical -- --path stress-artifacts/workflow-run-weekly-reliability.json
+
+      - name: Open or update regression issue
+        if: always() && github.ref_name == github.event.repository.default_branch && steps.warning_count.outputs.should_open_issue == 'true'
+        uses: actions/github-script@v7
+        env:
+          WARNINGS_COUNT: ${{ steps.warning_count.outputs.warnings_count }}
+          WARNING_THRESHOLD: ${{ steps.warning_count.outputs.threshold }}
+          PROFILE: ${{ matrix.profile }}
+          ISSUE_LABELS: ${{ env.STRESS_ISSUE_LABELS }}
+          ISSUE_ASSIGNEES: ${{ env.STRESS_ISSUE_ASSIGNEES }}
+        with:
+          script: |
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            const profile = process.env.PROFILE;
+            const warningCount = process.env.WARNINGS_COUNT;
+            const warningThreshold = process.env.WARNING_THRESHOLD;
+            const configuredLabels = (process.env.ISSUE_LABELS || '')
+              .split(',')
+              .map((item) => item.trim())
+              .filter(Boolean);
+            const profileLabels = [`reliability-${profile}`, `stress-${profile}`];
+            const desiredLabels = [...new Set([...configuredLabels, ...profileLabels])];
+            const configuredAssignees = (process.env.ISSUE_ASSIGNEES || '')
+              .split(',')
+              .map((item) => item.trim())
+              .filter(Boolean);
+            const runUrl = `https://github.com/${owner}/${repo}/actions/runs/${context.runId}`;
+            const title = `[Reliability Regression] ${profile} warnings >= threshold`;
+
+            const issueBody = [
+              `Weekly reliability stress detected regression warnings for profile \`${profile}\`.`,
+              '',
+              `- warning count: **${warningCount}**`,
+              `- threshold: **${warningThreshold}**`,
+              `- workflow run: ${runUrl}`,
+              '',
+              'Check artifacts:',
+              `- stress-${profile}-summary.md`,
+              `- stress-${profile}-summary-meta.json`,
+              `- stress-${profile}.log`,
+              `- stress-${profile}-report.json`
+            ].join('\n');
+
+            const { data: issues } = await github.rest.issues.listForRepo({
+              owner,
+              repo,
+              state: 'open',
+              per_page: 100,
+            });
+
+            let labelsToApply = [];
+            if (desiredLabels.length > 0) {
+              try {
+                const { data: repoLabels } = await github.rest.issues.listLabelsForRepo({
+                  owner,
+                  repo,
+                  per_page: 100,
+                });
+                const available = new Set(repoLabels.map((label) => label.name));
+                labelsToApply = desiredLabels.filter((label) => available.has(label));
+              } catch (error) {
+                core.warning(`Unable to load repository labels: ${error.message}`);
+              }
+            }
+
+            const assigneesToApply = [];
+            for (const username of configuredAssignees) {
+              try {
+                await github.rest.users.getByUsername({ username });
+                assigneesToApply.push(username);
+              } catch (error) {
+                core.warning(`Skipping unknown assignee '${username}': ${error.message}`);
+              }
+            }
+
+            const existing = issues.find((issue) => issue.title === title);
+
+            if (existing) {
+              await github.rest.issues.createComment({
+                owner,
+                repo,
+                issue_number: existing.number,
+                body: issueBody,
+              });
+
+              if (labelsToApply.length > 0) {
+                try {
+                  await github.rest.issues.addLabels({
+                    owner,
+                    repo,
+                    issue_number: existing.number,
+                    labels: labelsToApply,
+                  });
+                } catch (error) {
+                  core.warning(`Unable to add labels to existing issue #${existing.number}: ${error.message}`);
+                }
+              }
+
+              if (assigneesToApply.length > 0) {
+                try {
+                  await github.rest.issues.addAssignees({
+                    owner,
+                    repo,
+                    issue_number: existing.number,
+                    assignees: assigneesToApply,
+                  });
+                } catch (error) {
+                  core.warning(`Unable to add assignees to existing issue #${existing.number}: ${error.message}`);
+                }
+              }
+
+              core.info(`Updated existing issue #${existing.number}`);
+            } else {
+              const createPayload = {
+                owner,
+                repo,
+                title,
+                body: issueBody,
+              };
+              if (labelsToApply.length > 0) {
+                createPayload.labels = labelsToApply;
+              }
+              if (assigneesToApply.length > 0) {
+                createPayload.assignees = assigneesToApply;
+              }
+
+              const created = await github.rest.issues.create(createPayload);
+              core.info(`Created issue #${created.data.number}`);
+            }
+
+      - name: Close resolved regression issue
+        if: always() && github.ref_name == github.event.repository.default_branch && steps.warning_count.outputs.should_close_issue == 'true'
+        uses: actions/github-script@v7
+        env:
+          PROFILE: ${{ matrix.profile }}
+        with:
+          script: |
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            const profile = process.env.PROFILE;
+            const runUrl = `https://github.com/${owner}/${repo}/actions/runs/${context.runId}`;
+            const title = `[Reliability Regression] ${profile} warnings >= threshold`;
+
+            const { data: issues } = await github.rest.issues.listForRepo({
+              owner,
+              repo,
+              state: 'open',
+              per_page: 100,
+            });
+
+            const existing = issues.find((issue) => issue.title === title);
+            if (!existing) {
+              core.info(`No open regression issue found for profile '${profile}'.`);
+              return;
+            }
+
+            await github.rest.issues.createComment({
+              owner,
+              repo,
+              issue_number: existing.number,
+              body: [
+                `Regression warnings cleared for profile \`${profile}\` in weekly reliability run.`,
+                '',
+                `- warning count: **0**`,
+                `- workflow run: ${runUrl}`,
+                '',
+                'Closing this issue automatically.'
+              ].join('\n'),
+            });
+
+            await github.rest.issues.update({
+              owner,
+              repo,
+              issue_number: existing.number,
+              state: 'closed',
+            });
+
+            core.info(`Closed resolved regression issue #${existing.number}`);
+
+      - name: Note issue-write guard skip
+        if: always() && github.ref_name != github.event.repository.default_branch
+        run: |
+          echo "- issue write automation skipped for profile \`${{ matrix.profile }}\` on non-default branch \`${{ github.ref_name }}\` (default: \`${{ github.event.repository.default_branch }}\`)." >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Publish summary to job
+        if: always()
+        run: |
+          echo "## Profile: ${{ matrix.profile }}" >> "$GITHUB_STEP_SUMMARY"
+          cat stress-artifacts/stress-${{ matrix.profile }}-summary.md >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload stress artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: backend-weekly-reliability-${{ matrix.profile }}
+          path: |
+            backend/stress-artifacts/stress-${{ matrix.profile }}-report.json
+            backend/stress-artifacts/stress-${{ matrix.profile }}.log
+            backend/stress-artifacts/stress-${{ matrix.profile }}-summary.md
+            backend/stress-artifacts/stress-${{ matrix.profile }}-summary-meta.json
+            backend/stress-artifacts/workflow-run-weekly-reliability.json
+            backend/stress-artifacts/backend-dev.log
+
+      - name: Stop backend
+        if: always()
+        run: pkill -f "ts-node-dev src/index.ts" || true
+
+  validate-artifacts:
+    if: always()
+    needs: reliability
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: backend
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Download weekly artifacts
+        uses: actions/download-artifact@v4
+        with:
+          pattern: backend-weekly-reliability-*
+          path: backend/stress-artifacts/weekly-download
+
+      - name: Validate downloaded canonical artifacts
+        run: |
+          mapfile -t files < <(find stress-artifacts/weekly-download -type f -name 'workflow-run-weekly-reliability.json')
+          if [ "${#files[@]}" -eq 0 ]; then
+            {
+              echo "## Canonical Artifact Validation"
+              echo "- workflow: weekly-reliability"
+              echo "- validated files: 0"
+              echo "- result: FAIL (no canonical artifact found in downloaded bundles)"
+            } >> "$GITHUB_STEP_SUMMARY"
+            echo "No canonical weekly artifacts found in downloaded bundles."
+            exit 1
+          fi
+          validated=0
+          for file in "${files[@]}"; do
+            echo "Validating $file"
+            pnpm run stress:validate:canonical -- --path "$file"
+            validated=$((validated + 1))
+          done
+          if [ "$validated" -lt 2 ]; then
+            {
+              echo "## Canonical Artifact Validation"
+              echo "- workflow: weekly-reliability"
+              echo "- validated files: $validated"
+              echo "- result: FAIL (validated file count below minimum: expected >= 2)"
+            } >> "$GITHUB_STEP_SUMMARY"
+            echo "Validated file count below minimum for weekly workflow (expected >= 2, got $validated)."
+            exit 1
+          fi
+          {
+            echo "## Canonical Artifact Validation"
+            echo "- workflow: weekly-reliability"
+            echo "- validated files: $validated"
+            echo "- result: PASS"
+          } >> "$GITHUB_STEP_SUMMARY"

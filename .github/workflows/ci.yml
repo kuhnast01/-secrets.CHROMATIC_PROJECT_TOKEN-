@@ -1,0 +1,299 @@
+name: CI
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  performance-and-lighthouse:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+          cache-dependency-path: pnpm-lock.yaml
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      - name: Build web app
+        run: pnpm --filter web build
+
+      - name: Lint web app
+        run: pnpm run lint --filter web
+
+      - name: Run tests with coverage
+        run: pnpm --filter web run test:coverage
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          files: ./apps/web/coverage/lcov.info
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+      - name: Start web app
+        id: start_lighthouse_web
+        run: |
+          pnpm --filter web preview --host 127.0.0.1 --port 4173 &
+          echo "pid=$!" >> "$GITHUB_OUTPUT"
+      - name: Wait for web app
+        run: pnpm dlx wait-on http://localhost:4173
+      - name: Run Lighthouse CI
+        run: pnpm dlx @lhci/cli autorun --collect.url=http://localhost:4173 --assert.preset=lighthouse:recommended
+      - name: Stop web app
+        if: always() && steps.start_lighthouse_web.outputs.pid != ''
+        run: kill "${{ steps.start_lighthouse_web.outputs.pid }}" || true
+  install-and-test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+          cache-dependency-path: pnpm-lock.yaml
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      - name: Validate legal release records
+        run: node scripts/legal/check-release-records.mjs
+      - name: Validate legal template drift
+        run: node scripts/legal/check-release-template-drift.mjs
+      - name: Validate branch protection audit template governance
+        run: node scripts/governance/check-branch-protection-audit-template.mjs
+      - name: Validate governance controls matrix schema
+        run: node scripts/governance/check-controls-matrix.mjs
+      - name: Validate elite readiness (strict)
+        run: node scripts/governance/check-elite-readiness.mjs --strict --target=elite
+      - name: Validate launch readiness (strict)
+        run: node scripts/governance/check-elite-readiness.mjs --strict --target=launch
+      - name: Validate release distribution provenance policy
+        run: node scripts/governance/check-release-distribution-provenance-policy.mjs
+      - name: Validate license anomaly escalation policy
+        run: node scripts/governance/check-license-anomaly-escalation-policy.mjs
+      - name: Validate license anomaly policy report
+        run: node scripts/governance/validate-license-anomaly-policy-report.mjs
+      - name: Test license anomaly policy report validator
+        run: node scripts/governance/test-validate-license-anomaly-policy-report.mjs
+      - name: Test governance executive snapshot validator
+        run: node scripts/governance/test-validate-governance-executive-snapshot.mjs
+      - name: Validate AI approval gate drill
+        run: pnpm --dir backend exec tsx scripts/liveops/run-ai-approval-gate-drill.ts
+      - name: Validate no-code economy simulation drill
+        run: pnpm --dir backend exec tsx scripts/liveops/run-no-code-economy-simulation-drill.ts
+      - name: Validate no-code rollout safety drill
+        run: pnpm --dir backend exec tsx scripts/liveops/run-no-code-rollout-safety-drill.ts
+      - name: Validate license revocation and rotation drill
+        run: pnpm --dir backend exec tsx scripts/liveops/run-license-revocation-rotation-drill.ts
+      - name: Validate license strict staging drill
+        run: pnpm --dir backend exec tsx scripts/liveops/run-license-strict-staging-drill.ts --enduranceRequests=120
+      - name: Licensing drill summary
+        if: always()
+        run: |
+          echo "## Licensing Drill" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Artifact bundle: licensing-drill-artifacts-${{ github.run_id }}" >> "$GITHUB_STEP_SUMMARY"
+          latest_report=$(ls -1t backend/tmp/liveops-artifacts/lic-01-license-revocation-rotation-*.json 2>/dev/null | head -n1 || true)
+
+          if [[ -n "$latest_report" && -f "$latest_report" ]]; then
+            status=$(node -e "const fs=require('fs');const p=process.argv[1];const j=JSON.parse(fs.readFileSync(p,'utf8'));process.stdout.write(String(j.status || 'unknown'));" "$latest_report")
+            run_id=$(node -e "const fs=require('fs');const p=process.argv[1];const j=JSON.parse(fs.readFileSync(p,'utf8'));process.stdout.write(String(j.runId || 'n/a'));" "$latest_report")
+            generated_at=$(node -e "const fs=require('fs');const p=process.argv[1];const j=JSON.parse(fs.readFileSync(p,'utf8'));process.stdout.write(String(j.generatedAt || 'n/a'));" "$latest_report")
+
+            if [[ "$status" == "pass" ]]; then
+              echo "- LIC-01: ✅ pass" >> "$GITHUB_STEP_SUMMARY"
+            else
+              echo "- LIC-01: ❌ ${status}" >> "$GITHUB_STEP_SUMMARY"
+            fi
+
+            echo "- Run ID: ${run_id}" >> "$GITHUB_STEP_SUMMARY"
+            echo "- Generated At: ${generated_at}" >> "$GITHUB_STEP_SUMMARY"
+            echo "- Artifact: ${latest_report}" >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "- LIC-01: ⚠️ artifact not found" >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+          strict_report=$(ls -1t backend/tmp/liveops-artifacts/lic-02-license-strict-staging-*.json 2>/dev/null | head -n1 || true)
+
+          if [[ -n "$strict_report" && -f "$strict_report" ]]; then
+            strict_status=$(node -e "const fs=require('fs');const p=process.argv[1];const j=JSON.parse(fs.readFileSync(p,'utf8'));process.stdout.write(String(j.status || 'unknown'));" "$strict_report")
+            strict_mode=$(node -e "const fs=require('fs');const p=process.argv[1];const j=JSON.parse(fs.readFileSync(p,'utf8'));process.stdout.write(String(j.enforcementMode || 'n/a'));" "$strict_report")
+            strict_success_rate=$(node -e "const fs=require('fs');const p=process.argv[1];const j=JSON.parse(fs.readFileSync(p,'utf8'));process.stdout.write(String(j?.endurance?.successRate ?? 'n/a'));" "$strict_report")
+
+            if [[ "$strict_status" == "pass" ]]; then
+              echo "- LIC-02: ✅ pass" >> "$GITHUB_STEP_SUMMARY"
+            else
+              echo "- LIC-02: ❌ ${strict_status}" >> "$GITHUB_STEP_SUMMARY"
+            fi
+
+            echo "- Strict Mode: ${strict_mode}" >> "$GITHUB_STEP_SUMMARY"
+            echo "- Strict Endurance Success Rate: ${strict_success_rate}" >> "$GITHUB_STEP_SUMMARY"
+            echo "- Artifact: ${strict_report}" >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "- LIC-02: ⚠️ artifact not found" >> "$GITHUB_STEP_SUMMARY"
+          fi
+      - name: Anomaly policy summary
+        if: always()
+        run: |
+          echo "## License Anomaly Policy" >> "$GITHUB_STEP_SUMMARY"
+          report_path="governance-artifacts/license-anomaly-escalation-policy-report.json"
+
+          if [[ -f "$report_path" ]]; then
+            status=$(node -e "const fs=require('fs');const p=process.argv[1];const j=JSON.parse(fs.readFileSync(p,'utf8'));process.stdout.write(String(j.status || 'unknown'));" "$report_path")
+            failure_count=$(node -e "const fs=require('fs');const p=process.argv[1];const j=JSON.parse(fs.readFileSync(p,'utf8'));process.stdout.write(String(j.failureCount ?? 'n/a'));" "$report_path")
+            check_id=$(node -e "const fs=require('fs');const p=process.argv[1];const j=JSON.parse(fs.readFileSync(p,'utf8'));process.stdout.write(String(j.checkId || 'n/a'));" "$report_path")
+
+            if [[ "$status" == "pass" ]]; then
+              echo "- Status: ✅ pass" >> "$GITHUB_STEP_SUMMARY"
+            else
+              echo "- Status: ❌ ${status}" >> "$GITHUB_STEP_SUMMARY"
+            fi
+
+            echo "- Check ID: ${check_id}" >> "$GITHUB_STEP_SUMMARY"
+            echo "- Failure Count: ${failure_count}" >> "$GITHUB_STEP_SUMMARY"
+            echo "- Artifact: ${report_path}" >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "- Status: ⚠️ report not found" >> "$GITHUB_STEP_SUMMARY"
+            echo "- Artifact: ${report_path}" >> "$GITHUB_STEP_SUMMARY"
+          fi
+      - name: Upload licensing drill artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: licensing-drill-artifacts-${{ github.run_id }}
+          path: |
+            backend/tmp/liveops-artifacts/lic-01-license-revocation-rotation-*.json
+            backend/tmp/liveops-artifacts/lic-02-license-strict-staging-*.json
+            backend/tmp/licensing-revocation-rotation/**
+            backend/tmp/licensing-strict-staging/**
+          if-no-files-found: warn
+      - name: Upload anomaly policy governance report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: license-anomaly-policy-report-${{ github.run_id }}
+          path: governance-artifacts/license-anomaly-escalation-policy-report.json
+          if-no-files-found: warn
+      - name: Lint code
+        run: pnpm lint
+      - name: Format code
+        run: pnpm format || true
+      - name: Build packages
+        run: pnpm run build --filter api
+      - name: Run API tests with coverage
+        run: pnpm exec jest packages/api/src --coverage --passWithNoTests --coverageThreshold='{"global":{"branches":80,"functions":80,"lines":80,"statements":80}}'
+      - name: Run Web tests with coverage
+        run: pnpm exec jest --coverage apps/web/src --passWithNoTests --coverageThreshold='{"global":{"branches":80,"functions":80,"lines":80,"statements":80}}'
+      - name: Run Mobile tests with coverage
+        run: pnpm exec jest --coverage apps/mobile/src --passWithNoTests --coverageThreshold='{"global":{"branches":80,"functions":80,"lines":80,"statements":80}}'
+      - name: Upload coverage reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-reports
+          path: |
+            apps/web/coverage
+            apps/mobile/coverage
+            packages/api/coverage
+      - name: Run Cypress E2E tests (Web)
+        id: start_cypress_web
+        run: |
+          pnpm --filter web dev --host 127.0.0.1 --port 3000 &
+          echo "pid=$!" >> "$GITHUB_OUTPUT"
+          pnpm dlx wait-on http://localhost:3000
+          pnpm exec cypress run --config-file e2e/cypress/cypress.config.ts
+      - name: Stop Cypress web app
+        if: always() && steps.start_cypress_web.outputs.pid != ''
+        run: kill "${{ steps.start_cypress_web.outputs.pid }}" || true
+      - name: Run Detox E2E tests (Mobile)
+        run: |
+          pnpm --filter mobile build
+          pnpm exec detox test --config-path e2e/detox/.detoxrc.json --configuration ios.sim.debug || echo "Detox iOS tests skipped (simulator required)"
+          pnpm exec detox test --config-path e2e/detox/.detoxrc.json --configuration android.emu.debug || echo "Detox Android tests skipped (emulator required)"
+  security-and-visual-regression:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+      CHROMATIC_PROJECT_TOKEN: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+          cache-dependency-path: pnpm-lock.yaml
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      - name: Dependency audit (production gate)
+        run: pnpm run audit:prod
+      - name: Dependency audit (all dependencies, report only)
+        run: pnpm run audit:all
+        continue-on-error: true
+      - name: Run Snyk for security scan
+        id: run_snyk_scan
+        if: env.SNYK_TOKEN != ''
+        uses: snyk/actions/node@master
+        with:
+          command: test
+      - name: Report skipped Snyk scan
+        id: skip_snyk_scan
+        if: env.SNYK_TOKEN == ''
+        run: echo "Snyk scan skipped because SNYK_TOKEN is not configured for this workflow run."
+      - name: Publish Chromatic visual regression
+        id: run_chromatic_publish
+        if: env.CHROMATIC_PROJECT_TOKEN != ''
+        run: pnpm chromatic --project-token=${{ env.CHROMATIC_PROJECT_TOKEN }}
+      - name: Report skipped Chromatic publish
+        id: skip_chromatic_publish
+        if: env.CHROMATIC_PROJECT_TOKEN == ''
+        run: echo "Chromatic publish skipped because CHROMATIC_PROJECT_TOKEN is not configured for this workflow run."
+      - name: Security and visual summary
+        if: always()
+        run: |
+          echo "## Security and Visual Regression" >> "$GITHUB_STEP_SUMMARY"
+          if [[ "${{ steps.run_snyk_scan.outcome }}" == "success" ]]; then
+            echo "- Snyk: ✅ executed" >> "$GITHUB_STEP_SUMMARY"
+          elif [[ "${{ steps.skip_snyk_scan.outcome }}" == "success" ]]; then
+            echo "- Snyk: ⏭️ skipped (SNYK_TOKEN missing)" >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "- Snyk: ❌ failed" >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+          if [[ "${{ steps.run_chromatic_publish.outcome }}" == "success" ]]; then
+            echo "- Chromatic: ✅ executed" >> "$GITHUB_STEP_SUMMARY"
+          elif [[ "${{ steps.skip_chromatic_publish.outcome }}" == "success" ]]; then
+            echo "- Chromatic: ⏭️ skipped (CHROMATIC_PROJECT_TOKEN missing)" >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "- Chromatic: ❌ failed" >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+

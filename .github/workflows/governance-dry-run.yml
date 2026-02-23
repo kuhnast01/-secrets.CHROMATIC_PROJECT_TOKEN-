@@ -1,0 +1,74 @@
+name: Governance Dry Run
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+  schedule:
+    - cron: "35 9 * * 1"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: governance-dry-run-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  governance-dry-run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Execute governance dry-run checks
+        run: node scripts/governance/run-governance-dry-run.mjs
+
+      - name: Publish governance summary
+        if: always()
+        shell: bash
+        run: |
+          if [ -f governance-artifacts/governance-dry-run-report.json ]; then
+            node - <<'NODE'
+            const fs = require('fs');
+            const report = JSON.parse(fs.readFileSync('governance-artifacts/governance-dry-run-report.json', 'utf8'));
+            const lines = [];
+            lines.push('## Governance Dry Run');
+            lines.push('');
+            lines.push(`- overall: **${report.ok ? 'PASS' : 'FAIL'}**`);
+            lines.push(`- started: \`${report.startedAt}\``);
+            lines.push(`- ended: \`${report.endedAt}\``);
+            lines.push(`- checks: \`${report.checks.length}\``);
+            if (Array.isArray(report.failedChecks) && report.failedChecks.length > 0) {
+              lines.push(`- failed checks: \`${report.failedChecks.join(', ')}\``);
+            }
+            fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY, lines.join('\n') + '\n');
+            NODE
+          else
+            echo "## Governance Dry Run" >> "$GITHUB_STEP_SUMMARY"
+            echo "- report file was not generated" >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+      - name: Upload governance artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: governance-dry-run-report
+          path: governance-artifacts/governance-dry-run-report.json

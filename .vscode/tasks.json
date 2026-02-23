@@ -1,0 +1,128 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Start web app",
+			"type": "shell",
+			"command": "pnpm --filter web dev"
+		},
+		{
+			"label": "Full Monorepo Build",
+			"type": "shell",
+			"command": "pnpm run build -r",
+			"args": [],
+			"problemMatcher": [
+				"$tsc"
+			],
+			"group": "build"
+		},
+		{
+			"label": "Full Monorepo Build",
+			"type": "shell",
+			"command": "pnpm run build -r",
+			"args": [],
+			"problemMatcher": [
+				"$tsc"
+			],
+			"group": "build"
+		},
+		{
+			"label": "Full Monorepo Build",
+			"type": "shell",
+			"command": "pnpm run build -r",
+			"args": [],
+			"problemMatcher": [
+				"$tsc"
+			],
+			"group": "build"
+		},
+		{
+			"label": "Full Monorepo Build",
+			"type": "shell",
+			"command": "pnpm run build -r",
+			"args": [],
+			"problemMatcher": [
+				"$tsc"
+			],
+			"group": "build"
+		},
+		{
+			"label": "Full Monorepo Build",
+			"type": "shell",
+			"command": "pnpm run build -r",
+			"args": [],
+			"problemMatcher": [
+				"$tsc"
+			],
+			"group": "build"
+		},
+		{
+			"label": "Full Monorepo Build",
+			"type": "shell",
+			"command": "pnpm run build -r",
+			"args": [],
+			"problemMatcher": [
+				"$tsc"
+			],
+			"group": "build"
+		},
+		{
+			"label": "Full Monorepo Build",
+			"type": "shell",
+			"command": "pnpm run build -r",
+			"args": [],
+			"problemMatcher": [
+				"$tsc"
+			],
+			"group": "build"
+		},
+		{
+			"label": "Full Monorepo Build",
+			"type": "shell",
+			"command": "pnpm run build -r",
+			"args": [],
+			"problemMatcher": [
+				"$tsc"
+			],
+			"group": "build"
+		},
+		{
+			"label": "Full Monorepo Build",
+			"type": "shell",
+			"command": "pnpm run build -r",
+			"args": [],
+			"problemMatcher": [
+				"$tsc"
+			],
+			"group": "build"
+		},
+		{
+			"label": "Full Platform Battery Test",
+			"type": "shell",
+			"command": "pnpm run test -r",
+			"isBackground": false,
+			"group": "test"
+		},
+		{
+			"label": "Stress Test (Smoke)",
+			"type": "shell",
+			"command": "pnpm run stress:local:smoke",
+			"isBackground": false,
+			"group": "test"
+		},
+		{
+			"label": "Monorepo Test (No -r)",
+			"type": "shell",
+			"command": "pnpm run test",
+			"isBackground": false,
+			"group": "test"
+		},
+		{
+			"label": "Monorepo Full Test",
+			"type": "shell",
+			"command": "pnpm test",
+			"isBackground": false,
+			"group": "test"
+		}
+	]
+}

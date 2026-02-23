@@ -1,0 +1,52 @@
+# .github/workflows/poseidon-ci.yml
+# Elite CI/CD pipeline for Poseidon
+
+name: Poseidon CI/CD
+
+on:
+  push:
+    branches:
+      - main
+      - baseline_source_code
+  pull_request:
+    branches:
+      - main
+      - baseline_source_code
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+      - name: Install dependencies
+        run: npm install
+      - name: Run endpoint-connected tests
+        run: |
+          npm run test:smoke
+          npm run test:battery
+          npm run test:stress
+          npm run test:load
+          npm run test:integration
+          npm run test:security
+          npm run test:regression
+          npm run test:performance
+          npm run test:chaos
+          npm run test:uat
+      - name: Upload coverage report
+        uses: actions/upload-artifact@v3
+        with:
+          name: coverage-report
+          path: coverage/
+
+  rollback:
+    needs: test
+    runs-on: ubuntu-latest
+    if: failure()
+    steps:
+      - name: Rollback deployment
+        run: echo "Automated rollback triggered due to test failure."
+

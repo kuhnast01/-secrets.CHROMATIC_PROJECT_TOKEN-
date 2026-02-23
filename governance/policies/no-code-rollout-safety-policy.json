@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "description": "Policy gates for NC-03 A/B rollout safety before publish.",
+  "targeting": {
+    "requireAllowlistedSegmentsOnly": true,
+    "allowedSegments": [
+      "new_players",
+      "returning_players",
+      "payers_low_risk"
+    ],
+    "forbiddenSegments": [
+      "whales_high_value",
+      "vip_unbounded"
+    ]
+  },
+  "guardrails": {
+    "maxInitialRolloutPercent": 25,
+    "maxDailyRolloutIncreasePercent": 20,
+    "requireErrorBudgetGuardrail": true,
+    "maxErrorRatePercent": 1.5,
+    "maxCrashRatePercent": 0.3,
+    "maxP95LatencyMs": 350
+  },
+  "rollback": {
+    "required": true,
+    "maxRollbackTimeSeconds": 180,
+    "requireRollbackOwner": true
+  },
+  "blockPublishOnViolation": true
+}

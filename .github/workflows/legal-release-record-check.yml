@@ -1,0 +1,104 @@
+name: Legal Release Record Check
+
+on:
+  workflow_call:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: legal-release-record-check-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  legal-release-record-check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Validate legal release records
+        id: validate_release_records
+        run: node scripts/legal/check-release-records.mjs
+
+      - name: Validate legal template drift
+        id: validate_template_drift
+        run: node scripts/legal/check-release-template-drift.mjs
+
+      - name: Write legal checks summary
+        if: always()
+        shell: bash
+        run: |
+          echo "## Legal Checks" >> "$GITHUB_STEP_SUMMARY"
+          echo "- release records: **${{ steps.validate_release_records.outcome }}**" >> "$GITHUB_STEP_SUMMARY"
+          echo "- template drift: **${{ steps.validate_template_drift.outcome }}**" >> "$GITHUB_STEP_SUMMARY"
+
+  legal-template-drift-self-test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    continue-on-error: true
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Run negative drift self-test fixture
+        shell: bash
+        run: |
+          if grep -q "Founder approver:" scripts/legal/fixtures/APPROVAL_RECORD_TEMPLATE_MISSING_FOUNDER.md; then
+            echo "Negative fixture is no longer invalid (contains Founder approver field)."
+            echo "## Legal Drift Self-Test" >> "$GITHUB_STEP_SUMMARY"
+            echo "- status: ❌ failed" >> "$GITHUB_STEP_SUMMARY"
+            echo "- mode: negative fixture" >> "$GITHUB_STEP_SUMMARY"
+            echo "- result: fixture integrity check failed (expected missing Founder approver field)" >> "$GITHUB_STEP_SUMMARY"
+            exit 1
+          fi
+
+          set +e
+          LEGAL_APPROVAL_TEMPLATE_PATH=scripts/legal/fixtures/APPROVAL_RECORD_TEMPLATE_MISSING_FOUNDER.md \
+          node scripts/legal/check-release-template-drift.mjs > selftest.log 2>&1
+          exit_code=$?
+          set -e
+
+          if [ "$exit_code" -eq 0 ]; then
+            echo "Expected drift checker to fail for negative fixture, but it passed."
+            cat selftest.log
+            exit 1
+          fi
+
+          if ! grep -q "Founder approver:" selftest.log; then
+            echo "Expected failure signal for missing Founder approver field was not found."
+            cat selftest.log
+            echo "## Legal Drift Self-Test" >> "$GITHUB_STEP_SUMMARY"
+            echo "- status: ❌ failed" >> "$GITHUB_STEP_SUMMARY"
+            echo "- expected signal: \\`Founder approver:\\`" >> "$GITHUB_STEP_SUMMARY"
+            echo "- result: expected failure signal missing" >> "$GITHUB_STEP_SUMMARY"
+            exit 1
+          fi
+
+          echo "Negative self-test passed: checker failed as expected with Founder approver signal."
+          echo "## Legal Drift Self-Test" >> "$GITHUB_STEP_SUMMARY"
+          echo "- status: ✅ passed" >> "$GITHUB_STEP_SUMMARY"
+          echo "- mode: negative fixture" >> "$GITHUB_STEP_SUMMARY"
+          echo "- expected signal: \\`Founder approver:\\`" >> "$GITHUB_STEP_SUMMARY"
+          echo "- result: checker failed as expected" >> "$GITHUB_STEP_SUMMARY"

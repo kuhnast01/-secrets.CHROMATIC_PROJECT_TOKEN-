@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "description": "Policy-as-code source of truth for MONO-02 release lane immutability and reproducibility.",
+  "requiredLanes": ["dev", "stage", "prod"],
+  "lanePromotion": {
+    "dev": null,
+    "stage": "dev",
+    "prod": "stage"
+  },
+  "requireImmutableArtifacts": true,
+  "requireHashedArtifactFilenames": true,
+  "requireSameBundleAcrossLanes": true,
+  "requiredReproducibilityInputs": [
+    "lockfileSha256",
+    "workspaceFingerprintSha256",
+    "bundleSha256"
+  ]
+}

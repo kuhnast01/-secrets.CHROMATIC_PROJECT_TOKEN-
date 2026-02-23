@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "description": "Policy-as-code source of truth for AI-02 debug-loop remediation proposal quality gates.",
+  "minimumProposalCount": 3,
+  "requireCommandSuggestion": true,
+  "requireEvidenceReference": true,
+  "priorityOrder": [
+    "P0",
+    "P1",
+    "P2"
+  ],
+  "ownerByCategory": {
+    "test-failure": "Engineering",
+    "regression": "QA",
+    "latency": "SRE",
+    "dependency": "Security"
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "policyId": "license-anomaly-escalation",
+  "description": "Weekly license anomaly escalation thresholds and operational defaults",
+  "severityThresholds": {
+    "medium": {
+      "revokedCount": 5,
+      "invalidSignatureCount": 5,
+      "totalInvalidCount": 5
+    },
+    "high": {
+      "revokedCount": 25,
+      "invalidSignatureCount": 25,
+      "totalInvalidCount": 50
+    }
+  },
+  "workflowDefaults": {
+    "failOnHighSeverity": false,
+    "highSeverityAssignees": [],
+    "issueLabels": [
+      "security",
+      "backend",
+      "observability"
+    ]
+  },
+  "responseObjectives": {
+    "medium": {
+      "ackWithinMinutes": 240,
+      "ownerRole": "oncall-engineering"
+    },
+    "high": {
+      "ackWithinMinutes": 30,
+      "ownerRole": "security-oncall"
+    }
+  }
+}

@@ -1,0 +1,49 @@
+name: Agent SLO Validation
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: agent-slo-validation-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  agent-slo-validation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Run AGENT-03 SLO drill
+        run: pnpm --dir backend exec tsx scripts/liveops/run-agent-slo-drill.ts
+
+      - name: Upload AGENT-03 artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: agent-slo-artifacts
+          path: |
+            backend/tmp/liveops-artifacts/agent-03-slo-*.json
+            backend/tmp/agent-slo/**/agent-slo-telemetry.ndjson

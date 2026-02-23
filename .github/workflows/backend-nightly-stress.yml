@@ -1,0 +1,213 @@
+name: Backend Nightly Stress Smoke
+
+on:
+  schedule:
+    - cron: "0 7 * * *"
+  workflow_dispatch:
+    inputs:
+      failOnWarn:
+        description: Fail run on regression warnings
+        required: true
+        default: true
+        type: boolean
+      warnP95Ms:
+        description: Warn threshold for p95 increase (ms)
+        required: true
+        default: '25'
+        type: string
+      warnErrorRate:
+        description: Warn threshold for absolute error-rate increase (0-1)
+        required: true
+        default: '0.002'
+        type: string
+      warnRequestDropRatio:
+        description: Warn threshold for request-volume drop ratio (0-1)
+        required: true
+        default: '0.25'
+        type: string
+      baselinePath:
+        description: Baseline report path (relative to backend)
+        required: true
+        default: 'scripts/stress/baseline-smoke-report.json'
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: backend-nightly-stress-smoke
+  cancel-in-progress: true
+
+jobs:
+  stress-smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_DB: ${{ vars.POSEIDON_DB_NAME || 'liveops' }}
+          POSTGRES_USER: user
+          POSTGRES_PASSWORD: password
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    env:
+      DATABASE_URL: postgres://user:password@localhost:5432/${{ vars.POSEIDON_DB_NAME || 'liveops' }}
+      JWT_SECRET: test_secret
+      BACKEND_BASE_URL: http://127.0.0.1:4000
+      STRESS_REPORT_PATH: stress-artifacts/stress-smoke-report.json
+      STRESS_REGRESSION_WARN_P95_MS: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.warnP95Ms || '25' }}
+      STRESS_REGRESSION_WARN_ERROR_RATE: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.warnErrorRate || '0.002' }}
+      STRESS_REGRESSION_WARN_REQUEST_DROP_RATIO: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.warnRequestDropRatio || '0.25' }}
+      STRESS_REGRESSION_FAIL_ON_WARN: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.failOnWarn || 'false' }}
+      STRESS_BASELINE_PATH: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.baselinePath || 'scripts/stress/baseline-smoke-report.json' }}
+    defaults:
+      run:
+        working-directory: backend
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Run Prisma migrations
+        run: pnpm exec prisma migrate deploy
+
+      - name: Seed database
+        run: pnpm exec ts-node prisma/seed.ts
+
+      - name: Start backend
+        run: mkdir -p stress-artifacts; pnpm run dev > stress-artifacts/backend-dev.log 2>&1 &
+
+      - name: Wait for backend
+        run: npx wait-on http://127.0.0.1:4000/healthz
+
+      - name: Run smoke stress profile
+        run: pnpm run stress:smoke | tee stress-artifacts/stress-smoke.log
+
+      - name: Build stress markdown summary
+        if: always()
+        run: |
+          if [ -f stress-artifacts/stress-smoke-report.json ]; then
+            pnpm exec tsx scripts/stress/summarize-report.ts \
+              stress-artifacts/stress-smoke-report.json \
+              stress-artifacts/stress-summary.md \
+              "$STRESS_BASELINE_PATH" \
+              stress-artifacts/stress-summary-meta.json
+          else
+            echo "## Backend Stress Summary" > stress-artifacts/stress-summary.md
+            echo "" >> stress-artifacts/stress-summary.md
+            echo "Stress report file missing; smoke test likely failed before report generation." >> stress-artifacts/stress-summary.md
+            echo '{"profile":"smoke","reportPassed":false,"warningCount":0,"baselineComparable":false,"failOnWarning":false}' > stress-artifacts/stress-summary-meta.json
+          fi
+
+      - name: Build canonical nightly result JSON
+        if: always()
+        run: |
+          node -e "const fs=require('fs'); const metaPath='stress-artifacts/stress-summary-meta.json'; let meta={profile:'smoke',reportPassed:false,warningCount:0,baselineComparable:false,failOnWarning:false}; if(fs.existsSync(metaPath)){ try{ meta=JSON.parse(fs.readFileSync(metaPath,'utf8')); }catch{} } const reportPassed=Boolean(meta.reportPassed); const warningCount=Number(meta.warningCount ?? 0); const payload={schemaVersion:1, ok:reportPassed, mode:'nightly-stress-smoke', profile:String(meta.profile||'smoke'), repository:process.env.GITHUB_REPOSITORY, branch:process.env.GITHUB_REF_NAME, runId:process.env.GITHUB_RUN_ID, runNumber:process.env.GITHUB_RUN_NUMBER, runUrl:`https://github.com/${process.env.GITHUB_REPOSITORY}/actions/runs/${process.env.GITHUB_RUN_ID}`, reportPassed, warningCount, warningThreshold:null, shouldOpenIssue:false, shouldCloseIssue:false, baselineComparable:Boolean(meta.baselineComparable), failOnWarning:Boolean(meta.failOnWarning), metadataPath:'stress-artifacts/stress-summary-meta.json', summaryPath:'stress-artifacts/stress-summary.md', reportPath:'stress-artifacts/stress-smoke-report.json'}; fs.writeFileSync('stress-artifacts/workflow-run-nightly-stress-smoke.json', JSON.stringify(payload,null,2)+'\\n');"
+
+      - name: Validate canonical nightly result schema
+        if: always()
+        run: pnpm run stress:validate:canonical -- --path stress-artifacts/workflow-run-nightly-stress-smoke.json
+
+      - name: Publish stress summary to job
+        if: always()
+        run: cat stress-artifacts/stress-summary.md >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload stress artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: backend-nightly-stress-smoke
+          path: |
+            backend/stress-artifacts/stress-smoke-report.json
+            backend/stress-artifacts/stress-smoke.log
+            backend/stress-artifacts/stress-summary.md
+            backend/stress-artifacts/stress-summary-meta.json
+            backend/stress-artifacts/workflow-run-nightly-stress-smoke.json
+            backend/stress-artifacts/backend-dev.log
+
+      - name: Stop backend
+        if: always()
+        run: pkill -f "ts-node-dev src/index.ts" || true
+
+  validate-artifacts:
+    if: always()
+    needs: stress-smoke
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: backend
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Download nightly artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: backend-nightly-stress-smoke
+          path: backend/stress-artifacts/nightly-download
+
+      - name: Validate downloaded canonical artifacts
+        run: |
+          mapfile -t files < <(find stress-artifacts/nightly-download -type f -name 'workflow-run-nightly-stress-smoke.json')
+          if [ "${#files[@]}" -eq 0 ]; then
+            {
+              echo "## Canonical Artifact Validation"
+              echo "- workflow: nightly-stress-smoke"
+              echo "- validated files: 0"
+              echo "- result: FAIL (no canonical artifact found in downloaded bundle)"
+            } >> "$GITHUB_STEP_SUMMARY"
+            echo "No canonical nightly artifact found in downloaded bundle."
+            exit 1
+          fi
+          validated=0
+          for file in "${files[@]}"; do
+            echo "Validating $file"
+            pnpm run stress:validate:canonical -- --path "$file"
+            validated=$((validated + 1))
+          done
+          if [ "$validated" -lt 1 ]; then
+            {
+              echo "## Canonical Artifact Validation"
+              echo "- workflow: nightly-stress-smoke"
+              echo "- validated files: $validated"
+              echo "- result: FAIL (validated file count below minimum: expected >= 1)"
+            } >> "$GITHUB_STEP_SUMMARY"
+            echo "Validated file count below minimum for nightly workflow (expected >= 1, got $validated)."
+            exit 1
+          fi
+          {
+            echo "## Canonical Artifact Validation"
+            echo "- workflow: nightly-stress-smoke"
+            echo "- validated files: $validated"
+            echo "- result: PASS"
+          } >> "$GITHUB_STEP_SUMMARY"

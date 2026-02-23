@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "description": "License revocation and rotation policy for backend admin operations",
+  "rotation": {
+    "requireRotationMetadata": true,
+    "revokePreviousByDefault": true,
+    "minimumRotationTtlSeconds": 300
+  },
+  "revocation": {
+    "requireSha256Hash": true,
+    "allowedReasons": [
+      "manual_revocation",
+      "rotated_license",
+      "chargeback",
+      "compliance_hold"
+    ],
+    "requireAuditActor": true
+  },
+  "evidence": {
+    "artifactPrefix": "lic-01-license-revocation-rotation",
+    "requireMachineReadableReport": true
+  }
+}
