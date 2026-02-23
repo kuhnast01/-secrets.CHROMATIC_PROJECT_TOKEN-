@@ -1,0 +1,238 @@
+1<?xml version="1.0" encoding="utf-8"?>
+2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+3    package="com.anonymous.simgamemobile"
+4    android:versionCode="1"
+5    android:versionName="1.0.0" >
+6
+7    <uses-sdk
+8        android:minSdkVersion="24"
+9        android:targetSdkVersion="36" />
+10
+11    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+11-->C:\Users\kuhna\OneDrive\Desktop\SIMgameFiles\VisualStudio\FrontendMonorepo\apps\mobile\android\app\src\main\AndroidManifest.xml:4:3-75
+11-->C:\Users\kuhna\OneDrive\Desktop\SIMgameFiles\VisualStudio\FrontendMonorepo\apps\mobile\android\app\src\main\AndroidManifest.xml:4:20-73
+12    <uses-permission android:name="android.permission.INTERNET" />
+12-->C:\Users\kuhna\OneDrive\Desktop\SIMgameFiles\VisualStudio\FrontendMonorepo\apps\mobile\android\app\src\main\AndroidManifest.xml:2:3-64
+12-->C:\Users\kuhna\OneDrive\Desktop\SIMgameFiles\VisualStudio\FrontendMonorepo\apps\mobile\android\app\src\main\AndroidManifest.xml:2:20-62
+13    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+13-->C:\Users\kuhna\OneDrive\Desktop\SIMgameFiles\VisualStudio\FrontendMonorepo\apps\mobile\android\app\src\main\AndroidManifest.xml:3:3-77
+13-->C:\Users\kuhna\OneDrive\Desktop\SIMgameFiles\VisualStudio\FrontendMonorepo\apps\mobile\android\app\src\main\AndroidManifest.xml:3:20-75
+14    <uses-permission android:name="android.permission.VIBRATE" />
+14-->C:\Users\kuhna\OneDrive\Desktop\SIMgameFiles\VisualStudio\FrontendMonorepo\apps\mobile\android\app\src\main\AndroidManifest.xml:5:3-63
+14-->C:\Users\kuhna\OneDrive\Desktop\SIMgameFiles\VisualStudio\FrontendMonorepo\apps\mobile\android\app\src\main\AndroidManifest.xml:5:20-61
+15    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+15-->C:\Users\kuhna\OneDrive\Desktop\SIMgameFiles\VisualStudio\FrontendMonorepo\apps\mobile\android\app\src\main\AndroidManifest.xml:6:3-78
+15-->C:\Users\kuhna\OneDrive\Desktop\SIMgameFiles\VisualStudio\FrontendMonorepo\apps\mobile\android\app\src\main\AndroidManifest.xml:6:20-76
+16
+17    <queries>
+17-->C:\Users\kuhna\OneDrive\Desktop\SIMgameFiles\VisualStudio\FrontendMonorepo\apps\mobile\android\app\src\main\AndroidManifest.xml:7:3-13:13
+18        <intent>
+18-->C:\Users\kuhna\OneDrive\Desktop\SIMgameFiles\VisualStudio\FrontendMonorepo\apps\mobile\android\app\src\main\AndroidManifest.xml:8:5-12:14
+19            <action android:name="android.intent.action.VIEW" />
+19-->C:\Users\kuhna\OneDrive\Desktop\SIMgameFiles\VisualStudio\FrontendMonorepo\apps\mobile\android\app\src\main\AndroidManifest.xml:9:7-58
+19-->C:\Users\kuhna\OneDrive\Desktop\SIMgameFiles\VisualStudio\FrontendMonorepo\apps\mobile\android\app\src\main\AndroidManifest.xml:9:15-56
+20
+21            <category android:name="android.intent.category.BROWSABLE" />
+21-->C:\Users\kuhna\OneDrive\Desktop\SIMgameFiles\VisualStudio\FrontendMonorepo\apps\mobile\android\app\src\main\AndroidManifest.xml:10:7-67
+21-->C:\Users\kuhna\OneDrive\Desktop\SIMgameFiles\VisualStudio\FrontendMonorepo\apps\mobile\android\app\src\main\AndroidManifest.xml:10:17-65
+22
+23            <data android:scheme="https" />
+23-->C:\Users\kuhna\OneDrive\Desktop\SIMgameFiles\VisualStudio\FrontendMonorepo\apps\mobile\android\app\src\main\AndroidManifest.xml:11:7-37
+23-->C:\Users\kuhna\OneDrive\Desktop\SIMgameFiles\VisualStudio\FrontendMonorepo\apps\mobile\android\app\src\main\AndroidManifest.xml:11:13-35
+24        </intent>
+25        <!-- Query open documents -->
+26        <intent>
+26-->[host.exp.exponent:expo.modules.filesystem:19.0.21] C:\Users\kuhna\.gradle\caches\8.14.3\transforms\3196b5a3d74c8c03e2a8bf481ecd8256\transformed\expo.modules.filesystem-19.0.21\AndroidManifest.xml:15:9-17:18
+27            <action android:name="android.intent.action.OPEN_DOCUMENT_TREE" />
+27-->[host.exp.exponent:expo.modules.filesystem:19.0.21] C:\Users\kuhna\.gradle\caches\8.14.3\transforms\3196b5a3d74c8c03e2a8bf481ecd8256\transformed\expo.modules.filesystem-19.0.21\AndroidManifest.xml:16:13-79
+27-->[host.exp.exponent:expo.modules.filesystem:19.0.21] C:\Users\kuhna\.gradle\caches\8.14.3\transforms\3196b5a3d74c8c03e2a8bf481ecd8256\transformed\expo.modules.filesystem-19.0.21\AndroidManifest.xml:16:21-76
+28        </intent>
+29    </queries>
+30
+31    <permission
+31-->[androidx.core:core:1.13.1] C:\Users\kuhna\.gradle\caches\8.14.3\transforms\024a910050ff35f08d935a702dc3f11e\transformed\core-1.13.1\AndroidManifest.xml:22:5-24:47
+32        android:name="com.anonymous.simgamemobile.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
+32-->[androidx.core:core:1.13.1] C:\Users\kuhna\.gradle\caches\8.14.3\transforms\024a910050ff35f08d935a702dc3f11e\transformed\core-1.13.1\AndroidManifest.xml:23:9-81
+33        android:protectionLevel="signature" />
+33-->[androidx.core:core:1.13.1] C:\Users\kuhna\.gradle\caches\8.14.3\transforms\024a910050ff35f08d935a702dc3f11e\transformed\core-1.13.1\AndroidManifest.xml:24:9-44
+34
+35    <uses-permission android:name="com.anonymous.simgamemobile.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" />
+35-->[androidx.core:core:1.13.1] C:\Users\kuhna\.gradle\caches\8.14.3\transforms\024a910050ff35f08d935a702dc3f11e\transformed\core-1.13.1\AndroidManifest.xml:26:5-97
+35-->[androidx.core:core:1.13.1] C:\Users\kuhna\.gradle\caches\8.14.3\transforms\024a910050ff35f08d935a702dc3f11e\transformed\core-1.13.1\AndroidManifest.xml:26:22-94
+36
+37    <application
+37-->C:\Users\kuhna\OneDrive\Desktop\SIMgameFiles\VisualStudio\FrontendMonorepo\apps\mobile\android\app\src\main\AndroidManifest.xml:14:3-24:17
+38        android:name="com.anonymous.simgamemobile.MainApplication"
+38-->C:\Users\kuhna\OneDrive\Desktop\SIMgameFiles\VisualStudio\FrontendMonorepo\apps\mobile\android\app\src\main\AndroidManifest.xml:14:16-47
+39        android:allowBackup="true"
+39-->C:\Users\kuhna\OneDrive\Desktop\SIMgameFiles\VisualStudio\FrontendMonorepo\apps\mobile\android\app\src\main\AndroidManifest.xml:14:162-188
+40        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
+40-->[androidx.core:core:1.13.1] C:\Users\kuhna\.gradle\caches\8.14.3\transforms\024a910050ff35f08d935a702dc3f11e\transformed\core-1.13.1\AndroidManifest.xml:28:18-86
+41        android:debuggable="true"
+42        android:enableOnBackInvokedCallback="false"
+42-->C:\Users\kuhna\OneDrive\Desktop\SIMgameFiles\VisualStudio\FrontendMonorepo\apps\mobile\android\app\src\main\AndroidManifest.xml:14:248-291
+43        android:extractNativeLibs="false"
+44        android:icon="@mipmap/ic_launcher"
+44-->C:\Users\kuhna\OneDrive\Desktop\SIMgameFiles\VisualStudio\FrontendMonorepo\apps\mobile\android\app\src\main\AndroidManifest.xml:14:81-115
+45        android:label="@string/app_name"
+45-->C:\Users\kuhna\OneDrive\Desktop\SIMgameFiles\VisualStudio\FrontendMonorepo\apps\mobile\android\app\src\main\AndroidManifest.xml:14:48-80
+46        android:roundIcon="@mipmap/ic_launcher_round"
+46-->C:\Users\kuhna\OneDrive\Desktop\SIMgameFiles\VisualStudio\FrontendMonorepo\apps\mobile\android\app\src\main\AndroidManifest.xml:14:116-161
+47        android:supportsRtl="true"
+47-->C:\Users\kuhna\OneDrive\Desktop\SIMgameFiles\VisualStudio\FrontendMonorepo\apps\mobile\android\app\src\main\AndroidManifest.xml:14:221-247
+48        android:theme="@style/AppTheme"
+48-->C:\Users\kuhna\OneDrive\Desktop\SIMgameFiles\VisualStudio\FrontendMonorepo\apps\mobile\android\app\src\main\AndroidManifest.xml:14:189-220
+49        android:usesCleartextTraffic="true" >
+49-->C:\Users\kuhna\OneDrive\Desktop\SIMgameFiles\VisualStudio\FrontendMonorepo\apps\mobile\android\app\src\debug\AndroidManifest.xml:6:18-53
+50        <meta-data
+50-->C:\Users\kuhna\OneDrive\Desktop\SIMgameFiles\VisualStudio\FrontendMonorepo\apps\mobile\android\app\src\main\AndroidManifest.xml:15:5-83
+51            android:name="expo.modules.updates.ENABLED"
+51-->C:\Users\kuhna\OneDrive\Desktop\SIMgameFiles\VisualStudio\FrontendMonorepo\apps\mobile\android\app\src\main\AndroidManifest.xml:15:16-59
+52            android:value="false" />
+52-->C:\Users\kuhna\OneDrive\Desktop\SIMgameFiles\VisualStudio\FrontendMonorepo\apps\mobile\android\app\src\main\AndroidManifest.xml:15:60-81
+53        <meta-data
+53-->C:\Users\kuhna\OneDrive\Desktop\SIMgameFiles\VisualStudio\FrontendMonorepo\apps\mobile\android\app\src\main\AndroidManifest.xml:16:5-105
+54            android:name="expo.modules.updates.EXPO_UPDATES_CHECK_ON_LAUNCH"
+54-->C:\Users\kuhna\OneDrive\Desktop\SIMgameFiles\VisualStudio\FrontendMonorepo\apps\mobile\android\app\src\main\AndroidManifest.xml:16:16-80
+55            android:value="ALWAYS" />
+55-->C:\Users\kuhna\OneDrive\Desktop\SIMgameFiles\VisualStudio\FrontendMonorepo\apps\mobile\android\app\src\main\AndroidManifest.xml:16:81-103
+56        <meta-data
+56-->C:\Users\kuhna\OneDrive\Desktop\SIMgameFiles\VisualStudio\FrontendMonorepo\apps\mobile\android\app\src\main\AndroidManifest.xml:17:5-99
+57            android:name="expo.modules.updates.EXPO_UPDATES_LAUNCH_WAIT_MS"
+57-->C:\Users\kuhna\OneDrive\Desktop\SIMgameFiles\VisualStudio\FrontendMonorepo\apps\mobile\android\app\src\main\AndroidManifest.xml:17:16-79
+58            android:value="0" />
+58-->C:\Users\kuhna\OneDrive\Desktop\SIMgameFiles\VisualStudio\FrontendMonorepo\apps\mobile\android\app\src\main\AndroidManifest.xml:17:80-97
+59
+60        <activity
+60-->C:\Users\kuhna\OneDrive\Desktop\SIMgameFiles\VisualStudio\FrontendMonorepo\apps\mobile\android\app\src\main\AndroidManifest.xml:18:5-23:16
+61            android:name="com.anonymous.simgamemobile.MainActivity"
+61-->C:\Users\kuhna\OneDrive\Desktop\SIMgameFiles\VisualStudio\FrontendMonorepo\apps\mobile\android\app\src\main\AndroidManifest.xml:18:15-43
+62            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|uiMode"
+62-->C:\Users\kuhna\OneDrive\Desktop\SIMgameFiles\VisualStudio\FrontendMonorepo\apps\mobile\android\app\src\main\AndroidManifest.xml:18:44-134
+63            android:exported="true"
+63-->C:\Users\kuhna\OneDrive\Desktop\SIMgameFiles\VisualStudio\FrontendMonorepo\apps\mobile\android\app\src\main\AndroidManifest.xml:18:256-279
+64            android:launchMode="singleTask"
+64-->C:\Users\kuhna\OneDrive\Desktop\SIMgameFiles\VisualStudio\FrontendMonorepo\apps\mobile\android\app\src\main\AndroidManifest.xml:18:135-166
+65            android:screenOrientation="portrait"
+65-->C:\Users\kuhna\OneDrive\Desktop\SIMgameFiles\VisualStudio\FrontendMonorepo\apps\mobile\android\app\src\main\AndroidManifest.xml:18:280-316
+66            android:theme="@style/Theme.App.SplashScreen"
+66-->C:\Users\kuhna\OneDrive\Desktop\SIMgameFiles\VisualStudio\FrontendMonorepo\apps\mobile\android\app\src\main\AndroidManifest.xml:18:210-255
+67            android:windowSoftInputMode="adjustResize" >
+67-->C:\Users\kuhna\OneDrive\Desktop\SIMgameFiles\VisualStudio\FrontendMonorepo\apps\mobile\android\app\src\main\AndroidManifest.xml:18:167-209
+68            <intent-filter>
+68-->C:\Users\kuhna\OneDrive\Desktop\SIMgameFiles\VisualStudio\FrontendMonorepo\apps\mobile\android\app\src\main\AndroidManifest.xml:19:7-22:23
+69                <action android:name="android.intent.action.MAIN" />
+69-->C:\Users\kuhna\OneDrive\Desktop\SIMgameFiles\VisualStudio\FrontendMonorepo\apps\mobile\android\app\src\main\AndroidManifest.xml:20:9-60
+69-->C:\Users\kuhna\OneDrive\Desktop\SIMgameFiles\VisualStudio\FrontendMonorepo\apps\mobile\android\app\src\main\AndroidManifest.xml:20:17-58
+70
+71                <category android:name="android.intent.category.LAUNCHER" />
+71-->C:\Users\kuhna\OneDrive\Desktop\SIMgameFiles\VisualStudio\FrontendMonorepo\apps\mobile\android\app\src\main\AndroidManifest.xml:21:9-68
+71-->C:\Users\kuhna\OneDrive\Desktop\SIMgameFiles\VisualStudio\FrontendMonorepo\apps\mobile\android\app\src\main\AndroidManifest.xml:21:19-66
+72            </intent-filter>
+73        </activity>
+74
+75        <meta-data
+75-->[:expo-modules-core] C:\Users\kuhna\OneDrive\Desktop\SIMgameFiles\VisualStudio\FrontendMonorepo\node_modules\.pnpm\expo-modules-core@3.0.29_re_de8f0f97446f027f2eb628b56d228d01\node_modules\expo-modules-core\android\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:9:9-11:89
+76            android:name="org.unimodules.core.AppLoader#react-native-headless"
+76-->[:expo-modules-core] C:\Users\kuhna\OneDrive\Desktop\SIMgameFiles\VisualStudio\FrontendMonorepo\node_modules\.pnpm\expo-modules-core@3.0.29_re_de8f0f97446f027f2eb628b56d228d01\node_modules\expo-modules-core\android\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:10:13-79
+77            android:value="expo.modules.adapters.react.apploader.RNHeadlessAppLoader" />
+77-->[:expo-modules-core] C:\Users\kuhna\OneDrive\Desktop\SIMgameFiles\VisualStudio\FrontendMonorepo\node_modules\.pnpm\expo-modules-core@3.0.29_re_de8f0f97446f027f2eb628b56d228d01\node_modules\expo-modules-core\android\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:11:13-86
+78        <meta-data
+78-->[:expo-modules-core] C:\Users\kuhna\OneDrive\Desktop\SIMgameFiles\VisualStudio\FrontendMonorepo\node_modules\.pnpm\expo-modules-core@3.0.29_re_de8f0f97446f027f2eb628b56d228d01\node_modules\expo-modules-core\android\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:12:9-15:45
+79            android:name="com.facebook.soloader.enabled"
+79-->[:expo-modules-core] C:\Users\kuhna\OneDrive\Desktop\SIMgameFiles\VisualStudio\FrontendMonorepo\node_modules\.pnpm\expo-modules-core@3.0.29_re_de8f0f97446f027f2eb628b56d228d01\node_modules\expo-modules-core\android\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:13:13-57
+80            android:value="true" />
+80-->[:expo-modules-core] C:\Users\kuhna\OneDrive\Desktop\SIMgameFiles\VisualStudio\FrontendMonorepo\node_modules\.pnpm\expo-modules-core@3.0.29_re_de8f0f97446f027f2eb628b56d228d01\node_modules\expo-modules-core\android\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:14:13-33
+81
+82        <activity
+82-->[com.facebook.react:react-android:0.84.0] C:\Users\kuhna\.gradle\caches\8.14.3\transforms\2b01a7fc0e3ce81519a6851b3e7b9296\transformed\react-android-0.84.0-debug\AndroidManifest.xml:19:9-21:40
+83            android:name="com.facebook.react.devsupport.DevSettingsActivity"
+83-->[com.facebook.react:react-android:0.84.0] C:\Users\kuhna\.gradle\caches\8.14.3\transforms\2b01a7fc0e3ce81519a6851b3e7b9296\transformed\react-android-0.84.0-debug\AndroidManifest.xml:20:13-77
+84            android:exported="false" />
+84-->[com.facebook.react:react-android:0.84.0] C:\Users\kuhna\.gradle\caches\8.14.3\transforms\2b01a7fc0e3ce81519a6851b3e7b9296\transformed\react-android-0.84.0-debug\AndroidManifest.xml:21:13-37
+85
+86        <provider
+86-->[host.exp.exponent:expo.modules.filesystem:19.0.21] C:\Users\kuhna\.gradle\caches\8.14.3\transforms\3196b5a3d74c8c03e2a8bf481ecd8256\transformed\expo.modules.filesystem-19.0.21\AndroidManifest.xml:21:9-30:20
+87            android:name="expo.modules.filesystem.FileSystemFileProvider"
+87-->[host.exp.exponent:expo.modules.filesystem:19.0.21] C:\Users\kuhna\.gradle\caches\8.14.3\transforms\3196b5a3d74c8c03e2a8bf481ecd8256\transformed\expo.modules.filesystem-19.0.21\AndroidManifest.xml:22:13-74
+88            android:authorities="com.anonymous.simgamemobile.FileSystemFileProvider"
+88-->[host.exp.exponent:expo.modules.filesystem:19.0.21] C:\Users\kuhna\.gradle\caches\8.14.3\transforms\3196b5a3d74c8c03e2a8bf481ecd8256\transformed\expo.modules.filesystem-19.0.21\AndroidManifest.xml:23:13-74
+89            android:exported="false"
+89-->[host.exp.exponent:expo.modules.filesystem:19.0.21] C:\Users\kuhna\.gradle\caches\8.14.3\transforms\3196b5a3d74c8c03e2a8bf481ecd8256\transformed\expo.modules.filesystem-19.0.21\AndroidManifest.xml:24:13-37
+90            android:grantUriPermissions="true" >
+90-->[host.exp.exponent:expo.modules.filesystem:19.0.21] C:\Users\kuhna\.gradle\caches\8.14.3\transforms\3196b5a3d74c8c03e2a8bf481ecd8256\transformed\expo.modules.filesystem-19.0.21\AndroidManifest.xml:25:13-47
+91            <meta-data
+91-->[host.exp.exponent:expo.modules.filesystem:19.0.21] C:\Users\kuhna\.gradle\caches\8.14.3\transforms\3196b5a3d74c8c03e2a8bf481ecd8256\transformed\expo.modules.filesystem-19.0.21\AndroidManifest.xml:27:13-29:70
+92                android:name="android.support.FILE_PROVIDER_PATHS"
+92-->[host.exp.exponent:expo.modules.filesystem:19.0.21] C:\Users\kuhna\.gradle\caches\8.14.3\transforms\3196b5a3d74c8c03e2a8bf481ecd8256\transformed\expo.modules.filesystem-19.0.21\AndroidManifest.xml:28:17-67
+93                android:resource="@xml/file_system_provider_paths" />
+93-->[host.exp.exponent:expo.modules.filesystem:19.0.21] C:\Users\kuhna\.gradle\caches\8.14.3\transforms\3196b5a3d74c8c03e2a8bf481ecd8256\transformed\expo.modules.filesystem-19.0.21\AndroidManifest.xml:29:17-67
+94        </provider>
+95        <provider
+95-->[androidx.emoji2:emoji2:1.3.0] C:\Users\kuhna\.gradle\caches\8.14.3\transforms\1d46a0313b636983a01ee33fdec6b4fb\transformed\emoji2-1.3.0\AndroidManifest.xml:24:9-32:20
+96            android:name="androidx.startup.InitializationProvider"
+96-->[androidx.emoji2:emoji2:1.3.0] C:\Users\kuhna\.gradle\caches\8.14.3\transforms\1d46a0313b636983a01ee33fdec6b4fb\transformed\emoji2-1.3.0\AndroidManifest.xml:25:13-67
+97            android:authorities="com.anonymous.simgamemobile.androidx-startup"
+97-->[androidx.emoji2:emoji2:1.3.0] C:\Users\kuhna\.gradle\caches\8.14.3\transforms\1d46a0313b636983a01ee33fdec6b4fb\transformed\emoji2-1.3.0\AndroidManifest.xml:26:13-68
+98            android:exported="false" >
+98-->[androidx.emoji2:emoji2:1.3.0] C:\Users\kuhna\.gradle\caches\8.14.3\transforms\1d46a0313b636983a01ee33fdec6b4fb\transformed\emoji2-1.3.0\AndroidManifest.xml:27:13-37
+99            <meta-data
+99-->[androidx.emoji2:emoji2:1.3.0] C:\Users\kuhna\.gradle\caches\8.14.3\transforms\1d46a0313b636983a01ee33fdec6b4fb\transformed\emoji2-1.3.0\AndroidManifest.xml:29:13-31:52
+100                android:name="androidx.emoji2.text.EmojiCompatInitializer"
+100-->[androidx.emoji2:emoji2:1.3.0] C:\Users\kuhna\.gradle\caches\8.14.3\transforms\1d46a0313b636983a01ee33fdec6b4fb\transformed\emoji2-1.3.0\AndroidManifest.xml:30:17-75
+101                android:value="androidx.startup" />
+101-->[androidx.emoji2:emoji2:1.3.0] C:\Users\kuhna\.gradle\caches\8.14.3\transforms\1d46a0313b636983a01ee33fdec6b4fb\transformed\emoji2-1.3.0\AndroidManifest.xml:31:17-49
+102            <meta-data
+102-->[androidx.lifecycle:lifecycle-process:2.6.2] C:\Users\kuhna\.gradle\caches\8.14.3\transforms\a79f3911640e340357f5b6241db9751e\transformed\lifecycle-process-2.6.2\AndroidManifest.xml:29:13-31:52
+103                android:name="androidx.lifecycle.ProcessLifecycleInitializer"
+103-->[androidx.lifecycle:lifecycle-process:2.6.2] C:\Users\kuhna\.gradle\caches\8.14.3\transforms\a79f3911640e340357f5b6241db9751e\transformed\lifecycle-process-2.6.2\AndroidManifest.xml:30:17-78
+104                android:value="androidx.startup" />
+104-->[androidx.lifecycle:lifecycle-process:2.6.2] C:\Users\kuhna\.gradle\caches\8.14.3\transforms\a79f3911640e340357f5b6241db9751e\transformed\lifecycle-process-2.6.2\AndroidManifest.xml:31:17-49
+105            <meta-data
+105-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\kuhna\.gradle\caches\8.14.3\transforms\2bd29a2d4b7d19e60d2d7e6f9a7d5d90\transformed\profileinstaller-1.3.1\AndroidManifest.xml:29:13-31:52
+106                android:name="androidx.profileinstaller.ProfileInstallerInitializer"
+106-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\kuhna\.gradle\caches\8.14.3\transforms\2bd29a2d4b7d19e60d2d7e6f9a7d5d90\transformed\profileinstaller-1.3.1\AndroidManifest.xml:30:17-85
+107                android:value="androidx.startup" />
+107-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\kuhna\.gradle\caches\8.14.3\transforms\2bd29a2d4b7d19e60d2d7e6f9a7d5d90\transformed\profileinstaller-1.3.1\AndroidManifest.xml:31:17-49
+108        </provider>
+109
+110        <receiver
+110-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\kuhna\.gradle\caches\8.14.3\transforms\2bd29a2d4b7d19e60d2d7e6f9a7d5d90\transformed\profileinstaller-1.3.1\AndroidManifest.xml:34:9-52:20
+111            android:name="androidx.profileinstaller.ProfileInstallReceiver"
+111-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\kuhna\.gradle\caches\8.14.3\transforms\2bd29a2d4b7d19e60d2d7e6f9a7d5d90\transformed\profileinstaller-1.3.1\AndroidManifest.xml:35:13-76
+112            android:directBootAware="false"
+112-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\kuhna\.gradle\caches\8.14.3\transforms\2bd29a2d4b7d19e60d2d7e6f9a7d5d90\transformed\profileinstaller-1.3.1\AndroidManifest.xml:36:13-44
+113            android:enabled="true"
+113-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\kuhna\.gradle\caches\8.14.3\transforms\2bd29a2d4b7d19e60d2d7e6f9a7d5d90\transformed\profileinstaller-1.3.1\AndroidManifest.xml:37:13-35
+114            android:exported="true"
+114-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\kuhna\.gradle\caches\8.14.3\transforms\2bd29a2d4b7d19e60d2d7e6f9a7d5d90\transformed\profileinstaller-1.3.1\AndroidManifest.xml:38:13-36
+115            android:permission="android.permission.DUMP" >
+115-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\kuhna\.gradle\caches\8.14.3\transforms\2bd29a2d4b7d19e60d2d7e6f9a7d5d90\transformed\profileinstaller-1.3.1\AndroidManifest.xml:39:13-57
+116            <intent-filter>
+116-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\kuhna\.gradle\caches\8.14.3\transforms\2bd29a2d4b7d19e60d2d7e6f9a7d5d90\transformed\profileinstaller-1.3.1\AndroidManifest.xml:40:13-42:29
+117                <action android:name="androidx.profileinstaller.action.INSTALL_PROFILE" />
+117-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\kuhna\.gradle\caches\8.14.3\transforms\2bd29a2d4b7d19e60d2d7e6f9a7d5d90\transformed\profileinstaller-1.3.1\AndroidManifest.xml:41:17-91
+117-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\kuhna\.gradle\caches\8.14.3\transforms\2bd29a2d4b7d19e60d2d7e6f9a7d5d90\transformed\profileinstaller-1.3.1\AndroidManifest.xml:41:25-88
+118            </intent-filter>
+119            <intent-filter>
+119-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\kuhna\.gradle\caches\8.14.3\transforms\2bd29a2d4b7d19e60d2d7e6f9a7d5d90\transformed\profileinstaller-1.3.1\AndroidManifest.xml:43:13-45:29
+120                <action android:name="androidx.profileinstaller.action.SKIP_FILE" />
+120-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\kuhna\.gradle\caches\8.14.3\transforms\2bd29a2d4b7d19e60d2d7e6f9a7d5d90\transformed\profileinstaller-1.3.1\AndroidManifest.xml:44:17-85
+120-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\kuhna\.gradle\caches\8.14.3\transforms\2bd29a2d4b7d19e60d2d7e6f9a7d5d90\transformed\profileinstaller-1.3.1\AndroidManifest.xml:44:25-82
+121            </intent-filter>
+122            <intent-filter>
+122-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\kuhna\.gradle\caches\8.14.3\transforms\2bd29a2d4b7d19e60d2d7e6f9a7d5d90\transformed\profileinstaller-1.3.1\AndroidManifest.xml:46:13-48:29
+123                <action android:name="androidx.profileinstaller.action.SAVE_PROFILE" />
+123-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\kuhna\.gradle\caches\8.14.3\transforms\2bd29a2d4b7d19e60d2d7e6f9a7d5d90\transformed\profileinstaller-1.3.1\AndroidManifest.xml:47:17-88
+123-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\kuhna\.gradle\caches\8.14.3\transforms\2bd29a2d4b7d19e60d2d7e6f9a7d5d90\transformed\profileinstaller-1.3.1\AndroidManifest.xml:47:25-85
+124            </intent-filter>
+125            <intent-filter>
+125-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\kuhna\.gradle\caches\8.14.3\transforms\2bd29a2d4b7d19e60d2d7e6f9a7d5d90\transformed\profileinstaller-1.3.1\AndroidManifest.xml:49:13-51:29
+126                <action android:name="androidx.profileinstaller.action.BENCHMARK_OPERATION" />
+126-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\kuhna\.gradle\caches\8.14.3\transforms\2bd29a2d4b7d19e60d2d7e6f9a7d5d90\transformed\profileinstaller-1.3.1\AndroidManifest.xml:50:17-95
+126-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\kuhna\.gradle\caches\8.14.3\transforms\2bd29a2d4b7d19e60d2d7e6f9a7d5d90\transformed\profileinstaller-1.3.1\AndroidManifest.xml:50:25-92
+127            </intent-filter>
+128        </receiver>
+129    </application>
+130
+131</manifest>
