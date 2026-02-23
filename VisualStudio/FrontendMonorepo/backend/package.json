@@ -9,7 +9,7 @@
     "lint": "eslint src/**/*.ts",
     "format": "prettier --write src/**/*.{ts,json,md}",
     "type-check": "tsc --noEmit",
-    "test": "jest",
+    "test": "jest --config ./jest.config.mjs",
     "validate:store-items": "ts-node scripts/validate-store-items-schema.ts",
     "test:shop": "jest tests/shop.test.ts",
     "test:coverage": "jest --coverage",
