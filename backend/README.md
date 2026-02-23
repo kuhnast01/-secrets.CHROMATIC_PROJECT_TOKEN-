@@ -259,7 +259,6 @@ License admin endpoints now return structured audit metadata so operations tooli
 All admin mutation responses include:
 
 - `audit.actorId`: caller identity from JWT
-
 ### Endpoints
 
 - `GET /license/revocations`

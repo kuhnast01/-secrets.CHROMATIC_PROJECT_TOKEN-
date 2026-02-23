@@ -1,0 +1,15 @@
+{
+  "name": "Elite Node Backend",
+  "context": "..",
+  "dockerFile": "Dockerfile",
+  "workspaceFolder": "/workspace",
+  "mounts": [
+    "source=${localWorkspaceFolder}/VisualStudio/FrontendMonorepo/backend,target=/workspace/backend,type=bind"
+  ],
+  "settings": {
+    "terminal.integrated.shell.linux": "/bin/bash"
+  },
+  "postCreateCommand": "cd backend && pnpm install",
+  "forwardPorts": [4000],
+  "remoteUser": "node"
+}
