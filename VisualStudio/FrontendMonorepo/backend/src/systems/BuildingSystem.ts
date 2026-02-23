@@ -8,9 +8,16 @@ import { ResourceType } from '../models/Resource';
  * - Enforces build/upgrade requirements.
  */
 export class BuildingSystem {
+  /**
+   * List of all player buildings and their current state.
+   */
   buildings: Building[];
 
   constructor(initial: Building[] = []) {
+    /**
+     * Initialize BuildingSystem with a list of buildings.
+     * @param initial Initial buildings array
+     */
     this.buildings = initial;
   }
 
@@ -18,7 +25,8 @@ export class BuildingSystem {
    * Add a new building if requirements are met.
    */
   addBuilding(type: BuildingType, id: string, unlocks: string[] = []): boolean {
-    if (this.buildings.find(b => b.type === type)) return false; // Only one per type for MVP
+    // Only one building per type for MVP
+    if (this.buildings.find(b => b.type === type)) return false;
     this.buildings.push({
       id,
       type,
@@ -33,6 +41,11 @@ export class BuildingSystem {
    * Upgrade a building, increasing its level and resource generation.
    */
   upgradeBuilding(type: BuildingType): boolean {
+    /**
+     * Upgrade a building by type, increasing its level and resource generation.
+     * @param type BuildingType to upgrade
+     * @returns true if upgrade successful
+     */
     const b = this.buildings.find(b => b.type === type);
     if (!b) return false;
     b.level += 1;
@@ -45,6 +58,12 @@ export class BuildingSystem {
    * (Exponential scaling: 1.25x per level for buildings)
    */
   getBaseGeneration(type: BuildingType, level: number): Partial<Record<ResourceType, number>> {
+    /**
+     * Calculate base resource generation for a building type and level.
+     * @param type BuildingType
+     * @param level Building level
+     * @returns Resource generation mapping
+     */
     switch (type) {
       case BuildingType.Generator:
         return { [ResourceType.Energy]: Math.round(10 * Math.pow(1.25, level - 1)) };
@@ -63,6 +82,10 @@ export class BuildingSystem {
    * Get all unlocks from current buildings.
    */
   getUnlocks(): string[] {
+    /**
+     * Get all unlocks from current buildings.
+     * @returns Array of unlock strings
+     */
     return this.buildings.flatMap(b => b.unlocks);
   }
 
@@ -70,6 +93,10 @@ export class BuildingSystem {
    * Get total resource generation per minute from all buildings.
    */
   getTotalGeneration(): Partial<Record<ResourceType, number>> {
+    /**
+     * Get total resource generation per minute from all buildings.
+     * @returns ResourceType to total generation mapping
+     */
     const gen: Partial<Record<ResourceType, number>> = {};
     for (const b of this.buildings) {
       for (const [rtype, amount] of Object.entries(b.resourceGeneration)) {
