@@ -1,0 +1,7 @@
+# CODEOWNERS for Poseidon backend
+# Primary Owner: Daniel Kuhnast (Poseidon Engine)
+*       @kuhna
+
+# Backend workflow and governance docs require Daniel Kuhnast / Poseidon Engine review
+/.github/workflows/*.yml  @kuhna
+/*.md                     @kuhna

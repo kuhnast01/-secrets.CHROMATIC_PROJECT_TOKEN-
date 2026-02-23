@@ -1,0 +1,34 @@
+-- Users table
+CREATE TABLE IF NOT EXISTS users (
+  id SERIAL PRIMARY KEY,
+  username VARCHAR(64) UNIQUE NOT NULL,
+  password VARCHAR(128) NOT NULL,
+  role VARCHAR(32) NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Events table
+CREATE TABLE IF NOT EXISTS events (
+  id SERIAL PRIMARY KEY,
+  name VARCHAR(128) NOT NULL,
+  config JSONB NOT NULL,
+  created_by INTEGER REFERENCES users(id),
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Analytics table (example)
+CREATE TABLE IF NOT EXISTS analytics (
+  id SERIAL PRIMARY KEY,
+  metric VARCHAR(64) NOT NULL,
+  value NUMERIC NOT NULL,
+  recorded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Audit logs table
+CREATE TABLE IF NOT EXISTS audit_logs (
+  id SERIAL PRIMARY KEY,
+  action VARCHAR(128) NOT NULL,
+  user_id INTEGER REFERENCES users(id),
+  details JSONB,
+  timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);

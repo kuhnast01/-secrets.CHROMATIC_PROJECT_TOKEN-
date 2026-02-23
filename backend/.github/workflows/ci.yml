@@ -1,0 +1,97 @@
+name: CI
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: backend-ci-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    env:
+      SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+      DATABASE_URL: postgres://user:password@localhost:5432/${{ vars.POSEIDON_DB_NAME || 'liveops' }}
+      JWT_SECRET: test_secret
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_DB: ${{ vars.POSEIDON_DB_NAME || 'liveops' }}
+          POSTGRES_USER: user
+          POSTGRES_PASSWORD: password
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+          cache-dependency-path: pnpm-lock.yaml
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      - name: Run Prisma migrations
+        run: pnpm exec prisma migrate deploy
+      - name: Seed database
+        run: pnpm exec ts-node prisma/seed.ts
+      - name: Lint code
+        run: pnpm lint
+      - name: Format code
+        run: pnpm format
+      - name: Type-check code
+        run: pnpm type-check
+      - name: Check markdown links
+        run: pnpm exec tsx scripts/docs/check-markdown-links.ts
+      - name: Run tests
+        run: pnpm test
+      - name: Run tests with coverage
+        run: pnpm test:coverage
+      - name: Dependency audit (production gate)
+        run: pnpm audit --prod --audit-level=moderate
+      - name: Dependency audit (all dependencies, report only)
+        run: pnpm audit --audit-level=moderate
+        continue-on-error: true
+      - name: Run Snyk for security scan
+        id: run_snyk_scan
+        if: env.SNYK_TOKEN != ''
+        uses: snyk/actions/node@master
+        with:
+          command: test
+      - name: Report skipped Snyk scan
+        id: skip_snyk_scan
+        if: env.SNYK_TOKEN == ''
+        run: echo "Snyk scan skipped because SNYK_TOKEN is not configured for this workflow run."
+      - name: Security summary
+        if: always()
+        run: |
+          echo "## Security" >> "$GITHUB_STEP_SUMMARY"
+          if [[ "${{ steps.run_snyk_scan.outcome }}" == "success" ]]; then
+            echo "- Snyk: ✅ executed" >> "$GITHUB_STEP_SUMMARY"
+          elif [[ "${{ steps.skip_snyk_scan.outcome }}" == "success" ]]; then
+            echo "- Snyk: ⏭️ skipped (SNYK_TOKEN missing)" >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "- Snyk: ❌ failed" >> "$GITHUB_STEP_SUMMARY"
+          fi
+      - name: Deploy (placeholder)
+        run: echo "Add deployment step here"

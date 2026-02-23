@@ -1,0 +1,25 @@
+---
+name: "General Feedback"
+description: "Share general feedback or questions about the Poseidon backend."
+title: "[Feedback] "
+labels: [feedback]
+assignees: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        We value your feedback! Please fill out the form below.
+  - type: textarea
+    id: feedback
+    attributes:
+      label: "Feedback"
+      description: "Your feedback or question."
+    validations:
+      required: true
+  - type: textarea
+    id: context
+    attributes:
+      label: "Context"
+      description: "Any relevant context or background."
+    validations:
+      required: false
